@@ -1,7 +1,5 @@
-var browser = require("webextension-polyfill");
-
 // 从存储中获取用户定义的图片 URL
-browser.storage.sync.get('imageUrl', (data) => {
+browser.storage.sync.get({ imageUrl: '', displayText: '' }).then( (data) => {
     if (data.imageUrl) {
         const section = document.createElement('section');
         section.style.backgroundImage = `url('${data.imageUrl}')`;
