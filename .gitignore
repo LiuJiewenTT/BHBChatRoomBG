@@ -1,0 +1,12 @@
+.vscode/
+temp
+/samples/
+**/keep_local/
+/BHBChatRoomBG/
+*.xpi*
+*.crx
+*.pem
+*.zip
+/src/extension/firefox/BHBChatRoomBG/
+/src/extension/chrome/BHBChatRoomBG/
+/res/icons/cached/
