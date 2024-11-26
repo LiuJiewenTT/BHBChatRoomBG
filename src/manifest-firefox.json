@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+    "name": "BHB聊天室背景插入插件",
+    "version": "1.0",
+    "permissions": [
+        "storage",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "*://boyshelpboys.com/chat.htm"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
+        }
+    },
+    "background": {
+        "scripts": [
+            "libs/browser-polyfill.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://boyshelpboys.com/chat.htm"
+            ],
+            "js": [
+                "libs/browser-polyfill.js",
+                "content.js"
+            ]
+        }
+    ]
+}

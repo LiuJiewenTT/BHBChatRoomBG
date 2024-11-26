@@ -22,6 +22,10 @@
 
 ![效果图1](docs/运行效果图1.png)
 
+## 开发说明
+
+当前版本，在项目根目录执行`pack.bat`后`build/BHBChatRoomBG/`下的可以直接供Chrome加载。
+
 ## LICENSE Summary
 
 项目本体基于MIT，但使用了一些第三方库，它们的LICENSE文件也可能适用。
