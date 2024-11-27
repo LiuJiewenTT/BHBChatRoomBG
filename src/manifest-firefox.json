@@ -32,5 +32,11 @@
                 "content.js"
             ]
         }
-    ]
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "BHBChatRoomBG@liujiewentt.github.io",
+            "strict_min_version": "42.0"
+        }
+    }
 }
