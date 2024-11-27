@@ -1,7 +1,10 @@
 // 从存储中获取用户定义的图片 URL
-browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended' }).then((data) => {
+browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'chat-background' }).then((data) => {
     let sectionClassName = "background-insert-section";
+    let chatboxClassName = "chat-history-wrapper";
     section = document.getElementById(sectionClassName);
+    chatBox = document.getElementsByClassName(chatboxClassName)[0];
+
     if (!section) {
         flag_new_section = true;
         section = document.createElement('section');
@@ -36,6 +39,21 @@ browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended
         section.textContent = data.displayText || '';
     }
     if (flag_new_section) {
-        document.body.appendChild(section); // 将 section 插入页面
+        if (data.displayMode === 'fullscreen') {
+            document.body.appendChild(section); // 将 section 插入页面
+        }
+        if (data.displayMode === 'extended') {
+            document.body.appendChild(section); // 将 section 插入页面
+        }
+        if (data.displayMode === 'page-background') {
+            document.body.insertBefore(section, document.body.firstChild);
+        }
+        if (data.displayMode === 'chat-background-extended') {
+            chatBox.insertBefore(section, chatBox.firstChild);
+        }
+        if (data.displayMode === 'chat-background') {
+            chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
+        }
+        
     }
 });
