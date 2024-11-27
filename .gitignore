@@ -3,6 +3,7 @@ temp
 /samples/
 **/keep_local/
 /build/BHBChatRoomBG/
+/packs/
 *.xpi*
 *.crx
 *.pem
