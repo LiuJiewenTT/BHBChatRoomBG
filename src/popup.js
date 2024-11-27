@@ -5,9 +5,10 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const displayText = document.getElementById('displayText').value;
     const themeToggle = document.getElementById("themeToggle");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
+    const displayModeSelect = document.getElementById("display-mode-select");
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({ imageUrl, displayText }).then(() => {
+    browser.storage.sync.set({ imageUrl, displayText, previewCheckbox: previewCheckbox.checked, displayMode: displayModeSelect.value }).then(() => {
         alert('Section content saved!');
         if (imageUrl.startsWith("http") || imageUrl.startsWith("https")) {
             imageUrl_fullpath = imageUrl;
@@ -28,21 +29,13 @@ document.getElementById('saveButton').addEventListener('click', () => {
     });
 });
 
-// 初始化时读取存储值并填充到输入框
-browser.storage.sync.get({ imageUrl: '', displayText: '' }).then((data) => {
-    if (data.imageUrl) {
-        document.getElementById('imageUrl').value = data.imageUrl;
-    }
-    if (data.displayText) {
-        document.getElementById('displayText').value = data.displayText;
-    }
-});
 
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
     const imageUrlInput = document.getElementById("imageUrl");
     const displayTextInput = document.getElementById("displayText");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
+    const displayModeSelect = document.getElementById("display-mode-select");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
 
@@ -51,7 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
     imageUrl_fullpath = "";
 
     // 加载用户设置的图片背景
-    browser.storage.sync.get({ "imageUrl": "", "theme": "", "previewEnabled": "false" }).then((data) => {
+    browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: 'false', displayMode: 'default' }).then((data) => {
+        if (data.imageUrl) {
+            document.getElementById('imageUrl').value = data.imageUrl;
+        }
+        if (data.displayText) {
+            document.getElementById('displayText').value = data.displayText;
+        }
+
         // 恢复预览开关状态
         if (data.previewEnabled === "true") {
             previewCheckbox.checked = true;
@@ -79,10 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.theme) {
             currentTheme = data.theme;
         }
+
+        // 恢复显示模式
+        if (data.displayMode) {
+            displayModeSelect.value = data.displayMode;
+        }
         
         imageUrlInput.className = currentTheme;
         displayTextInput.className = currentTheme;
         previewCheckbox.className = currentTheme;
+        displayModeSelect.className = currentTheme;
         themeToggle.className = currentTheme;
         saveButton.className = currentTheme;
 
@@ -101,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageUrlInput.className = currentTheme;
         displayTextInput.className = currentTheme;
         previewCheckbox.className = currentTheme;
+        displayModeSelect.className = currentTheme;
         themeToggle.className = currentTheme;
         saveButton.className = currentTheme;
 

@@ -1,9 +1,13 @@
 // 从存储中获取用户定义的图片 URL
-browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'chat-background' }).then((data) => {
+browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended' }).then((data) => {
     let sectionClassName = "background-insert-section";
     let chatboxClassName = "chat-history-wrapper";
     section = document.getElementById(sectionClassName);
     chatBox = document.getElementsByClassName(chatboxClassName)[0];
+
+    if (data.displayMode === 'default') {
+        data.displayMode = 'extended';
+    }
 
     if (!section) {
         flag_new_section = true;

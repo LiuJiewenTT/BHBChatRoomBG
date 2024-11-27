@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="popup.css">
   <title>Set Section Content</title>
 </head>
+
 <body>
   <h2>BHB聊天室背景图设置页</h2>
   <div class="container">
@@ -20,6 +22,17 @@
     <label class="checkbox">
       <input type="checkbox" id="previewBackgroundCheckbox">Preview Background Image
     </label>
+    <div class="select-container">
+      <label for="display-mode-select">Mode:</label>
+      <select id="display-mode-select">
+        <option value="fullscreen">Fullscreen</option>
+        <option value="extended">Extended</option>
+        <option value="page-background">Page Background</option>
+        <option value="chat-background-extended">Chat Background Extended</option>
+        <option value="chat-background">Chat Background</option>
+      </select>
+    </div>    
+
     <button id="saveButton">Save</button>
     <button id="themeToggle">Toggle Theme</button>
   </div>

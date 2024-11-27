@@ -21,6 +21,12 @@ body {
     width: 90%;
 }
 
+.select-container {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
 label {
     display: flex;
     justify-content: space-between;
@@ -54,6 +60,17 @@ input[type="checkbox"] {
     /* border: 1px solid #ccc; */
 }
 
+select {
+    padding: 5px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+select.dark {
+    background-color: var(--lighter-dark-bgcolor);
+    color: var(--light-purple-bgcolor);
+}
+
 button {
     padding: 10px;
     border: none;
@@ -72,7 +89,8 @@ body.light {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    color: #000;
+    /* color: #000; */
+    color: #566a7f;
 }
 
 button.light {
