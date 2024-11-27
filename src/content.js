@@ -53,7 +53,24 @@ browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'chat-bac
         }
         if (data.displayMode === 'chat-background') {
             chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
+            // 接下来删除黑条
+            // 选择目标元素
+            // 源在app-chat.css文件中
+            // const targetElement = document.querySelector('.app-chat .app-chat-history .chat-history-footer:before');
+            // // 确保元素存在
+            // if (targetElement) {
+            //     // 删除背景颜色
+            //     targetElement.style.backgroundColor = '';
+            // }
+
+            const style = document.createElement('style');
+            style.textContent = `
+  .chat-history-footer:before {
+    background: transparent !important;
+  }
+`;
+            chatBox.parentNode.insertBefore(style, chatBox);
         }
-        
+
     }
 });
