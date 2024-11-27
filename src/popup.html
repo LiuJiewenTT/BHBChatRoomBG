@@ -3,17 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="popup.css">
   <title>Set Section Content</title>
 </head>
 <body>
-  <h2>Set Section Content</h2>
-  <label for="imageUrl">Background Image URL:</label>
-  <input type="text" id="imageUrl" placeholder="Enter image URL" style="width: 80%;" />
-  
-  <label for="displayText">Display Text:</label>
-  <input type="text" id="displayText" placeholder="Enter display text" style="width: 80%;" />
-  
-  <button id="saveBtn">Save</button>
+  <!-- <h2>Set Section Content</h2> -->
+  <div class="container">
+    <label>
+      <span>Image URL:</span>
+      <input type="text" id="imageUrl" placeholder="Enter image URL">
+    </label>
+    <label>
+      <span>Display Text:</span>
+      <input type="text" id="displayText" placeholder="Enter display text">
+    </label>
+    <button id="saveButton">Save</button>
+    <button id="themeToggle">Toggle Theme</button>
+  </div>
   
   <script src="libs/browser-polyfill.js"></script>
   <script src="popup.js"></script>
