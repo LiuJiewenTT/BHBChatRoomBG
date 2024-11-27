@@ -14,6 +14,54 @@ body {
     flex-direction: column;
 }
 
+/* Header容器，使用flex布局 */
+.popup-header {
+    display: flex;
+    /* 默认居中对齐 */
+    justify-content: center;
+    align-items: center;
+    /* 允许按钮绝对定位 */
+    position: relative;
+    /* 与下方内容分隔 */
+    margin-bottom: 1em;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 90%;
+}
+
+/* 标题样式 */
+.header-title {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 0;
+    /* 保证标题占据可用空间，居中 */
+    flex-grow: 1;
+}
+
+/* 按钮样式 */
+.theme-toggle {
+    /* 定位到右上角 */
+    position: absolute;
+    right: 0;
+    top: 0;
+    /* 无背景 */
+    background: none;
+    /* 无边框 */
+    border: none;
+    padding: 0.5em;
+    cursor: pointer;
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 按钮里的图标 */
+#theme-toggle img {
+    /* 图标大小 */
+    width: 24px;
+    height: 24px;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -102,17 +150,17 @@ button.light {
 /* 暗色主题 */
 body.dark {
     /* background-color: #000080; */
-    background-color: var(--dark-bgcolor);
     /* 深蓝色背景 */
-    color: var(--theme-color);
+    background-color: var(--dark-bgcolor);
     /* 粉色字体 */
+    color: var(--theme-color);
     border-color: var(--dark-bgcolor);
 }
 
 button.dark {
     /* background-color: #000080; */
-    background-color: var(--theme-color);
     /* 深蓝按钮 */
+    background-color: var(--theme-color);
     color: white;
 }
 
