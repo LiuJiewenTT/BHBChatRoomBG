@@ -13,6 +13,13 @@
 
 ### 开发版
 
+#### Chrome/Edge
+
+见[【开发说明】](#开发说明)。
+
+#### Firefox
+
+在地址栏输入`about:debugging`进入调试页面，点击`This Firefox`下的`Load Temporary Add-on...`按钮，选择`build/BHBChatRoomBG.xpi`文件，即可安装插件。（适用于无扩展ID时）
 
 ## 使用方法
 
@@ -21,6 +28,7 @@
 ## 效果图
 
 ![效果图1](docs/运行效果图1.png)
+![效果图2](docs/运行效果图2.png)
 
 ## 开发说明
 
