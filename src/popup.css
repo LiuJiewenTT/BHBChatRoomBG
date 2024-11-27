@@ -1,14 +1,17 @@
 /* 通用样式 */
 body {
     margin: 0;
-    padding: 0;
+    padding: 15px;
     font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 200px;
     min-width: 400px;
     transition: background-color 0.3s ease, color 0.3s ease;
+    flex-direction: column;
 }
 
 .container {
@@ -24,10 +27,19 @@ label {
     align-items: center;
 }
 
+label.checkbox {
+    justify-content: start;
+}
+
 label span {
     white-space: nowrap;
     margin-right: 10px;
     flex-shrink: 0;
+}
+
+input.dark {
+    background-color: var(--lighter-dark-bgcolor);
+    color: var(--light-purple-bgcolor);
 }
 
 input[type="text"] {
@@ -37,11 +49,17 @@ input[type="text"] {
     border-radius: 4px;
 }
 
+input[type="checkbox"] {
+    margin: 5px;
+    /* border: 1px solid #ccc; */
+}
+
 button {
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    color: white;
 }
 
 button:hover {
@@ -50,7 +68,7 @@ button:hover {
 
 /* 亮色主题 */
 body.light {
-    background-image: var(--bg-image);
+    background-image: var(--white-smoke);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -58,9 +76,9 @@ body.light {
 }
 
 button.light {
-    background-color: #ffc0cb;
+    background-color: var(--theme-color);
     /* 粉色按钮 */
-    color: #000;
+    /* color: #000; */
 }
 
 /* 暗色主题 */
@@ -68,15 +86,16 @@ body.dark {
     /* background-color: #000080; */
     background-color: var(--dark-bgcolor);
     /* 深蓝色背景 */
-    color: #ffc0cb;
+    color: var(--theme-color);
     /* 粉色字体 */
+    border-color: var(--dark-bgcolor);
 }
 
 button.dark {
     /* background-color: #000080; */
-    background-color: var(--dark-bgcolor);
+    background-color: var(--theme-color);
     /* 深蓝按钮 */
-    color: #ffc0cb;
+    color: white;
 }
 
 /* 背景图片样式 */
@@ -97,5 +116,9 @@ body.has-bg-image.dark {
 /* 主题背景图片 */
 :root {
     --bg-image: url('');
+    --theme-color: #FF8FA2;
+    --white-smoke: #e6e9ec;
     --dark-bgcolor: #2b2c40;
+    --lighter-dark-bgcolor: #39394d;
+    --light-purple-bgcolor: #A3A4CC;
 }

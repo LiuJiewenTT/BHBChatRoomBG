@@ -1,7 +1,16 @@
 // 从存储中获取用户定义的图片 URL
-browser.storage.sync.get({ imageUrl: '', displayText: '' }).then( (data) => {
+browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended' }).then((data) => {
+    let sectionClassName = "background-insert-section";
+    section = document.getElementById(sectionClassName);
+    if (!section) {
+        flag_new_section = true;
+        section = document.createElement('section');
+        section.className = "background-insert-section"
+    }
+    else {
+        flag_new_section = false;
+    }
     if (data.imageUrl) {
-        const section = document.createElement('section');
         section.style.backgroundImage = `url('${data.imageUrl}')`;
         section.style.backgroundRepeat = "repeat";
         section.style.display = "flex";
@@ -16,10 +25,17 @@ browser.storage.sync.get({ imageUrl: '', displayText: '' }).then( (data) => {
         section.style.bottom = "0";
         section.style.pointerEvents = "none"; // 防止干扰用户操作
         section.style.opacity = "0.3";
-        
+        if (data.displayMode === 'fullscreen') {
+            section.style.zIndex = "2000";  // 全屏模式用
+        } else {
+            // 取消对于 section.style.zIndex 的设置
+            section.style.zIndex = null;
+        }
+
         // 设置显示的文本，默认为空字符串
         section.textContent = data.displayText || '';
-
+    }
+    if (flag_new_section) {
         document.body.appendChild(section); // 将 section 插入页面
     }
 });
