@@ -8,7 +8,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const displayModeSelect = document.getElementById("display-mode-select");
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({ imageUrl, displayText, previewCheckbox: previewCheckbox.checked, displayMode: displayModeSelect.value }).then(() => {
+    browser.storage.sync.set({ imageUrl, displayText, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value }).then(() => {
         alert('Section content saved!');
         if (imageUrl.startsWith("http") || imageUrl.startsWith("https")) {
             imageUrl_fullpath = imageUrl;
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     imageUrl_fullpath = "";
 
     // 加载用户设置的图片背景
-    browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: 'false', displayMode: 'default' }).then((data) => {
+    browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: false, displayMode: 'default' }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
         }
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // 恢复预览开关状态
-        if (data.previewEnabled === "true") {
+        if (data.previewEnabled === true) {
             previewCheckbox.checked = true;
         } else {
             previewCheckbox.checked = false;
@@ -134,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         // 保存预览状态
+        console.log('[previewEnabled:' + isPreviewEnabled + ']');
         browser.storage.sync.set({ previewEnabled: isPreviewEnabled });
     });
 });
