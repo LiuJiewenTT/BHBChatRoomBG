@@ -13,7 +13,7 @@
         "activeTab"
     ],
     "host_permissions": [
-        "*://boyshelpboys.com/chat.htm"
+        "*://boyshelpboys.com/*"
     ],
     "action": {
         "default_popup": "popup.html",
@@ -29,7 +29,8 @@
     "content_scripts": [
         {
             "matches": [
-                "*://boyshelpboys.com/chat.htm"
+                "*://boyshelpboys.com/chat.htm",
+                "*://boyshelpboys.com/my-notice.htm"
             ],
             "js": [
                 "libs/browser-polyfill.js",
