@@ -14,7 +14,7 @@ body {
     flex-direction: column;
 }
 
-/* Header容器，使用flex布局 */
+/* 标题Header容器，使用flex布局 */
 .popup-header {
     display: flex;
     /* 默认居中对齐 */
@@ -38,7 +38,7 @@ body {
     flex-grow: 1;
 }
 
-/* 按钮样式 */
+/* 暗色模式切换按钮样式 */
 .theme-toggle {
     /* 定位到右上角 */
     position: absolute;
@@ -110,8 +110,10 @@ input[type="checkbox"] {
 
 select {
     padding: 5px;
+    border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%;
+    /* 火狐浏览器的默认背景颜色不是纯白，文字颜色也不是灰色。 */
 }
 
 select.dark {
