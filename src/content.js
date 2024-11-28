@@ -42,6 +42,13 @@ browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended
         // 设置显示的文本，默认为空字符串
         section.textContent = data.displayText || '';
     }
+
+    const inputBoxShadowLineStyle = document.createElement('style');
+    inputBoxShadowLineStyle.textContent = `
+      .chat-history-footer:before {
+        background: transparent !important;
+      }
+    `;
     if (flag_new_section) {
         if (data.displayMode === 'fullscreen') {
             document.body.appendChild(section); // 将 section 插入页面
@@ -54,17 +61,13 @@ browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended
         }
         if (data.displayMode === 'chat-background-extended') {
             chatBox.insertBefore(section, chatBox.firstChild);
+            // 接下来删除黑条
+            chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
         }
         if (data.displayMode === 'chat-background') {
             chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
             // 接下来删除黑条
-            const style = document.createElement('style');
-            style.textContent = `
-  .chat-history-footer:before {
-    background: transparent !important;
-  }
-`;
-            chatBox.parentNode.insertBefore(style, chatBox);
+            chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
         }
 
     }
