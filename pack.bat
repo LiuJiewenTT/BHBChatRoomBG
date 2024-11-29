@@ -13,6 +13,7 @@ if not exist ".\build\BHBChatRoomBG\res\icons" exit /B 1
 xcopy /E /Y ".\src\*" ".\build\BHBChatRoomBG\"
 copy ".\res\icons\icon.png" ".\build\BHBChatRoomBG\res\icons\icon.png"
 copy ".\res\icons\lamp_121067.svg" ".\build\BHBChatRoomBG\res\icons\lamp_121067.svg"
+copy ".\res\icons\arrow_reset_filled_icon_202577.svg" ".\build\BHBChatRoomBG\res\icons\arrow_reset_filled_icon_202577.svg"
 ren ".\build\BHBChatRoomBG\manifest-firefox.json" "manifest.json"
 7z a -sse ".\build\BHBChatRoomBG.xpi" ".\build\BHBChatRoomBG\*" -x!".\build\BHBChatRoomBG\manifest-chrome.json"
 ren ".\build\BHBChatRoomBG\manifest.json" "manifest-firefox.json"

@@ -1,5 +1,5 @@
 // 从存储中获取用户定义的图片 URL
-browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended' }).then((data) => {
+browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3 }).then((data) => {
     if (data.displayMode === 'disabled') {
         return;
     }
@@ -35,7 +35,7 @@ browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended
         section.style.right = "0";
         section.style.bottom = "0";
         section.style.pointerEvents = "none"; // 防止干扰用户操作
-        section.style.opacity = "0.3";
+        section.style.opacity = `${opacityValue}`;
         if (data.displayMode === 'fullscreen') {
             section.style.zIndex = "2000";  // 全屏模式用
         } else {

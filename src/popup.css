@@ -38,35 +38,72 @@ body {
     flex-grow: 1;
 }
 
-/* 暗色模式切换按钮样式 */
-.theme-toggle {
-    /* 定位到右上角 */
-    position: absolute;
-    right: 0;
-    top: 0;
-    /* 无背景 */
-    background: none;
-    /* 无边框 */
-    border: none;
-    padding: 0.5em;
-    cursor: pointer;
-    display: block;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 按钮里的图标 */
-#theme-toggle img {
-    /* 图标大小 */
-    width: 24px;
-    height: 24px;
-}
-
 .container {
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 90%;
+}
+
+#opacityInputDiv {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+}
+
+#opacitySlider {
+    width: 100%;
+}
+
+input[type='range'] {
+    width: 210px;
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  input[type='range'],
+  input[type='range']::-webkit-slider-runnable-track,
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+  input[type='range']::-webkit-slider-runnable-track {
+    width: 200px;
+    height: 10px;
+    background: #AAA;
+  }
+  input[type='range']::-webkit-slider-thumb {
+    position: relative;
+    height: 30px;
+    width: 30px;
+    margin-top: -10px;
+    background: steelblue;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+  input[type='range']::-webkit-slider-thumb::before {
+    position: absolute;
+    content: '';
+    height: 10px; /* equal to height of runnable track */
+    width: 500px; /* make this bigger than the widest range input element */
+    left: -502px; /* this should be -2px - width */
+    top: 8px; /* don't change this */
+    background: #777;
+  }
+
+/* 设置滑动条的进度颜色 */
+input.dark[type="range"]::-webkit-slider-runnable-track {
+    /* 设置进度条的背景颜色 */
+    background: var(--lighter-dark-bgcolor); 
+    border-radius: 5px;
+    /* height: 8px; */
+}
+
+input.dark[type="range"]::-webkit-slider-thumb {
+    background: var(--theme-color); /* 滑块颜色 */
+    border-radius: 5px;
 }
 
 .select-container {
@@ -89,6 +126,12 @@ label span {
     white-space: nowrap;
     margin-right: 10px;
     flex-shrink: 0;
+}
+
+#opacitySliderValueSpan {
+    width: 30px;
+    margin-right: 0px;
+    text-align: center;
 }
 
 input.dark {
@@ -164,6 +207,61 @@ button.dark {
     /* 深蓝按钮 */
     background-color: var(--theme-color);
     color: white;
+}
+
+/* 暗色模式切换按钮样式 */
+.theme-toggle {
+    /* 宽度为父元素宽度 */
+    width: auto;
+    /* 高度为父元素高度 */
+    height: 100%;
+    /* 保证宽高比为 1:1 */
+    aspect-ratio: 1;
+    /* 定位到右上角 */
+    position: absolute;
+    right: 0px;
+    top: 0;
+    /* 无背景 */
+    background: none;
+    /* 无边框 */
+    border: none;
+    /* padding: 0.5em; */
+    padding: 0%;
+    cursor: pointer;
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 按钮里的图标 */
+#themeToggle img {
+    /* 图标大小 */
+    width: auto;
+    height: 70%;
+    /* 保证宽高比为 1:1 */
+    aspect-ratio: 1;
+}
+
+#opacityResetButton {
+    /* padding: 0.5em; */
+    padding: 0%;
+    position: relative;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    /* 宽度为父元素宽度 */
+    width: auto;
+    /* 高度为父元素高度 */
+    height: 100%;
+    /* 保证宽高比为 1:1 */
+    aspect-ratio: 1;
+}
+
+#opacityResetButton img {
+    width: auto;
+    height: 70%;
+    /* 保证宽高比为 1:1 */
+    aspect-ratio: 1;
 }
 
 /* 背景图片样式 */

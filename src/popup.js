@@ -3,12 +3,13 @@ let baseUrl = "https://boyshelpboys.com/";
 document.getElementById('saveButton').addEventListener('click', () => {
     const imageUrl = document.getElementById('imageUrl').value.trim();
     const displayText = document.getElementById('displayText').value;
-    const themeToggle = document.getElementById("themeToggle");
+    const opacitySlider = document.getElementById("opacitySlider");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
+    const themeToggle = document.getElementById("themeToggle");
     const displayModeSelect = document.getElementById("display-mode-select");
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({ imageUrl, displayText, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value }).then(() => {
+    browser.storage.sync.set({ imageUrl, displayText, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value, opacityValue: opacitySlider.value }).then(() => {
         alert('Section content saved!');
         if (imageUrl.startsWith("http") || imageUrl.startsWith("https")) {
             imageUrl_fullpath = imageUrl;
@@ -34,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
     const imageUrlInput = document.getElementById("imageUrl");
     const displayTextInput = document.getElementById("displayText");
+    const opacitySlider = document.getElementById("opacitySlider");
+    const opacitySliderValueSpan = document.getElementById("opacitySliderValueSpan");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
     const displayModeSelect = document.getElementById("display-mode-select");
     const saveButton = document.getElementById('saveButton');
@@ -44,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     imageUrl_fullpath = "";
 
     // 加载用户设置的图片背景
-    browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: false, displayMode: 'default' }).then((data) => {
+    browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: false, displayMode: 'default', opacityValue: 0.3 }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
         }
@@ -75,6 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
             imageUrl_fullpath = "";
         }
 
+        if (data.opacityValue != null) {
+            // 设置 opacitySilder 的数值为 data.opacityValue;
+            opacitySlider.value = data.opacityValue;
+            opacitySliderValueSpan.textContent = `${data.opacityValue}`;
+        }
+
         // 恢复主题
         if (data.theme) {
             currentTheme = data.theme;
@@ -84,13 +93,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.displayMode) {
             displayModeSelect.value = data.displayMode;
         }
-        
-        imageUrlInput.className = currentTheme;
-        displayTextInput.className = currentTheme;
-        previewCheckbox.className = currentTheme;
-        displayModeSelect.className = currentTheme;
-        themeToggle.className = currentTheme;
-        saveButton.className = currentTheme;
+
+        imageUrlInput.classList.add(currentTheme);
+        displayTextInput.classList.add(currentTheme);
+        opacitySlider.classList.add(currentTheme);
+        opacityResetButton.classList.add(currentTheme);
+        previewCheckbox.classList.add(currentTheme);
+        displayModeSelect.classList.add(currentTheme);
+        themeToggle.classList.add(currentTheme);
+        saveButton.classList.add(currentTheme);
 
         body.classList.add(currentTheme);
     });
@@ -102,14 +113,25 @@ document.addEventListener("DOMContentLoaded", () => {
         // 切换主题类
         body.classList.remove(currentTheme);
         body.classList.add(newTheme);
-        currentTheme = newTheme;
         
-        imageUrlInput.className = currentTheme;
-        displayTextInput.className = currentTheme;
-        previewCheckbox.className = currentTheme;
-        displayModeSelect.className = currentTheme;
-        themeToggle.className = currentTheme;
-        saveButton.className = currentTheme;
+        imageUrlInput.classList.remove(currentTheme);
+        imageUrlInput.classList.add(newTheme);
+        displayTextInput.classList.remove(currentTheme);
+        displayTextInput.classList.add(newTheme);
+        opacitySlider.classList.remove(currentTheme);
+        opacitySlider.classList.add(newTheme);
+        opacityResetButton.classList.remove(currentTheme);
+        opacityResetButton.classList.add(newTheme);
+        previewCheckbox.classList.remove(currentTheme);
+        previewCheckbox.classList.add(newTheme);
+        displayModeSelect.classList.remove(currentTheme);
+        displayModeSelect.classList.add(newTheme);
+        themeToggle.classList.remove(currentTheme);
+        themeToggle.classList.add(newTheme);
+        saveButton.classList.remove(currentTheme);
+        saveButton.classList.add(newTheme);
+
+        currentTheme = newTheme;
 
         // 输出body的主题类名
         console.log('[body.className:' + body.className + ']');
@@ -118,19 +140,23 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.storage.sync.set({ theme: currentTheme });
     });
 
+    opacitySlider.addEventListener("input", function() {
+        opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
+    });
+
     // 监听预览复选框变化
     previewCheckbox.addEventListener("change", (event) => {
         const isPreviewEnabled = event.target.checked;
 
         if (imageUrl_fullpath) {
             if (isPreviewEnabled) {
-                body.classList.remove(themeToggle.className);
+                body.classList.remove(currentTheme);
                 body.classList.add("has-bg-image")
-                body.classList.add(themeToggle.className);
+                body.classList.add(currentTheme);
             } else {
-                body.classList.remove(themeToggle.className);
+                body.classList.remove(currentTheme);
                 body.classList.remove("has-bg-image")
-                body.classList.add(themeToggle.className);
+                body.classList.add(currentTheme);
             }
         }
         // 保存预览状态
