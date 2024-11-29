@@ -78,7 +78,8 @@ input[type='range'] {
 input[type='range']::-webkit-slider-runnable-track {
     width: 200px;
     height: 24px;
-    background: var(--white-smoke);
+    /* background: var(--white-smoke); */
+    background: var(--slider-cover-background);
     /* border-radius 设置成 50% 会发生非常幽默的事。 */
     border-radius: 50%;
     /* border-radius 应当设置成高度的一半。 */
@@ -97,13 +98,14 @@ input[type='range']::-webkit-slider-thumb {
 /* 设置滑动条的进度颜色 */
 input.dark[type="range"]::-webkit-slider-runnable-track {
     /* 设置进度条的背景颜色 */
-    background: var(--lighter-dark-bgcolor);
+    /* background: var(--lighter-dark-bgcolor); */
+    /* background: var(--dark-slider-bgcolor); */
     border-radius: 5px;
     /* height: 8px; */
 }
 
 input.dark[type="range"]::-webkit-slider-thumb {
-    background: var(--theme-color);
+    /* background: var(--theme-color); */
     /* 滑块颜色 */
     border-radius: 5px;
 }
@@ -289,4 +291,5 @@ body.has-bg-image.dark {
     --dark-bgcolor: #2b2c40;
     --lighter-dark-bgcolor: #39394d;
     --light-purple-bgcolor: #A3A4CC;
+    --slider-cover-background: var(--theme-color);
 }

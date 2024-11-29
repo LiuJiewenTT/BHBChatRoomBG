@@ -140,11 +140,38 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.storage.sync.set({ theme: currentTheme });
     });
 
+    opacityFgColor = "var(--theme-color)";
+    opacityBgColor = "var(--white-smoke)";
+    opacityFgColor_light = "var(--theme-color)";
+    opacityBgColor_light = "var(--white-smoke)";
+    opacityFgColor_dark = "var(--light-purple-bgcolor)";
+    opacityBgColor_dark = "var(--lighter-dark-bgcolor)";
 
-    opacitySlider.style.background = `linear-gradient(to right, var(--light-purple-bgcolor) 0%, var(--light-purple-bgcolor) ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, var(--lighter-dark-bgcolor) ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, var(--lighter-dark-bgcolor) 100%)`;
+    if (currentTheme === "light") {
+        opacityFgColor = opacityFgColor_light;
+        opacityBgColor = opacityBgColor_light;
+    } else {
+        opacityFgColor = opacityFgColor_dark;
+        opacityBgColor = opacityBgColor_dark;
+    }
+
+    // 滑动条背景色初始状态适配
+    body.style.setProperty('--slider-cover-background', `linear-gradient(to right, ${opacityFgColor} 0%, ${opacityFgColor} ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, ${opacityBgColor} ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, ${opacityBgColor} 100%)`);
+
     opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
-        this.style.background = `linear-gradient(to right, var(--light-purple-bgcolor) 0%, var(--light-purple-bgcolor) ${(this.value - this.min) / (this.max - this.min) * 100}%, var(--lighter-dark-bgcolor) ${(this.value - this.min) / (this.max - this.min) * 100}%, var(--lighter-dark-bgcolor) 100%)`; // 设置滑动条背景色
+
+        // 滑动条背景色适配
+        if (currentTheme === "light") {
+            opacityFgColor = opacityFgColor_light;
+            opacityBgColor = opacityBgColor_light;
+        } else {
+            opacityFgColor = opacityFgColor_dark;
+            opacityBgColor = opacityBgColor_dark;
+        }
+        const sliderCoveredBackground = `linear-gradient(to right, ${opacityFgColor} 0%, ${opacityFgColor} ${(this.value - this.min) / (this.max - this.min) * 100}%, ${opacityBgColor} ${(this.value - this.min) / (this.max - this.min) * 100}%, ${opacityBgColor} 100%)`;
+        body.style.setProperty('--slider-cover-background', sliderCoveredBackground); // 设置滑动条背景色
+        console.log('[Theme:' + currentTheme + '][sliderCoveredBackground:' + sliderCoveredBackground + ']');
     });
 
     // 监听预览复选框变化
