@@ -35,7 +35,7 @@ browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended
         section.style.right = "0";
         section.style.bottom = "0";
         section.style.pointerEvents = "none"; // 防止干扰用户操作
-        section.style.opacity = `${opacityValue}`;
+        section.style.opacity = `${data.opacityValue}`;
         if (data.displayMode === 'fullscreen') {
             section.style.zIndex = "2000";  // 全屏模式用
         } else {

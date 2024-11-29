@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayTextInput = document.getElementById("displayText");
     const opacitySlider = document.getElementById("opacitySlider");
     const opacitySliderValueSpan = document.getElementById("opacitySliderValueSpan");
+    const opacityResetButton = document.getElementById("opacityResetButton");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
     const displayModeSelect = document.getElementById("display-mode-select");
     const saveButton = document.getElementById('saveButton');
@@ -166,6 +167,12 @@ document.addEventListener("DOMContentLoaded", () => {
     opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
         slider_colorChange(this);  // 背景色适配
+    });
+
+    opacityResetButton.addEventListener("click", function () {
+        opacitySlider.value = 0.3;
+        opacitySliderValueSpan.textContent = "0.3";
+        slider_colorChange(opacitySlider);
     });
 
     // 监听预览复选框变化
