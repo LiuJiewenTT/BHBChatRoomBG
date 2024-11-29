@@ -38,6 +38,7 @@
 <img src="docs/运行效果图2.png" alt="效果图2" style="zoom:50%;" />
 <img src="docs/运行效果图3.png" alt="效果图3" style="zoom:50%;" />
 <img src="docs/运行效果图4.png" alt="效果图4" style="zoom:50%;" />
+<img src="docs/运行效果图5.png" alt="效果图5" style="zoom:50%;" />
 
 
 

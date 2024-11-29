@@ -1,6 +1,4 @@
-######
-
-License for the main body of the project:
+// License for the main body of the project:
 
 MIT License
 
@@ -24,9 +22,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-######
+---
 
-License for mozilla/webextension-polyfill:
+// License for mozilla/webextension-polyfill:
 
 Mozilla Public License Version 2.0
 ==================================
@@ -403,5 +401,3 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   defined by the Mozilla Public License, v. 2.0.
 
 
-
-######
