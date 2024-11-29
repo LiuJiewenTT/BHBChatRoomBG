@@ -116,11 +116,26 @@ input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
 }
 
+input[type='range'],
+input[type="range"]::-moz-range-track,
+input[type="range"]::-moz-range-thumb {
+    -moz-appearance: none;
+}
+
 input[type='range'] {
     background: transparent;
 }
 
 input[type='range']::-webkit-slider-runnable-track {
+    width: 200px;
+    height: 24px;
+    background: var(--slider-cover-background);
+    /* border-radius 设置成 50% 会发生非常幽默的事。 */
+    border-radius: 50%;
+    /* border-radius 应当设置成高度的一半。 */
+    /* border-radius: 12px; */
+}
+input[type="range"]::-moz-range-track {
     width: 200px;
     height: 24px;
     background: var(--slider-cover-background);
@@ -138,13 +153,27 @@ input[type='range']::-webkit-slider-thumb {
     border-radius: 50%;
     border: 2px solid white;
 }
+input[type="range"]::-moz-range-thumb {
+    position: relative;
+    height: 24px;
+    width: 24px;
+    background: var(--theme-color);
+    border-radius: 50%;
+    border: 2px solid white;
+}
 
 /* 设置滑动条的进度颜色 */
 input.dark[type="range"]::-webkit-slider-runnable-track {
     border-radius: 5px;
 }
+input.dark[type="range"]::-moz-range-track {
+    border-radius: 5px;
+}
 
 input.dark[type="range"]::-webkit-slider-thumb {
+    border-radius: 5px;
+}
+input.dark[type="range"]::-moz-range-thumb {
     border-radius: 5px;
 }
 
