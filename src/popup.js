@@ -11,20 +11,25 @@ document.getElementById('saveButton').addEventListener('click', () => {
     // 将用户输入的内容保存到存储中
     browser.storage.sync.set({ imageUrl, displayText, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value, opacityValue: opacitySlider.value }).then(() => {
         alert('Section content saved!');
-        if (imageUrl.startsWith("http") || imageUrl.startsWith("https")) {
-            imageUrl_fullpath = imageUrl;
+        if (imageUrl.trim() === "") {
+            imageUrl_fullpath = "";
         } else {
-            imageUrl_fullpath = baseUrl + imageUrl;
+            if (imageUrl.startsWith("http") || imageUrl.startsWith("https")) {
+                imageUrl_fullpath = imageUrl;
+            } else {
+                imageUrl_fullpath = baseUrl + imageUrl;
+            }
         }
+
         document.documentElement.style.setProperty("--bg-image", `url('${imageUrl_fullpath}')`);
         console.log(document.documentElement.style.getPropertyValue("--bg-image"));
         if (previewCheckbox.checked) {
             if (imageUrl) {
-                document.body.classList.remove(themeToggle.className);
+                document.body.classList.remove(currentTheme);
                 document.body.classList.add("has-bg-image")
-                document.body.classList.add(themeToggle.className);
+                document.body.classList.add(currentTheme);
             } else {
-                document.body.className = `${themeToggle.className}`;
+                document.body.className = `${currentTheme}`;
             }
         }
     });
@@ -44,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("themeToggle");
 
     // 默认主题
-    let currentTheme = "light";
+    currentTheme = "light";
     imageUrl_fullpath = "";
 
     sliderFgColor = "var(--theme-color)";
@@ -179,17 +184,17 @@ document.addEventListener("DOMContentLoaded", () => {
     previewCheckbox.addEventListener("change", (event) => {
         const isPreviewEnabled = event.target.checked;
 
-        if (imageUrl_fullpath) {
-            if (isPreviewEnabled) {
-                body.classList.remove(currentTheme);
-                body.classList.add("has-bg-image")
-                body.classList.add(currentTheme);
-            } else {
-                body.classList.remove(currentTheme);
-                body.classList.remove("has-bg-image")
-                body.classList.add(currentTheme);
-            }
+
+        if (isPreviewEnabled && imageUrl_fullpath) {
+            body.classList.remove(currentTheme);
+            body.classList.add("has-bg-image")
+            body.classList.add(currentTheme);
+        } else {
+            body.classList.remove(currentTheme);
+            body.classList.remove("has-bg-image")
+            body.classList.add(currentTheme);
         }
+
         // 保存预览状态
         console.log('[previewEnabled:' + isPreviewEnabled + ']');
         browser.storage.sync.set({ previewEnabled: isPreviewEnabled });
