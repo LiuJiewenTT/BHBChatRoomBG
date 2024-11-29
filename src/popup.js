@@ -46,6 +46,26 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentTheme = "light";
     imageUrl_fullpath = "";
 
+    sliderFgColor = "var(--theme-color)";
+    sliderBgColor = "var(--white-smoke)";
+    sliderFgColor_light = "var(--theme-color)";
+    sliderBgColor_light = "var(--white-smoke)";
+    sliderFgColor_dark = "var(--light-purple-bgcolor)";
+    sliderBgColor_dark = "var(--lighter-dark-bgcolor)";
+
+    function slider_colorChange(slider) {
+        // 滑动条背景色适配
+        if (currentTheme === "light") {
+            sliderFgColor = sliderFgColor_light;
+            sliderBgColor = sliderBgColor_light;
+        } else {
+            sliderFgColor = sliderFgColor_dark;
+            sliderBgColor = sliderBgColor_dark;
+        }
+        sliderCoveredBackground = `linear-gradient(to right, ${sliderFgColor} 0%, ${sliderFgColor} ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, ${sliderBgColor} ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, ${sliderBgColor} 100%)`;
+        body.style.setProperty('--slider-cover-background', sliderCoveredBackground); // 设置滑动条背景色
+    }
+
     // 加载用户设置的图片背景
     browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: false, displayMode: 'default', opacityValue: 0.3 }).then((data) => {
         if (data.imageUrl) {
@@ -98,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         displayTextInput.classList.add(currentTheme);
         opacitySlider.classList.add(currentTheme);
         opacityResetButton.classList.add(currentTheme);
+        slider_colorChange(opacitySlider);
         previewCheckbox.classList.add(currentTheme);
         displayModeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
@@ -133,6 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         currentTheme = newTheme;
 
+        slider_colorChange(opacitySlider);
+
         // 输出body的主题类名
         console.log('[body.className:' + body.className + ']');
 
@@ -140,38 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.storage.sync.set({ theme: currentTheme });
     });
 
-    opacityFgColor = "var(--theme-color)";
-    opacityBgColor = "var(--white-smoke)";
-    opacityFgColor_light = "var(--theme-color)";
-    opacityBgColor_light = "var(--white-smoke)";
-    opacityFgColor_dark = "var(--light-purple-bgcolor)";
-    opacityBgColor_dark = "var(--lighter-dark-bgcolor)";
-
-    if (currentTheme === "light") {
-        opacityFgColor = opacityFgColor_light;
-        opacityBgColor = opacityBgColor_light;
-    } else {
-        opacityFgColor = opacityFgColor_dark;
-        opacityBgColor = opacityBgColor_dark;
-    }
-
-    // 滑动条背景色初始状态适配
-    body.style.setProperty('--slider-cover-background', `linear-gradient(to right, ${opacityFgColor} 0%, ${opacityFgColor} ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, ${opacityBgColor} ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, ${opacityBgColor} 100%)`);
-
     opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
-
-        // 滑动条背景色适配
-        if (currentTheme === "light") {
-            opacityFgColor = opacityFgColor_light;
-            opacityBgColor = opacityBgColor_light;
-        } else {
-            opacityFgColor = opacityFgColor_dark;
-            opacityBgColor = opacityBgColor_dark;
-        }
-        const sliderCoveredBackground = `linear-gradient(to right, ${opacityFgColor} 0%, ${opacityFgColor} ${(this.value - this.min) / (this.max - this.min) * 100}%, ${opacityBgColor} ${(this.value - this.min) / (this.max - this.min) * 100}%, ${opacityBgColor} 100%)`;
-        body.style.setProperty('--slider-cover-background', sliderCoveredBackground); // 设置滑动条背景色
-        console.log('[Theme:' + currentTheme + '][sliderCoveredBackground:' + sliderCoveredBackground + ']');
+        slider_colorChange(this);  // 背景色适配
     });
 
     // 监听预览复选框变化

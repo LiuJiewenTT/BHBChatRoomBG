@@ -54,62 +54,6 @@ body {
     justify-content: start;
 }
 
-#opacitySlider {
-    width: 100%;
-}
-
-input[type='range'] {
-    width: 210px;
-    height: 30px;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-input[type='range'],
-input[type='range']::-webkit-slider-runnable-track,
-input[type='range']::-webkit-slider-thumb {
-    -webkit-appearance: none;
-}
-
-input[type='range'] {
-    background: transparent;
-}
-
-input[type='range']::-webkit-slider-runnable-track {
-    width: 200px;
-    height: 24px;
-    /* background: var(--white-smoke); */
-    background: var(--slider-cover-background);
-    /* border-radius 设置成 50% 会发生非常幽默的事。 */
-    border-radius: 50%;
-    /* border-radius 应当设置成高度的一半。 */
-    /* border-radius: 12px; */
-}
-
-input[type='range']::-webkit-slider-thumb {
-    position: relative;
-    height: 24px;
-    width: 24px;
-    background: var(--theme-color);
-    border-radius: 50%;
-    border: 2px solid white;
-}
-
-/* 设置滑动条的进度颜色 */
-input.dark[type="range"]::-webkit-slider-runnable-track {
-    /* 设置进度条的背景颜色 */
-    /* background: var(--lighter-dark-bgcolor); */
-    /* background: var(--dark-slider-bgcolor); */
-    border-radius: 5px;
-    /* height: 8px; */
-}
-
-input.dark[type="range"]::-webkit-slider-thumb {
-    /* background: var(--theme-color); */
-    /* 滑块颜色 */
-    border-radius: 5px;
-}
-
 .select-container {
     display: flex;
     gap: 15px;
@@ -153,6 +97,55 @@ input[type="text"] {
 input[type="checkbox"] {
     margin: 5px;
     /* border: 1px solid #ccc; */
+}
+
+#opacitySlider {
+    width: 100%;
+}
+
+input[type='range'] {
+    width: 210px;
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+input[type='range'],
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+}
+
+input[type='range'] {
+    background: transparent;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+    width: 200px;
+    height: 24px;
+    background: var(--slider-cover-background);
+    /* border-radius 设置成 50% 会发生非常幽默的事。 */
+    border-radius: 50%;
+    /* border-radius 应当设置成高度的一半。 */
+    /* border-radius: 12px; */
+}
+
+input[type='range']::-webkit-slider-thumb {
+    position: relative;
+    height: 24px;
+    width: 24px;
+    background: var(--theme-color);
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* 设置滑动条的进度颜色 */
+input.dark[type="range"]::-webkit-slider-runnable-track {
+    border-radius: 5px;
+}
+
+input.dark[type="range"]::-webkit-slider-thumb {
+    border-radius: 5px;
 }
 
 select {
