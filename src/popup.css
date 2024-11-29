@@ -96,7 +96,68 @@ input[type="text"] {
 
 input[type="checkbox"] {
     margin: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* accent-color: var(--theme-color); */
     /* border: 1px solid #ccc; */
+}
+
+/* 自定义 Checkbox 外观 */
+input[type="checkbox"] {
+    -webkit-appearance: none;  /* 去除默认样式 */
+    appearance: none;
+    aspect-ratio: 1;
+    height: 15px;
+    border: 1px solid var(--border-color, #d5d5d5);  /* 边框颜色 */
+    border-radius: 4px;  /* 设置为方角或圆角 */
+    background-color: var(--unchecked-bgcolor, var(--white-smoke));  /* 未勾选状态背景色 */
+    position: relative;
+    cursor: pointer;
+}
+
+/* 勾选状态 */
+input[type="checkbox"]:checked {
+    background-color: var(--checked-bgcolor, var(--theme-color));  /* 勾选状态背景色 */
+    border-color: var(--checked-border-color, var(--theme-color));  /* 勾选状态边框色 */
+}
+input.dark[type="checkbox"]:checked {
+    background-color: var(--lighter-dark-bgcolor);  /* 勾选状态背景色 */
+    border-color: var(--lighter-dark-bgcolor);  /* 勾选状态边框色 */
+}
+
+/* 添加勾选的勾 */
+input[type="checkbox"]:checked::after {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    line-height: 0; /* 通过设置 line-height 来去除多余的空白 */
+    transform: translate(-50%, -50%);  /* 使用 transform 水平和垂直居中 */
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--white-smoke);
+    /* color: var(--checked-sign-color); */
+}
+input.dark[type="checkbox"]:checked::after {
+    color: var(--light-purple-bgcolor);
+}
+
+/* 鼠标悬停时的状态 */
+input[type="checkbox"]:hover {
+    background-color: var(--hover-bgcolor, #e0e0e0);  /* 悬停时未勾选的颜色 */
+    border-color: var(--hover-bgcolor, #e0e0e0);
+}
+
+/* 只应用于 Edge 和 Firefox 中 */
+input[type="checkbox"]:not(:checked) {
+    background-color: var(--unchecked-bgcolor, var(--white-smoke));  /* 设置未勾选时的颜色 */
+}
+input.dark[type="checkbox"]:not(:checked) {
+    background-color: var(--unchecked-bgcolor, var(--lighter-dark-bgcolor));  /* 设置未勾选时的颜色 */
+}
+input.dark[type="checkbox"]:not(:checked):hover {
+    background-color: var(--light-purple-bgcolor);  /* 设置未勾选时的颜色 */
 }
 
 #opacitySlider {
@@ -309,6 +370,8 @@ body.has-bg-image.dark {
 :root {
     --bg-image: url('');
     --theme-color: #FF8FA2;
+    --checked-sign-color: #d66c7e;
+    --hover-bgcolor: #FFB2B8;
     --white-smoke: #e6e9ec;
     --dark-bgcolor: #2b2c40;
     --lighter-dark-bgcolor: #39394d;

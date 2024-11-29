@@ -1,9 +1,11 @@
 if not exist ".\build\BHBChatRoomBG" mkdir ".\build\BHBChatRoomBG"
 if not exist ".\build\BHBChatRoomBG" exit /B 1
+:retry_entry_label
 if exist ".\build\BHBChatRoomBG.xpi" del ".\build\BHBChatRoomBG.xpi"
 @ if exist ".\build\BHBChatRoomBG.xpi" @(
     echo "Error: Fail to delete BHBChatRoomBG.xpi"
-    choice /M "Do you want to continue packing for Chrome/Edge"
+    choice /M "Do you want to continue packing for Chrome/Edge? [Y/N] Or retry? [R]: " /C YNR /N
+    if ERRORLEVEL 3 goto :retry_entry_label
     if ERRORLEVEL 2 exit /B 1
 )
 del ".\build\BHBChatRoomBG\*.*" /Q /S
