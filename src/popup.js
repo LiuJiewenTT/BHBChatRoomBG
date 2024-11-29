@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 切换主题类
         body.classList.remove(currentTheme);
         body.classList.add(newTheme);
-        
+
         imageUrlInput.classList.remove(currentTheme);
         imageUrlInput.classList.add(newTheme);
         displayTextInput.classList.remove(currentTheme);
@@ -140,8 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.storage.sync.set({ theme: currentTheme });
     });
 
-    opacitySlider.addEventListener("input", function() {
+
+    opacitySlider.style.background = `linear-gradient(to right, var(--light-purple-bgcolor) 0%, var(--light-purple-bgcolor) ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, var(--lighter-dark-bgcolor) ${(opacitySlider.value - opacitySlider.min) / (opacitySlider.max - opacitySlider.min) * 100}%, var(--lighter-dark-bgcolor) 100%)`;
+    opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
+        this.style.background = `linear-gradient(to right, var(--light-purple-bgcolor) 0%, var(--light-purple-bgcolor) ${(this.value - this.min) / (this.max - this.min) * 100}%, var(--lighter-dark-bgcolor) ${(this.value - this.min) / (this.max - this.min) * 100}%, var(--lighter-dark-bgcolor) 100%)`; // 设置滑动条背景色
     });
 
     // 监听预览复选框变化
