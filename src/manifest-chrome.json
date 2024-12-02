@@ -10,7 +10,8 @@
     "description": "为BHB聊天室网页添加背景图片，5种模式任你选！\nGithub项目：https://github.com/LiuJiewenTT/BHBChatRoomBG。（好评就给个Star吧球球了）",
     "permissions": [
         "storage",
-        "activeTab"
+        "activeTab",
+        "scripting"
     ],
     "host_permissions": [
         "*://boyshelpboys.com/*"
@@ -24,7 +25,7 @@
         }
     },
     "background": {
-        "service_worker": "libs/browser-polyfill.js"
+        "service_worker": "background_worker.js"
     },
     "content_scripts": [
         {
