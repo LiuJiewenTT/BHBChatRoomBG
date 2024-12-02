@@ -1,5 +1,9 @@
 if not exist ".\build\BHBChatRoomBG" mkdir ".\build\BHBChatRoomBG"
 if not exist ".\build\BHBChatRoomBG" exit /B 1
+@REM if not exist ".\build\cache\chrome" mkdir ".\build\cache\chrome"
+@REM if not exist ".\build\cache\chrome" exit /B 1
+if not exist ".\build\cache\firefox" mkdir ".\build\cache\firefox"
+if not exist ".\build\cache\firefox" exit /B 1
 :retry_entry_label
 if exist ".\build\BHBChatRoomBG.xpi" del ".\build\BHBChatRoomBG.xpi"
 @ if exist ".\build\BHBChatRoomBG.xpi" @(
@@ -18,5 +22,6 @@ copy ".\res\icons\lamp_121067.svg" ".\build\BHBChatRoomBG\res\icons\lamp_121067.
 copy ".\res\icons\arrow_reset_filled_icon_202577.svg" ".\build\BHBChatRoomBG\res\icons\arrow_reset_filled_icon_202577.svg"
 ren ".\build\BHBChatRoomBG\manifest-firefox.json" "manifest.json"
 7z a -sse ".\build\BHBChatRoomBG.xpi" ".\build\BHBChatRoomBG\*" -x!".\build\BHBChatRoomBG\manifest-chrome.json"
+xcopy /E /Y ".\build\BHBChatRoomBG" ".\build\cache\firefox\"
 ren ".\build\BHBChatRoomBG\manifest.json" "manifest-firefox.json"
 ren ".\build\BHBChatRoomBG\manifest-chrome.json" "manifest.json"
