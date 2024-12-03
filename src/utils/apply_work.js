@@ -79,12 +79,16 @@ function applyWork() {
         }
 
         textStrokeParams = data.textStrokeParams;
+        console.log(textStrokeParams);  // 调试用
         textStrokeEnabled = textStrokeParams && textStrokeParams.isEnabled === true;
         if (textStrokeEnabled) {
             textStrokeScope = textStrokeParams.scope;
             let scope_username = false;
             let scope_chatbox = false;
             let style_filter = '';
+            let textStrokeColor = null;
+            let textStrokeColorToUse = null;
+            textStrokeScope = 'all';    // 临时设置
             if (textStrokeScope === 'all') {
                 textStrokeScope = 'chatbox';
             }
@@ -96,16 +100,19 @@ function applyWork() {
                 scope_chatbox = true;
                 style_filter = 'chat-history-wrapper';
             }
-            
+            if (textStrokeParams.autoColor) {
+                const computedStyle = window.getComputedStyle(chatBox.querySelector('small'));
+                textStrokeColorToUse = invertColor(computedStyle.color);
+            }
             if (scope_username || scope_chatbox) {
                 try {
-                    if (!textStrokeParams.hasOwnProperty('width') || !textStrokeParams.hasOwnProperty('color')) {
-                        throw new Error('textStrokeParams.width and textStrokeParams.color are not ready.');
+                    if (!textStrokeParams.hasOwnProperty('width') || (!textStrokeParams.hasOwnProperty('color') && !textStrokeParams.hasOwnProperty('autoColor') || textStrokeColorToUse)) {
+                        throw new Error('textStrokeParams.width or (textStrokeParams.color and textStrokeParams.autoColor) are not ready.');
                     }
                     const textStrokeStyle = document.createElement('style');
                     textStrokeStyle.textContent = `
               ${style_filter} {
-                -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeParams.color};
+                -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeColorToUse};
               }
             `;
                     chatBox.parentNode.insertBefore(textStrokeStyle, chatBox);

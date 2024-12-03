@@ -35,6 +35,7 @@
             ],
             "js": [
                 "libs/browser-polyfill.js",
+                "utils/utils.js",
                 "utils/apply_work.js",
                 "content.js"
             ]

@@ -7,9 +7,20 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
     const themeToggle = document.getElementById("themeToggle");
     const displayModeSelect = document.getElementById("display-mode-select");
+    const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
+    const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
+    
+    let textStrokeParams = {
+        isEnabled: enableTextStrokeCheckbox.checked,
+        autoColor: autoTextStrokeColorCheckbox.checked,
+        width: parseFloat(textStrokeWidthInput.value)
+    };
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({ imageUrl, displayText, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value, opacityValue: opacitySlider.value }).then(() => {
+    browser.storage.sync.set({ imageUrl, displayText, opacityValue: opacitySlider.value, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value,
+        textStrokeParams
+     }).then(() => {
         alert('Section content saved!');
         if (imageUrl.trim() === "") {
             imageUrl_fullpath = "";
@@ -77,7 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 加载用户设置的图片背景
-    browser.storage.sync.get({ imageUrl: '', displayText: '', theme: '', previewEnabled: false, displayMode: 'default', opacityValue: 0.3 }).then((data) => {
+    browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, displayMode: 'default', 
+        textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1 } 
+    }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
         }
@@ -112,6 +125,12 @@ document.addEventListener("DOMContentLoaded", () => {
             // 设置 opacitySilder 的数值为 data.opacityValue;
             opacitySlider.value = data.opacityValue;
             opacitySliderValueSpan.textContent = `${data.opacityValue}`;
+        }
+
+        if (data.textStrokeParams) {
+            enableTextStrokeCheckbox.checked = data.textStrokeParams.isEnabled;
+            autoTextStrokeColorCheckbox.checked = data.textStrokeParams.autoColor;
+            textStrokeWidthInput.value = data.textStrokeParams.width;
         }
 
         // 恢复主题
