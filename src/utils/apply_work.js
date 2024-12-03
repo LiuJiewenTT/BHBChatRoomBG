@@ -1,7 +1,7 @@
 
 function applyWork() {
     // 从存储中获取用户定义的图片 URL
-    browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, textStroke: {} }).then((data) => {
+    browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, textStrokeParams: null }).then((data) => {
         if (data.displayMode === 'disabled') {
             return;
         }
@@ -76,6 +76,43 @@ function applyWork() {
                 chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
             }
 
+        }
+
+        textStrokeParams = data.textStrokeParams;
+        textStrokeEnabled = textStrokeParams && textStrokeParams.isEnabled === true;
+        if (textStrokeEnabled) {
+            textStrokeScope = textStrokeParams.scope;
+            let scope_username = false;
+            let scope_chatbox = false;
+            let style_filter = '';
+            if (textStrokeScope === 'all') {
+                textStrokeScope = 'chatbox';
+            }
+            if (textStrokeScope === 'username') {
+                scope_username = true;
+                style_filter = 'small';
+            }
+            if (textStrokeScope === 'chatbox') {
+                scope_chatbox = true;
+                style_filter = 'chat-history-wrapper';
+            }
+            
+            if (scope_username || scope_chatbox) {
+                try {
+                    if (!textStrokeParams.hasOwnProperty('width') || !textStrokeParams.hasOwnProperty('color')) {
+                        throw new Error('textStrokeParams.width and textStrokeParams.color are not ready.');
+                    }
+                    const textStrokeStyle = document.createElement('style');
+                    textStrokeStyle.textContent = `
+              ${style_filter} {
+                -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeParams.color};
+              }
+            `;
+                    chatBox.parentNode.insertBefore(textStrokeStyle, chatBox);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
         }
     });
 }

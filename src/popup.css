@@ -60,6 +60,20 @@ body {
     width: 100%;
 }
 
+.textStrokeSettingsHorizontalDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+p {
+    margin: 0;
+}
+
+hr {
+    width: 100%;
+}
+
 label {
     display: flex;
     justify-content: space-between;
