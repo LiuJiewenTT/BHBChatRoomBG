@@ -1,12 +1,12 @@
 // 从存储中获取用户定义的图片 URL
-browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3 }).then((data) => {
+browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, textStroke: {} }).then((data) => {
     if (data.displayMode === 'disabled') {
         return;
     }
 
     let sectionClassName = "background-insert-section";
     let chatboxClassName = "chat-history-wrapper";
-    section = document.getElementById(sectionClassName);
+    section = document.getElementsByClassName(sectionClassName)[0];
     chatBox = document.getElementsByClassName(chatboxClassName)[0];
 
     if (data.displayMode === 'default') {
