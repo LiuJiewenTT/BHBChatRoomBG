@@ -1,18 +1,16 @@
-// 使用 ES6 module
+// content.js
+
+// 动态创建 script 元素
 const script = document.createElement('script');
-script.type = 'module';
-script.src = browser.runtime.getURL('utils/load.js');
+script.src = browser.runtime.getURL('utils/apply_work.js');  // 引入 apply_work.js
 script.onload = function () {
-    console.log('load.js loaded');
+    console.log('apply_work.js loaded');
 };
-document.head.appendChild(script);
-console.log('script load.js appended');
 
-import("./utils/load.js").then(module => {
-    const { applyWork } = module;
+document.head.appendChild(script);  // 将脚本注入到页面
+console.log('script apply_work.js appended');
 
-    // 使用 applyWork 函数
-    applyWork();
-}).catch(error => {
-    console.error('Failed to load applyWork:', error);
-});
+window.onload = function () {
+    console.log('window Loaded');
+    window.applyWork();
+};

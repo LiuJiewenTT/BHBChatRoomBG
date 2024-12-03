@@ -1,5 +1,5 @@
 
-export function applyWork() {
+function applyWork() {
     // 从存储中获取用户定义的图片 URL
     browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, textStroke: {} }).then((data) => {
         if (data.displayMode === 'disabled') {
@@ -79,3 +79,5 @@ export function applyWork() {
         }
     });
 }
+
+window.applyWork = applyWork;
