@@ -45,6 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const opacityResetButton = document.getElementById("opacityResetButton");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
     const displayModeSelect = document.getElementById("display-mode-select");
+    const horizontalDivider1 = document.getElementById("horizontalDivider1");
+    const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
+    const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
 
@@ -128,6 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
         previewCheckbox.classList.add(currentTheme);
         displayModeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
+        horizontalDivider1.classList.add(currentTheme);
+        enableTextStrokeCheckbox.classList.add(currentTheme);
+        autoTextStrokeColorCheckbox.classList.add(currentTheme);
+        textStrokeWidthInput.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
 
         body.classList.add(currentTheme);
@@ -155,6 +163,14 @@ document.addEventListener("DOMContentLoaded", () => {
         displayModeSelect.classList.add(newTheme);
         themeToggle.classList.remove(currentTheme);
         themeToggle.classList.add(newTheme);
+        horizontalDivider1.classList.remove(currentTheme);
+        horizontalDivider1.classList.add(newTheme);
+        enableTextStrokeCheckbox.classList.remove(currentTheme);
+        enableTextStrokeCheckbox.classList.add(newTheme);
+        autoTextStrokeColorCheckbox.classList.remove(currentTheme);
+        autoTextStrokeColorCheckbox.classList.add(newTheme);
+        textStrokeWidthInput.classList.remove(currentTheme);
+        textStrokeWidthInput.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
 

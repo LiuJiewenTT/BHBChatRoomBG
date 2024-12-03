@@ -72,6 +72,12 @@ p {
 
 hr {
     width: 100%;
+    border-width: 0;
+    background: var(--white-smoke);
+    height: 3px;
+}
+hr.dark {
+    background: var(--lighter-dark-bgcolor);
 }
 
 label {
