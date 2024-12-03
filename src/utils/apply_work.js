@@ -79,5 +79,3 @@ function applyWork() {
         }
     });
 }
-
-window.applyWork = applyWork;

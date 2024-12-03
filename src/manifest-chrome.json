@@ -35,18 +35,8 @@
             ],
             "js": [
                 "libs/browser-polyfill.js",
+                "utils/apply_work.js",
                 "content.js"
-            ]
-        }
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "utils/load.js",
-                "utils/apply_work.js"
-            ],
-            "matches": [
-                "*://boyshelpboys.com/*"
             ]
         }
     ]
