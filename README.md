@@ -48,7 +48,7 @@
 
 手机效果图见：[手机效果图](手机效果图.md)
 
-
+<img src="docs/运行效果图6.png" alt="效果图6" style="zoom:50%;" />
 <img src="docs/运行效果图2.png" alt="效果图2" style="zoom:50%;" />
 <img src="docs/运行效果图3.png" alt="效果图3" style="zoom:50%;" />
 <img src="docs/运行效果图4.png" alt="效果图4" style="zoom:50%;" />

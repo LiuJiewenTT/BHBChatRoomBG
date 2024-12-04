@@ -5,6 +5,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const displayText = document.getElementById('displayText').value;
     const opacitySlider = document.getElementById("opacitySlider");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
+    const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
     const themeToggle = document.getElementById("themeToggle");
     const displayModeSelect = document.getElementById("display-mode-select");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
@@ -18,8 +19,9 @@ document.getElementById('saveButton').addEventListener('click', () => {
     };
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({ imageUrl, displayText, opacityValue: opacitySlider.value, previewEnabled: previewCheckbox.checked, displayMode: displayModeSelect.value,
-        textStrokeParams
+    browser.storage.sync.set({ imageUrl, displayText, opacityValue: opacitySlider.value, 
+        previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
+        displayMode: displayModeSelect.value, textStrokeParams
      }).then(() => {
         alert('Section content saved!');
         if (imageUrl.trim() === "") {
@@ -55,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const opacitySliderValueSpan = document.getElementById("opacitySliderValueSpan");
     const opacityResetButton = document.getElementById("opacityResetButton");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
+    const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
     const displayModeSelect = document.getElementById("display-mode-select");
     const horizontalDivider1 = document.getElementById("horizontalDivider1");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
@@ -88,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 加载用户设置的图片背景
-    browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, displayMode: 'default', 
-        textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1 } 
+    browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false, 
+        displayMode: 'default', textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1 } 
     }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
@@ -103,6 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
             previewCheckbox.checked = true;
         } else {
             previewCheckbox.checked = false;
+        }
+
+        if (data.autoResizeBackground === true) {
+            autoResizeBackgroundCheckbox.checked = true;
+        } else {
+            autoResizeBackgroundCheckbox.checked = false;
         }
 
         // 恢复图片背景
@@ -149,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
         opacityResetButton.classList.add(currentTheme);
         slider_colorChange(opacitySlider);
         previewCheckbox.classList.add(currentTheme);
+        autoResizeBackgroundCheckbox.classList.add(currentTheme);
         displayModeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
         horizontalDivider1.classList.add(currentTheme);
@@ -178,6 +188,8 @@ document.addEventListener("DOMContentLoaded", () => {
         opacityResetButton.classList.add(newTheme);
         previewCheckbox.classList.remove(currentTheme);
         previewCheckbox.classList.add(newTheme);
+        autoResizeBackgroundCheckbox.classList.remove(currentTheme);
+        autoResizeBackgroundCheckbox.classList.add(newTheme);
         displayModeSelect.classList.remove(currentTheme);
         displayModeSelect.classList.add(newTheme);
         themeToggle.classList.remove(currentTheme);

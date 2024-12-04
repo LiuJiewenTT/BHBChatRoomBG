@@ -4,7 +4,9 @@ function applyWork() {
     console.log(siteThemeMode);  // 调试用
 
     // 从存储中获取用户定义的图片 URL
-    browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, textStrokeParams: null }).then((data) => {
+    browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
+        textStrokeParams: null 
+    }).then((data) => {
         if (data.displayMode === 'disabled') {
             return;
         }
@@ -29,6 +31,9 @@ function applyWork() {
         if (data.imageUrl) {
             section.style.backgroundImage = `url('${data.imageUrl}')`;
             section.style.backgroundRepeat = "repeat";
+            if (data.autoResizeBackground) {
+                section.style.backgroundSize = "cover";
+            }
             section.style.display = "flex";
             section.style.alignItems = "center";
             section.style.justifyContent = "center";

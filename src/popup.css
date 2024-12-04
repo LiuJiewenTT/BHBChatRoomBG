@@ -60,6 +60,7 @@ body {
     width: 100%;
 }
 
+#backgroundSettingsCheckboxDiv,
 .textStrokeSettingsHorizontalDiv {
     display: flex;
     justify-content: space-between;
