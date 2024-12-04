@@ -1,5 +1,8 @@
 
 function applyWork() {
+    let siteThemeMode = getSiteThemeMode_LightOrDark();
+    console.log(siteThemeMode);  // 调试用
+
     // 从存储中获取用户定义的图片 URL
     browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, textStrokeParams: null }).then((data) => {
         if (data.displayMode === 'disabled') {
@@ -98,15 +101,21 @@ function applyWork() {
             }
             if (textStrokeScope === 'chatbox') {
                 scope_chatbox = true;
-                style_filter = 'chat-history-wrapper';
+                style_filter = '.chat-history-wrapper';
             }
             if (textStrokeParams.autoColor) {
-                const computedStyle = window.getComputedStyle(chatBox.querySelector('small'));
-                textStrokeColorToUse = invertColor(computedStyle.color);
+                let tempColor;
+                if ( siteThemeMode === 'dark' ) {
+                    tempColor = HexToRgb('#7071a4');
+                } else {
+                    tempColor = HexToRgb('#a1acb8');
+                }
+                textStrokeColorToUse = invertColor(tempColor);
+                console.log('textStrokeColorToUse: ', textStrokeColorToUse);  // 调试用
             }
             if (scope_username || scope_chatbox) {
                 try {
-                    if (!textStrokeParams.hasOwnProperty('width') || (!textStrokeParams.hasOwnProperty('color') && !textStrokeParams.hasOwnProperty('autoColor') || textStrokeColorToUse)) {
+                    if (!textStrokeParams.hasOwnProperty('width') || (!textStrokeParams.hasOwnProperty('color') && !textStrokeParams.hasOwnProperty('autoColor') || !textStrokeColorToUse)) {
                         throw new Error('textStrokeParams.width or (textStrokeParams.color and textStrokeParams.autoColor) are not ready.');
                     }
                     const textStrokeStyle = document.createElement('style');
