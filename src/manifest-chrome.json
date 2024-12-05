@@ -36,9 +36,18 @@
             "js": [
                 "libs/browser-polyfill.js",
                 "utils/utils.js",
-                "utils/wrappers.js",
                 "utils/apply_work.js",
                 "content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "utils/wrap_msg.js"
+            ],
+            "matches": [
+                "*://boyshelpboys.com/*"
             ]
         }
     ]
