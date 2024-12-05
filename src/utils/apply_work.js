@@ -1,11 +1,35 @@
 
+var wrapped_addmsg = null;
+var wrapped_get_msg = null;
+var wrap_timer = 0;
+
+
+function wrap() {
+    if (typeof window.addmsg === 'undefined' || typeof window.get_msg === 'undefined') {
+        // console.log('addmsg or get_msg is not defined.');
+    } else {
+        clearInterval(wrap_timer);
+        wrapped_addmsg = wrap_addmsg(addmsg);
+        wrapped_get_msg = wrap_get_msg(get_msg);
+
+        if (typeof c !== 'undefined' && c) {
+            console.log('c: ', c);  // 调试用
+            clearInterval(c);
+        }
+        c = setInterval(wrapped_get_msg, 1000);
+        console.log('c: ', c);  // 调试用
+    }
+}
+
+
 function applyWork() {
     let siteThemeMode = getSiteThemeMode_LightOrDark();
     console.log(siteThemeMode);  // 调试用
 
     // 从存储中获取用户定义的图片 URL
-    browser.storage.sync.get({ imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
-        textStrokeParams: null 
+    browser.storage.sync.get({
+        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
+        textStrokeParams: null
     }).then((data) => {
         if (data.displayMode === 'disabled') {
             return;
@@ -110,7 +134,7 @@ function applyWork() {
             }
             if (textStrokeParams.autoColor) {
                 let tempColor;
-                if ( siteThemeMode === 'dark' ) {
+                if (siteThemeMode === 'dark') {
                     tempColor = HexToRgb('#7071a4');
                 } else {
                     tempColor = HexToRgb('#a1acb8');
@@ -136,4 +160,8 @@ function applyWork() {
             }
         }
     });
+
+    wrap_timer = setInterval(wrap, 100);
+
+    console.log('applyWork() done.');
 }
