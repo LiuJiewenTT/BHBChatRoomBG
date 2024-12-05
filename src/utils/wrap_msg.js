@@ -21,7 +21,7 @@ function wrap_get_msg() {
     return function (...args) {
         original_get_msg(...args);
         let new_msg_cnt = k - old_k;
-        console.log('new_msg_cnt: , k-old_k: , c: ', new_msg_cnt, k, old_k, c);  // 调试用
+        // console.log('new_msg_cnt: , k-old_k: , c: ', new_msg_cnt, k, old_k, c);  // 调试用
         if (old_k != k) {
             old_k = k;
         }
@@ -50,7 +50,7 @@ addmsg = wrapped_addmsg;
 get_msg = wrapped_get_msg;
 
 if (typeof c !== 'undefined' && c) {
-    console.log('old c: ', c);  // 调试用
+    console.log('c (old): ', c);  // 调试用
     clearInterval(c);
 }
 c_wrapped = setInterval(wrapped_get_msg, 1000);

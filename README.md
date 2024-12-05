@@ -6,6 +6,12 @@
 
 > 这个插件按照W3标准编写，对Chrome的兼容由[polyfill](https://github.com/mozilla/webextension-polyfill)提供。
 
+## 特点
+
+1. 能够显示**外链**的用户头像，完美适配。（需要发送者的发送参数以`http://`或`https://`起始）
+
+
+
 ## 安装
 
 ### 稳定版
