@@ -20,11 +20,9 @@ function wrap_get_msg() {
     original_get_msg = get_msg;
     return function (...args) {
         original_get_msg(...args);
-        console.log('get_msg success');  // 调试用
         let li_item = document.getElementsByClassName("mk-chat-box")[0].lastElementChild;
-        // console.log('li: ', li_item);  // 调试用
         let img_item = li_item.querySelector("img");
-        console.log('img: ', img_item);  // 调试用
+        // console.log('img: ', img_item);  // 调试用
         if (img_item) {
             if (img_item.getAttribute('src').startsWith(".http://") || img_item.getAttribute('src').startsWith(".https://")) {
                 img_item.src = img_item.getAttribute('src').replace(/^\./, '');
