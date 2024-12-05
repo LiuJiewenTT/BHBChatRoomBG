@@ -117,6 +117,8 @@ function applyWork() {
                 }
                 textStrokeColorToUse = invertColor(tempColor);
                 console.log('textStrokeColorToUse: ', textStrokeColorToUse);  // 调试用
+            } else {
+                textStrokeColorToUse = textStrokeParams.color;
             }
             if (scope_username || scope_chatbox) {
                 try {

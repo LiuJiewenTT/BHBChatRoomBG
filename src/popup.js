@@ -11,11 +11,13 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
+    const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     
     let textStrokeParams = {
         isEnabled: enableTextStrokeCheckbox.checked,
         autoColor: autoTextStrokeColorCheckbox.checked,
-        width: parseFloat(textStrokeWidthInput.value)
+        width: parseFloat(textStrokeWidthInput.value),
+        color: textStrokeColorPicker.value.trim()
     };
 
     // 将用户输入的内容保存到存储中
@@ -63,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
+    const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
+    const textStrokeColorPrintSpan = document.getElementById("textStrokeColorPrint");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
 
@@ -92,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 加载用户设置的图片背景
     browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false, 
-        displayMode: 'default', textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1 } 
+        displayMode: 'default', textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1, color: "#000000" } 
     }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
@@ -140,6 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
             enableTextStrokeCheckbox.checked = data.textStrokeParams.isEnabled;
             autoTextStrokeColorCheckbox.checked = data.textStrokeParams.autoColor;
             textStrokeWidthInput.value = data.textStrokeParams.width;
+            textStrokeColorPicker.value = data.textStrokeParams.color;
+            textStrokeColorPrintSpan.textContent = data.textStrokeParams.color;
+            console.log('color: ', data.textStrokeParams.color, typeof data.textStrokeParams.color);
         }
 
         // 恢复主题
@@ -245,5 +252,16 @@ document.addEventListener("DOMContentLoaded", () => {
         // 保存预览状态
         console.log('[previewEnabled:' + isPreviewEnabled + ']');
         browser.storage.sync.set({ previewEnabled: isPreviewEnabled });
+    });
+
+    // 当颜色选择器的值改变时，更新 <span> 的文本
+    textStrokeColorPicker.addEventListener('input', function(event) {
+        const color = event.target.value;
+        textStrokeColorPrintSpan.textContent = color;  // 改变 span 中的文本为选择的颜色值
+    });
+    // 当颜色选择器失去焦点时，打印选择的颜色值
+    textStrokeColorPicker.addEventListener('blur', function() {
+        const selectedColor = textStrokeColorPicker.value;
+        console.log('颜色选择器失去焦点，选择的颜色值是:', selectedColor);
     });
 });
