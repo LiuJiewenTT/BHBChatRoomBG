@@ -19,15 +19,17 @@ function wrap_addmsg() {
 function wrap_get_msg() {
     original_get_msg = get_msg;
     return function (...args) {
-        const old_k = k;
         original_get_msg(...args);
         let new_msg_cnt = k - old_k;
         console.log('new_msg_cnt: , k-old_k: , c: ', new_msg_cnt, k, old_k, c);  // 调试用
-        let ul_item = document.getElementsByClassName("mk-chat-box")[0];
-        let ul_len = ul_item.length;
+        if (old_k != k) {
+            old_k = k;
+        }
+        let ul_items = document.getElementsByClassName("mk-chat-box")[0].children;
+        let ul_len = ul_items.length;
         let li_item;
-        for (let i = new_msg_cnt, j = ul_len; i; i--, j--) {
-            li_item = ul_item[j];
+        for (let i = new_msg_cnt, j = ul_len - 1; i; i--, j--) {
+            li_item = ul_items[j];
             let img_item = li_item.querySelector("img");
             // console.log('img: ', img_item);  // 调试用
             if (img_item) {
@@ -52,11 +54,13 @@ if (typeof c !== 'undefined' && c) {
     clearInterval(c);
 }
 c_wrapped = setInterval(wrapped_get_msg, 1000);
-c = c_wrapped;
+// c = c_wrapped;
+c = 0;
 console.log('c (wrapped_get_msg): ', c);  // 调试用
-
+old_k = 0;
 setInterval(function () {
-    if ( c !== c_wrapped ) {
+    if (c) {
         clearInterval(c);
+        c = 0;
     }
 }, 100);
