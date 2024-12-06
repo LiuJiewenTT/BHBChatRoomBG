@@ -58,3 +58,33 @@ function compareVersion(v1, v2) {
     return 0; // v1 等于 v2
 }
 
+function setElementTextIgnoreVisitedPseudoClass(element) {
+    element.addEventListener('mouseover', function() {
+        if (currentTheme === "dark") {
+            element.style.color = "var(--light-purple-bgcolor)";
+        } else {
+            element.style.color = "var(--hover-bgcolor)";
+        }
+    });
+    element.addEventListener('mouseout', function() {
+        if (currentTheme === "dark") {
+            element.style.color = "var(--lighter-dark-bgcolor)";
+        } else {
+            element.style.color = "var(--white-smoke)";
+        }
+    });
+    element.addEventListener('mousedown', function() {
+        if (currentTheme === "dark") {
+            element.style.color = "var(--theme-color)";
+        } else {
+            element.style.color = "var(--theme-color)";
+        }
+    });
+    element.addEventListener('mouseup', function() {
+        if (currentTheme === "dark") {
+            element.style.color = "var(--lighter-dark-bgcolor)";
+        } else {
+            element.style.color = "var(--white-smoke)";
+        }
+    });
+}

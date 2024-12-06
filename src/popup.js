@@ -14,7 +14,7 @@ fetch(projectRepoTagsUrl)
     .then(data => {
         var latestVersion = data[0].name.replace(/^v/, '');
         var currentVersion = ext_currentVersion.textContent;
-        // currentVersion = '1.1';
+        currentVersion = '1.1';
         console.log("Latest version: " + latestVersion + ", current version: " + currentVersion);
         if (compareVersion(latestVersion, currentVersion) > 0) {
             console.log("New version(tag) available: " + latestVersion);
@@ -33,34 +33,7 @@ fetch(projectRepoTagsUrl)
                         updateLink.href = projectRepoReleaseLatestPageUrl;
                         updateLink.textContent = `Update available: ${latestVersion}`;
                         // updateLink.style.display = "block";
-                        updateLink.addEventListener('mouseover', function() {
-                            if (currentTheme === "dark") {
-                                updateLink.style.color = "var(--light-purple-bgcolor)";
-                            } else {
-                                updateLink.style.color = "var(--hover-bgcolor)";
-                            }
-                        });
-                        updateLink.addEventListener('mouseout', function() {
-                            if (currentTheme === "dark") {
-                                updateLink.style.color = "var(--lighter-dark-bgcolor)";
-                            } else {
-                                updateLink.style.color = "var(--white-smoke)";
-                            }
-                        });
-                        updateLink.addEventListener('mousedown', function() {
-                            if (currentTheme === "dark") {
-                                updateLink.style.color = "var(--theme-color)";
-                            } else {
-                                updateLink.style.color = "var(--theme-color)";
-                            }
-                        });
-                        updateLink.addEventListener('mouseup', function() {
-                            if (currentTheme === "dark") {
-                                updateLink.style.color = "var(--lighter-dark-bgcolor)";
-                            } else {
-                                updateLink.style.color = "var(--white-smoke)";
-                            }
-                        });
+                        setElementTextIgnoreVisitedPseudoClass(updateLink);
                     } else {
                         console.log("No release for new version tag is available.");
                     }
