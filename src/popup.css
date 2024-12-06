@@ -14,19 +14,27 @@ body {
     flex-direction: column;
 }
 
-/* 标题Header容器，使用flex布局 */
-.popup-header {
+
+.popup-header-topmost {
     display: flex;
+    flex-direction: column;
     /* 默认居中对齐 */
     justify-content: center;
     align-items: center;
-    /* 允许按钮绝对定位 */
     position: relative;
     /* 与下方内容分隔 */
     margin-bottom: 1em;
     padding-left: 15px;
     padding-right: 15px;
     width: 90%;
+}
+
+/* 标题Header容器，使用flex布局 */
+.popup-header {
+    /* 允许按钮绝对定位 */
+    flex-direction: row;
+    position: relative;
+    width: 100%;
 }
 
 /* 标题样式 */

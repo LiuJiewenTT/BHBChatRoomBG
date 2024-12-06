@@ -158,6 +158,8 @@ function applyWork() {
     };
     document.head.appendChild(wrap_msg_script);
 
+    const chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
+    chatBox_send_button.style.alignItems = "center";
 
     console.log('applyWork() done.');
 }

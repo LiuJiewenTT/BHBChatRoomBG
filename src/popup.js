@@ -1,5 +1,7 @@
 let baseUrl = "https://boyshelpboys.com/";
 
+document.getElementById('ext_currentVersion').textContent = browser.runtime.getManifest().version;
+
 document.getElementById('saveButton').addEventListener('click', () => {
     const imageUrl = document.getElementById('imageUrl').value.trim();
     const displayText = document.getElementById('displayText').value;
