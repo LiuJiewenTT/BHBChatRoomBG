@@ -53,10 +53,15 @@
     </div>
     <hr id="horizontalDivider1">
     <div class="textStrokeSettingsDiv">
-      <p>Text Stroke:&nbsp;</p>
+      <div class="textStrokeSettingsHorizontalDiv" style="justify-content: start;">
+        <p>Text Stroke:&nbsp;</p>
+        <label class="checkbox" style="display: inline-flex;">
+          <input type="checkbox" id="enableTextStrokeCheckbox-afterText"><span>Enable</span>
+        </label>
+      </div>
       <div class="textStrokeSettingsHorizontalDiv" id="textStrokeSettingsHorizontalDiv_row1">
         <label class="checkbox" style="display: inline-flex;">
-          <input type="checkbox" id="enableTextStrokeCheckbox">Enable
+          <input type="checkbox" id="enableTextStrokeCheckbox"><span>Enable</span>
         </label>
         <label class="checkbox" style="display: inline-flex;">
           <input type="checkbox" id="autoTextStrokeColorCheckbox">Auto Color

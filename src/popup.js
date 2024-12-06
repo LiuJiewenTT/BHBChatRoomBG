@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayModeSelect = document.getElementById("display-mode-select");
     const horizontalDivider1 = document.getElementById("horizontalDivider1");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
+    const enableTextStrokeCheckbox_afterText = document.getElementById("enableTextStrokeCheckbox-afterText");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeManualColorPickDiv = document.getElementById("textStrokeManualColorPickDiv");
@@ -97,6 +98,37 @@ document.addEventListener("DOMContentLoaded", () => {
         sliderCoveredBackground = `linear-gradient(to right, ${sliderFgColor} 0%, ${sliderFgColor} ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, ${sliderBgColor} ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, ${sliderBgColor} 100%)`;
         body.style.setProperty('--slider-cover-background', sliderCoveredBackground); // 设置滑动条背景色
     }
+
+    enableTextStrokeCheckbox_afterText.addEventListener("change", (event) => {
+        const isTextStrokeEnabled = event.target.checked;
+        enableTextStrokeCheckbox.checked = isTextStrokeEnabled;
+        if (isTextStrokeEnabled) {
+            enableTextStrokeCheckbox_afterText.setAttribute('hidden', '');
+            enableTextStrokeCheckbox_afterText.parentElement.children[1].setAttribute('hidden', '');
+            enableTextStrokeCheckbox_afterText.disabled = true;
+            enableTextStrokeCheckbox.disabled = false;
+            // enableTextStrokeCheckbox.removeAttribute('hidden');
+            // enableTextStrokeCheckbox.parentElement.children[1].removeAttribute('hidden');
+            document.getElementById('textStrokeSettingsHorizontalDiv_row1').style.removeProperty('display');
+            document.getElementById('textStrokeSettingsHorizontalDiv_row2').style.removeProperty('display');
+        }
+    });
+
+    enableTextStrokeCheckbox.addEventListener("change", (event) => {
+        const isTextStrokeEnabled = event.target.checked;
+        enableTextStrokeCheckbox_afterText.checked = isTextStrokeEnabled;
+        if (!isTextStrokeEnabled) {
+            // enableTextStrokeCheckbox.setAttribute('hidden', '');
+            // enableTextStrokeCheckbox.parentElement.children[1].setAttribute('hidden', '');
+            enableTextStrokeCheckbox.disabled = true;
+            enableTextStrokeCheckbox_afterText.removeAttribute('hidden');
+            enableTextStrokeCheckbox_afterText.disabled = false;
+            enableTextStrokeCheckbox_afterText.parentElement.children[1].removeAttribute('hidden');
+
+            document.getElementById('textStrokeSettingsHorizontalDiv_row1').style.display = 'none';
+            document.getElementById('textStrokeSettingsHorizontalDiv_row2').style.display = 'none';
+        }
+    });
 
     // 加载用户设置的图片背景
     browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false, 
@@ -148,7 +180,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (data.textStrokeParams) {
             enableTextStrokeCheckbox.checked = data.textStrokeParams.isEnabled;
+            enableTextStrokeCheckbox_afterText.checked = data.textStrokeParams.isEnabled;
+            enableTextStrokeCheckbox.dispatchEvent(new Event('change'));
+            enableTextStrokeCheckbox_afterText.dispatchEvent(new Event('change'));
             autoTextStrokeColorCheckbox.checked = data.textStrokeParams.autoColor;
+            autoTextStrokeColorCheckbox.dispatchEvent(new Event('change'));
             textStrokeWidthInput.value = data.textStrokeParams.width;
             textStrokeColorPicker.value = data.textStrokeParams.color;
             textStrokeColorPrintSpan.textContent = data.textStrokeParams.color;
@@ -176,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
         displayModeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
         horizontalDivider1.classList.add(currentTheme);
+        enableTextStrokeCheckbox_afterText.classList.add(currentTheme);
         enableTextStrokeCheckbox.classList.add(currentTheme);
         autoTextStrokeColorCheckbox.classList.add(currentTheme);
         textStrokeWidthInput.classList.add(currentTheme);
@@ -211,6 +248,8 @@ document.addEventListener("DOMContentLoaded", () => {
         themeToggle.classList.add(newTheme);
         horizontalDivider1.classList.remove(currentTheme);
         horizontalDivider1.classList.add(newTheme);
+        enableTextStrokeCheckbox_afterText.classList.remove(currentTheme);
+        enableTextStrokeCheckbox_afterText.classList.add(newTheme);
         enableTextStrokeCheckbox.classList.remove(currentTheme);
         enableTextStrokeCheckbox.classList.add(newTheme);
         autoTextStrokeColorCheckbox.classList.remove(currentTheme);
