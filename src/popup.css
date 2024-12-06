@@ -407,6 +407,11 @@ button.dark {
     aspect-ratio: 1;
 }
 
+#saveButton,
+#applyButton {
+    width: 100%;
+}
+
 /* 背景图片样式 */
 body.has-bg-image.light {
     background-image: var(--bg-image);

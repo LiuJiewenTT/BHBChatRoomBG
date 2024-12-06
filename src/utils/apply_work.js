@@ -11,10 +11,13 @@ function applyWork() {
             return;
         }
 
+        let section;
+        let old_section = null;
         let sectionClassName = "background-insert-section";
+        let sectionID = "background-insert-section-id";
         let chatboxClassName = "chat-history-wrapper";
-        section = document.getElementsByClassName(sectionClassName)[0];
-        chatBox = document.getElementsByClassName(chatboxClassName)[0];
+        section = document.getElementById(sectionID);
+        chatBox = document.querySelector('.'+chatboxClassName);
 
         if (data.displayMode === 'default') {
             data.displayMode = 'extended';
@@ -24,9 +27,14 @@ function applyWork() {
             flag_new_section = true;
             section = document.createElement('section');
             section.className = "background-insert-section"
+            section.id = sectionID;
         }
         else {
             flag_new_section = false;
+            // 创建一个深拷贝（包含子节点）
+            // old_section = section.cloneNode(true);
+            // 创建一个浅拷贝（不包含子节点）
+            old_section = section.cloneNode(false);
         }
         if (data.imageUrl) {
             section.style.backgroundImage = `url('${data.imageUrl}')`;
@@ -57,45 +65,63 @@ function applyWork() {
             section.textContent = data.displayText || '';
         }
 
-        const inputBoxShadowLineStyle = document.createElement('style');
-        inputBoxShadowLineStyle.textContent = `
-      .chat-history-footer:before {
-        background: transparent !important;
-      }
-    `;
-        if (flag_new_section) {
-            if (data.displayMode === 'fullscreen') {
-                document.body.appendChild(section); // 将 section 插入页面
+        let inputBoxShadowLineStyleID =  "input-box-shadow-line-removing-style";
+        let inputBoxShadowLineStyle = document.getElementById(inputBoxShadowLineStyleID);
+        let inputBoxShadowLineStyle_isNew = false;
+        if (inputBoxShadowLineStyle === null) {
+            inputBoxShadowLineStyle_isNew = true;
+            inputBoxShadowLineStyle = document.createElement('style');
+            inputBoxShadowLineStyle.id = inputBoxShadowLineStyleID;
+            inputBoxShadowLineStyle.textContent = `
+            .chat-history-footer:before {
+                background: transparent !important;
             }
-            if (data.displayMode === 'extended') {
-                document.body.appendChild(section); // 将 section 插入页面
-            }
-            if (data.displayMode === 'page-background') {
-                document.body.insertBefore(section, document.body.firstChild);
-            }
-            if (data.displayMode === 'chat-background-extended') {
-                chatBox.insertBefore(section, chatBox.firstChild);
-                // 接下来删除黑条
-                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
-            }
-            if (data.displayMode === 'chat-background') {
-                chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
-                // 接下来删除黑条
-                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
-            }
-
+            `;
         }
 
+        if (old_section) {
+            old_section.parentElement.removeChild(old_section);
+        }
+        // else: new section will be appended to body without deleting old one
+        
+        if (data.displayMode === 'fullscreen') {
+            document.body.appendChild(section); // 将 section 插入页面
+        }
+        if (data.displayMode === 'extended') {
+            document.body.appendChild(section); // 将 section 插入页面
+        }
+        if (data.displayMode === 'page-background') {
+            document.body.insertBefore(section, document.body.firstChild);
+        }
+        if (data.displayMode === 'chat-background-extended') {
+            chatBox.insertBefore(section, chatBox.firstChild);
+            // 接下来删除黑条
+            if (inputBoxShadowLineStyle_isNew) {
+                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+            }
+        }
+        if (data.displayMode === 'chat-background') {
+            chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
+            // 接下来删除黑条
+            if (inputBoxShadowLineStyle_isNew) {
+                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+            }
+        }
+        
+        let textStrokeStyle = document.getElementById(textStrokeStyleID);
+        let textStrokeStyle_isNew = false;
         textStrokeParams = data.textStrokeParams;
         console.log(textStrokeParams);  // 调试用
         textStrokeEnabled = textStrokeParams && textStrokeParams.isEnabled === true;
         if (textStrokeEnabled) {
-            textStrokeScope = textStrokeParams.scope;
+            let textStrokeScope = textStrokeParams.scope;
             let scope_username = false;
             let scope_chatbox = false;
             let style_filter = '';
             let textStrokeColor = null;
             let textStrokeColorToUse = null;
+
+            let textStrokeStyleID = "text-stroke-style";
 
             console.log('text stroke scope: ', textStrokeScope);  // 调试用
             // textStrokeScope = 'all';    // 临时设置
@@ -130,8 +156,17 @@ function applyWork() {
                 throw new Error('textStrokeParams.width or (textStrokeParams.color and textStrokeParams.autoColor) are not ready.');
             }
 
+
+            if (textStrokeStyle === null) {
+                textStrokeStyle = document.createElement('style');
+                textStrokeStyle.id = textStrokeStyleID;
+                textStrokeStyle_isNew = true;
+            }
+
+            if (!textStrokeStyle_isNew) {
+                textStrokeStyle.parentElement.removeChild(textStrokeStyle);
+            }
             if (textStrokeScope === 'all') {
-                const textStrokeStyle = document.createElement('style');
                 textStrokeStyle.textContent = `
                 p,div,span,a{
                     -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeColorToUse};
@@ -140,7 +175,6 @@ function applyWork() {
                 document.body.insertBefore(textStrokeStyle, document.body.firstChild);
             }
             if (scope_username || scope_chatbox) {
-                const textStrokeStyle = document.createElement('style');
                 textStrokeStyle.textContent = `
                 ${style_filter} {
                     -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeColorToUse};
@@ -148,18 +182,28 @@ function applyWork() {
                 `;
                 chatBox.parentNode.insertBefore(textStrokeStyle, chatBox);
             }
+        } else {
+            // 未启用，删除已有的 textStrokeStyle
+            textStrokeStyle.parentElement.removeChild(textStrokeStyle);
         }
     });
 
-    const wrap_msg_script = document.createElement('script');
-    wrap_msg_script.src = browser.runtime.getURL('utils/wrap_msg.js');
-    wrap_msg_script.onload = function () {
-        console.log("wrap_msg_script loaded.");
-    };
-    document.head.appendChild(wrap_msg_script);
+    const wrap_msg_script_id = "wrap_msg_script-id";
+    let wrap_msg_script = document.getElementById(wrap_msg_script_id);
+    if (wrap_msg_script === null) {   
+        wrap_msg_script = document.createElement('script');
+        wrap_msg_script.id = wrap_msg_script_id;
+        wrap_msg_script.src = browser.runtime.getURL('utils/wrap_msg.js');
+        wrap_msg_script.onload = function () {
+            console.log("wrap_msg_script loaded.");
+        };
+        document.head.appendChild(wrap_msg_script);
+    }
 
     const chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
-    chatBox_send_button.style.alignItems = "center";
+    if (chatBox_send_button) {
+        chatBox_send_button.style.alignItems = "center";
+    }
 
     console.log('applyWork() done.');
 }

@@ -2,46 +2,57 @@ let baseUrl = "https://boyshelpboys.com/";
 
 var currentTheme;
 
-var ext_currentVersion = document.getElementById('ext_currentVersion');
-ext_currentVersion.textContent = browser.runtime.getManifest().version;
-var projectRepoTagsUrl = "https://api.github.com/repos/LiuJiewenTT/BHBChatRoomBG/tags";
-var projectRepoReleasesUrl = "https://api.github.com/repos/LiuJiewenTT/BHBChatRoomBG/releases";
-var projectRepoReleasesPageUrl = "https://github.com/LiuJiewenTT/BHBChatRoomBG/releases";
-var projectRepoReleaseLatestPageUrl = "https://github.com/LiuJiewenTT/BHBChatRoomBG/releases/latest";
+function popupPage_checkExtensionUpdate() {
+    var ext_currentVersion = document.getElementById('ext_currentVersion');
+    ext_currentVersion.textContent = browser.runtime.getManifest().version;
+    var projectRepoTagsUrl = "https://api.github.com/repos/LiuJiewenTT/BHBChatRoomBG/tags";
+    var projectRepoReleasesUrl = "https://api.github.com/repos/LiuJiewenTT/BHBChatRoomBG/releases";
+    var projectRepoReleasesPageUrl = "https://github.com/LiuJiewenTT/BHBChatRoomBG/releases";
+    var projectRepoReleaseLatestPageUrl = "https://github.com/LiuJiewenTT/BHBChatRoomBG/releases/latest";
 
-fetch(projectRepoTagsUrl)
-    .then(response => response.json())
-    .then(data => {
-        var latestVersion = data[0].name.replace(/^v/, '');
-        var currentVersion = ext_currentVersion.textContent;
-        currentVersion = '1.1';
-        console.log("Latest version: " + latestVersion + ", current version: " + currentVersion);
-        if (compareVersion(latestVersion, currentVersion) > 0) {
-            console.log("New version(tag) available: " + latestVersion);
-            fetch(projectRepoReleasesUrl)
-                .then(response => response.json())
-                .then(data => {
-                    var latestRelease = data[0];
-                    console.log("Latest release: " + latestRelease.tag_name);
-                    if (latestRelease.prerelease) {
-                        console.log("This is a pre-release, skip update check.");
-                        return;
-                    }
-                    if ( latestRelease.tag_name === `v${latestVersion}` ) {
-                        console.log("Release for new version tag is available.");
-                        var updateLink = document.getElementById('ext_updateLink');
-                        updateLink.href = projectRepoReleaseLatestPageUrl;
-                        updateLink.textContent = `Update available: ${latestVersion}`;
-                        // updateLink.style.display = "block";
-                        setElementTextIgnoreVisitedPseudoClass(updateLink);
-                    } else {
-                        console.log("No release for new version tag is available.");
-                    }
-                })
-                .catch(error => console.error(error));
-        }
-    })
-    .catch(error => console.error(error));
+    fetch(projectRepoTagsUrl)
+        .then(response => response.json())
+        .then(data => {
+            var latestVersion = data[0].name.replace(/^v/, '');
+            var currentVersion = ext_currentVersion.textContent;
+            // currentVersion = '1.1';
+            console.log("Latest version: " + latestVersion + ", current version: " + currentVersion);
+            if (compareVersion(latestVersion, currentVersion) > 0) {
+                console.log("New version(tag) available: " + latestVersion);
+                fetch(projectRepoReleasesUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        var latestRelease = data[0];
+                        console.log("Latest release: " + latestRelease.tag_name);
+                        if (latestRelease.prerelease) {
+                            console.log("This is a pre-release, skip update check.");
+                            return;
+                        }
+                        if (latestRelease.tag_name === `v${latestVersion}`) {
+                            console.log("Release for new version tag is available.");
+                            var updateLink = document.getElementById('ext_updateLink');
+                            updateLink.href = projectRepoReleaseLatestPageUrl;
+                            updateLink.textContent = `Update available: ${latestVersion}`;
+                            // updateLink.style.display = "block";
+                            setElementTextIgnoreVisitedPseudoClass(updateLink);
+                        } else {
+                            console.log("No release for new version tag is available.");
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        })
+        .catch(error => console.error(error));
+}
+popupPage_checkExtensionUpdate();
+
+{
+    const headerTitle = document.querySelector('.header-title');
+    headerTitle.addEventListener('click', () => {
+        popupPage_checkExtensionUpdate();
+    });
+}
+
 
 document.getElementById('saveButton').addEventListener('click', () => {
     const imageUrl = document.getElementById('imageUrl').value.trim();
@@ -119,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
+    const applyButton = document.getElementById('applyButton');
 
     // 默认主题
     currentTheme = "light";
@@ -267,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
         textStrokeWidthInput.classList.add(currentTheme);
         textStrokeScopeSelect.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
+        applyButton.classList.add(currentTheme);
 
         body.classList.add(currentTheme);
     });
@@ -311,6 +324,8 @@ document.addEventListener("DOMContentLoaded", () => {
         textStrokeScopeSelect.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
+        applyButton.classList.remove(currentTheme);
+        applyButton.classList.add(newTheme);
 
         currentTheme = newTheme;
 
@@ -378,5 +393,11 @@ document.addEventListener("DOMContentLoaded", () => {
     textStrokeColorPicker.addEventListener('blur', function () {
         const selectedColor = textStrokeColorPicker.value;
         console.log('颜色选择器失去焦点，选择的颜色值是:', selectedColor);
+    });
+
+    applyButton.addEventListener("click", () => {
+        browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
+            
+        }
     });
 });
