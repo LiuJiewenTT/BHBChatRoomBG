@@ -96,7 +96,10 @@ function applyWork() {
             let style_filter = '';
             let textStrokeColor = null;
             let textStrokeColorToUse = null;
-            textStrokeScope = 'all';    // 临时设置
+            // textStrokeScope = 'all';    // 临时设置
+            if (textStrokeScope === null) {
+                textStrokeScope = 'username';    // 设置默认值
+            }
             if (textStrokeScope === 'all') {
                 textStrokeScope = 'chatbox';
             }
@@ -108,6 +111,9 @@ function applyWork() {
                 scope_chatbox = true;
                 style_filter = '.chat-history-wrapper';
             }
+            if (textStrokeParams.color) {
+                textStrokeColor = textStrokeParams.color;
+            }
             if (textStrokeParams.autoColor) {
                 let tempColor;
                 if (siteThemeMode === 'dark') {
@@ -118,7 +124,7 @@ function applyWork() {
                 textStrokeColorToUse = invertColor(tempColor);
                 console.log('textStrokeColorToUse: ', textStrokeColorToUse);  // 调试用
             } else {
-                textStrokeColorToUse = textStrokeParams.color;
+                textStrokeColorToUse = textStrokeColor;
             }
             if (scope_username || scope_chatbox) {
                 try {

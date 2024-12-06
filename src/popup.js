@@ -12,12 +12,14 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
+    const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     
     let textStrokeParams = {
         isEnabled: enableTextStrokeCheckbox.checked,
         autoColor: autoTextStrokeColorCheckbox.checked,
         width: parseFloat(textStrokeWidthInput.value),
-        color: textStrokeColorPicker.value.trim()
+        color: textStrokeColorPicker.value.trim(),
+        scope: textStrokeScopeSelect.value
     };
 
     // 将用户输入的内容保存到存储中
@@ -67,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeColorPrintSpan = document.getElementById("textStrokeColorPrint");
+    const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
 
@@ -96,7 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 加载用户设置的图片背景
     browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false, 
-        displayMode: 'default', textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1, color: "#000000" } 
+        displayMode: 'default', 
+        textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1, 
+            color: '#000000', scope: 'username' } 
     }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
@@ -147,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
             textStrokeColorPicker.value = data.textStrokeParams.color;
             textStrokeColorPrintSpan.textContent = data.textStrokeParams.color;
             console.log('color: ', data.textStrokeParams.color, typeof data.textStrokeParams.color);
+            textStrokeScopeSelect.value = data.textStrokeParams.scope;
         }
 
         // 恢复主题
@@ -172,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
         enableTextStrokeCheckbox.classList.add(currentTheme);
         autoTextStrokeColorCheckbox.classList.add(currentTheme);
         textStrokeWidthInput.classList.add(currentTheme);
+        textStrokeScopeSelect.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
 
         body.classList.add(currentTheme);
@@ -209,6 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
         autoTextStrokeColorCheckbox.classList.add(newTheme);
         textStrokeWidthInput.classList.remove(currentTheme);
         textStrokeWidthInput.classList.add(newTheme);
+        textStrokeScopeSelect.classList.remove(currentTheme);
+        textStrokeScopeSelect.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
 

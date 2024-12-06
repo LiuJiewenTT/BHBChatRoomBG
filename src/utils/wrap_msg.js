@@ -56,7 +56,7 @@ if (typeof c !== 'undefined' && c) {
 c_wrapped = setInterval(wrapped_get_msg, 1000);
 // c = c_wrapped;
 c = 0;
-console.log('c (wrapped_get_msg): ', c);  // 调试用
+console.log('c (wrapped_get_msg): ', c_wrapped);  // 调试用
 old_k = 0;
 setInterval(function () {
     if (c) {

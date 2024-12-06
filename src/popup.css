@@ -67,6 +67,10 @@ body {
     align-items: center;
 }
 
+#textStrokeSettingsHorizontalDiv_row2 {
+    column-gap: 10px;
+}
+
 p {
     margin: 0;
 }
