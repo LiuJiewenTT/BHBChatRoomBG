@@ -96,12 +96,11 @@ function applyWork() {
             let style_filter = '';
             let textStrokeColor = null;
             let textStrokeColorToUse = null;
+
+            console.log('text stroke scope: ', textStrokeScope);  // 调试用
             // textStrokeScope = 'all';    // 临时设置
             if (textStrokeScope === null) {
                 textStrokeScope = 'username';    // 设置默认值
-            }
-            if (textStrokeScope === 'all') {
-                textStrokeScope = 'chatbox';
             }
             if (textStrokeScope === 'username') {
                 scope_username = true;
@@ -126,21 +125,28 @@ function applyWork() {
             } else {
                 textStrokeColorToUse = textStrokeColor;
             }
-            if (scope_username || scope_chatbox) {
-                try {
-                    if (!textStrokeParams.hasOwnProperty('width') || (!textStrokeParams.hasOwnProperty('color') && !textStrokeParams.hasOwnProperty('autoColor') || !textStrokeColorToUse)) {
-                        throw new Error('textStrokeParams.width or (textStrokeParams.color and textStrokeParams.autoColor) are not ready.');
-                    }
-                    const textStrokeStyle = document.createElement('style');
-                    textStrokeStyle.textContent = `
-              ${style_filter} {
-                -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeColorToUse};
-              }
-            `;
-                    chatBox.parentNode.insertBefore(textStrokeStyle, chatBox);
-                } catch (error) {
-                    console.log(error);
+
+            if (!textStrokeParams.hasOwnProperty('width') || (!textStrokeParams.hasOwnProperty('color') && !textStrokeParams.hasOwnProperty('autoColor') || !textStrokeColorToUse)) {
+                throw new Error('textStrokeParams.width or (textStrokeParams.color and textStrokeParams.autoColor) are not ready.');
+            }
+
+            if (textStrokeScope === 'all') {
+                const textStrokeStyle = document.createElement('style');
+                textStrokeStyle.textContent = `
+                p,div,span,a{
+                    -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeColorToUse};
                 }
+                `;
+                document.body.insertBefore(textStrokeStyle, document.body.firstChild);
+            }
+            if (scope_username || scope_chatbox) {
+                const textStrokeStyle = document.createElement('style');
+                textStrokeStyle.textContent = `
+                ${style_filter} {
+                    -webkit-text-stroke: ${textStrokeParams.width}px ${textStrokeColorToUse};
+                }
+                `;
+                chatBox.parentNode.insertBefore(textStrokeStyle, chatBox);
             }
         }
     });
