@@ -47,3 +47,14 @@ function HexToRgb(hex) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
+function compareVersion(v1, v2) {
+    const parts1 = v1.split('.').map(num => parseInt(num, 10));
+    const parts2 = v2.split('.').map(num => parseInt(num, 10));
+
+    for (let i = 0; i < 3; i++) {
+        if (parts1[i] > parts2[i]) return 1;  // v1 大于 v2
+        if (parts1[i] < parts2[i]) return -1; // v1 小于 v2
+    }
+    return 0; // v1 等于 v2
+}
+

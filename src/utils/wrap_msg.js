@@ -37,7 +37,7 @@ function wrap_get_msg() {
                     img_item.src = img_item.getAttribute('src').replace(/^\./, '');
                 }
             } else {
-                throw RuntimeError('get_msg error: img null');
+                throw Error('get_msg error: img null');
             }
         }
     }

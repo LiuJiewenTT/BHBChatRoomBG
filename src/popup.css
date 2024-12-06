@@ -89,6 +89,23 @@ p {
     margin: 0;
 }
 
+a.dark {
+    color: var(--lighter-dark-bgcolor);
+}
+
+a.dark:focus,
+a.dark:hover {
+    color: var(--light-purple-bgcolor);
+}
+
+a.dark:active {
+    color: var(--theme-color);
+}
+
+#ext_updateLink.dark:visited {
+    color: var(--lighter-dark-bgcolor);
+}
+
 hr {
     width: 100%;
     border-width: 0;

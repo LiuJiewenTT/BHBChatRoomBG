@@ -1,6 +1,74 @@
 let baseUrl = "https://boyshelpboys.com/";
 
-document.getElementById('ext_currentVersion').textContent = browser.runtime.getManifest().version;
+var currentTheme;
+
+var ext_currentVersion = document.getElementById('ext_currentVersion');
+ext_currentVersion.textContent = browser.runtime.getManifest().version;
+var projectRepoTagsUrl = "https://api.github.com/repos/LiuJiewenTT/BHBChatRoomBG/tags";
+var projectRepoReleasesUrl = "https://api.github.com/repos/LiuJiewenTT/BHBChatRoomBG/releases";
+var projectRepoReleasesPageUrl = "https://github.com/LiuJiewenTT/BHBChatRoomBG/releases";
+var projectRepoReleaseLatestPageUrl = "https://github.com/LiuJiewenTT/BHBChatRoomBG/releases/latest";
+
+fetch(projectRepoTagsUrl)
+    .then(response => response.json())
+    .then(data => {
+        var latestVersion = data[0].name.replace(/^v/, '');
+        var currentVersion = ext_currentVersion.textContent;
+        // currentVersion = '1.1';
+        console.log("Latest version: " + latestVersion + ", current version: " + currentVersion);
+        if (compareVersion(latestVersion, currentVersion) > 0) {
+            console.log("New version(tag) available: " + latestVersion);
+            fetch(projectRepoReleasesUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var latestRelease = data[0];
+                    console.log("Latest release: " + latestRelease.tag_name);
+                    if (latestRelease.prerelease) {
+                        console.log("This is a pre-release, skip update check.");
+                        return;
+                    }
+                    if ( latestRelease.tag_name === `v${latestVersion}` ) {
+                        console.log("Release for new version tag is available.");
+                        var updateLink = document.getElementById('ext_updateLink');
+                        updateLink.href = projectRepoReleaseLatestPageUrl;
+                        updateLink.textContent = `Update available: ${latestVersion}`;
+                        // updateLink.style.display = "block";
+                        updateLink.addEventListener('mouseover', function() {
+                            if (currentTheme === "dark") {
+                                updateLink.style.color = "var(--light-purple-bgcolor)";
+                            } else {
+                                updateLink.style.color = "var(--hover-bgcolor)";
+                            }
+                        });
+                        updateLink.addEventListener('mouseout', function() {
+                            if (currentTheme === "dark") {
+                                updateLink.style.color = "var(--lighter-dark-bgcolor)";
+                            } else {
+                                updateLink.style.color = "var(--white-smoke)";
+                            }
+                        });
+                        updateLink.addEventListener('mousedown', function() {
+                            if (currentTheme === "dark") {
+                                updateLink.style.color = "var(--theme-color)";
+                            } else {
+                                updateLink.style.color = "var(--theme-color)";
+                            }
+                        });
+                        updateLink.addEventListener('mouseup', function() {
+                            if (currentTheme === "dark") {
+                                updateLink.style.color = "var(--lighter-dark-bgcolor)";
+                            } else {
+                                updateLink.style.color = "var(--white-smoke)";
+                            }
+                        });
+                    } else {
+                        console.log("No release for new version tag is available.");
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+    })
+    .catch(error => console.error(error));
 
 document.getElementById('saveButton').addEventListener('click', () => {
     const imageUrl = document.getElementById('imageUrl').value.trim();
@@ -15,7 +83,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
-    
+
     let textStrokeParams = {
         isEnabled: enableTextStrokeCheckbox.checked,
         autoColor: autoTextStrokeColorCheckbox.checked,
@@ -25,10 +93,11 @@ document.getElementById('saveButton').addEventListener('click', () => {
     };
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({ imageUrl, displayText, opacityValue: opacitySlider.value, 
+    browser.storage.sync.set({
+        imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
         displayMode: displayModeSelect.value, textStrokeParams
-     }).then(() => {
+    }).then(() => {
         alert('Section content saved!');
         if (imageUrl.trim() === "") {
             imageUrl_fullpath = "";
@@ -57,6 +126,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
+    const updateHint = document.getElementById("ext_updateLink");
     const imageUrlInput = document.getElementById("imageUrl");
     const displayTextInput = document.getElementById("displayText");
     const opacitySlider = document.getElementById("opacitySlider");
@@ -133,10 +203,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 加载用户设置的图片背景
-    browser.storage.sync.get({ imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false, 
-        displayMode: 'default', 
-        textStrokeParams: { isEnabled: false, autoColor: false, width: 0.1, 
-            color: '#000000', scope: 'username' } 
+    browser.storage.sync.get({
+        imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
+        displayMode: 'default',
+        textStrokeParams: {
+            isEnabled: false, autoColor: false, width: 0.1,
+            color: '#000000', scope: 'username'
+        }
     }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
@@ -204,6 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
             displayModeSelect.value = data.displayMode;
         }
 
+        updateHint.classList.add(currentTheme);
         imageUrlInput.classList.add(currentTheme);
         displayTextInput.classList.add(currentTheme);
         opacitySlider.classList.add(currentTheme);
@@ -232,6 +306,8 @@ document.addEventListener("DOMContentLoaded", () => {
         body.classList.remove(currentTheme);
         body.classList.add(newTheme);
 
+        updateHint.classList.remove(currentTheme);
+        updateHint.classList.add(newTheme);
         imageUrlInput.classList.remove(currentTheme);
         imageUrlInput.classList.add(newTheme);
         displayTextInput.classList.remove(currentTheme);
@@ -321,12 +397,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 当颜色选择器的值改变时，更新 <span> 的文本
-    textStrokeColorPicker.addEventListener('input', function(event) {
+    textStrokeColorPicker.addEventListener('input', function (event) {
         const color = event.target.value;
         textStrokeColorPrintSpan.textContent = color;  // 改变 span 中的文本为选择的颜色值
     });
     // 当颜色选择器失去焦点时，打印选择的颜色值
-    textStrokeColorPicker.addEventListener('blur', function() {
+    textStrokeColorPicker.addEventListener('blur', function () {
         const selectedColor = textStrokeColorPicker.value;
         console.log('颜色选择器失去焦点，选择的颜色值是:', selectedColor);
     });
