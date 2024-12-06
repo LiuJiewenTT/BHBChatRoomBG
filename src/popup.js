@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
+    const textStrokeManualColorPickDiv = document.getElementById("textStrokeManualColorPickDiv");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeColorPrintSpan = document.getElementById("textStrokeColorPrint");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
@@ -261,6 +262,21 @@ document.addEventListener("DOMContentLoaded", () => {
         // 保存预览状态
         console.log('[previewEnabled:' + isPreviewEnabled + ']');
         browser.storage.sync.set({ previewEnabled: isPreviewEnabled });
+    });
+
+    // 启用自动颜色时禁用并隐藏颜色选择器
+    autoTextStrokeColorCheckbox.addEventListener("change", (event) => {
+        const isAutoColorEnabled = event.target.checked;
+        textStrokeColorPicker.disabled = isAutoColorEnabled;
+        if (isAutoColorEnabled) {
+            textStrokeManualColorPickDiv.children[0].setAttribute('hidden', '');
+            textStrokeColorPicker.setAttribute('hidden', '');
+            textStrokeColorPrintSpan.setAttribute('hidden', '');
+        } else {
+            textStrokeManualColorPickDiv.children[0].removeAttribute('hidden');
+            textStrokeColorPicker.removeAttribute('hidden');
+            textStrokeColorPrintSpan.removeAttribute('hidden');
+        }
     });
 
     // 当颜色选择器的值改变时，更新 <span> 的文本

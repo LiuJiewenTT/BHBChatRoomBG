@@ -60,6 +60,12 @@ body {
     width: 100%;
 }
 
+.textStrokeSettingsDiv {
+    row-gap: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
 #backgroundSettingsCheckboxDiv,
 .textStrokeSettingsHorizontalDiv {
     display: flex;

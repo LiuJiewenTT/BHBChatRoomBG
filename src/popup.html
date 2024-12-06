@@ -68,11 +68,13 @@
         </label>
       </div>
       <div class="textStrokeSettingsHorizontalDiv" id="textStrokeSettingsHorizontalDiv_row2">
-        <span>Stroke Color:&nbsp;</span>
-        <label style="display: inline-flex;" for="textStrokeColorPicker">
-          <span id="textStrokeColorPrint">#000000</span>
-        </label>
-        <input type="color" id="textStrokeColorPicker" value="#000000">
+        <div class="textStrokeSettingsHorizontalDiv" id="textStrokeManualColorPickDiv">
+          <span>Stroke Color:&nbsp;</span>
+          <label style="display: inline-flex;" for="textStrokeColorPicker">
+            <span id="textStrokeColorPrint">#000000</span>
+          </label>
+          <input type="color" id="textStrokeColorPicker" value="#000000">
+        </div>
         <div class="select-container">
           <label for="text-stroke-scope-select">Scope:</label>
           <select id="text-stroke-scope-select" value="username">
