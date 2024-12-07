@@ -46,6 +46,7 @@
     "web_accessible_resources": [
         {
             "resources": [
+                "utils/apply_work.js",
                 "utils/wrap_msg.js"
             ],
             "matches": [

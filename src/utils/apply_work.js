@@ -1,15 +1,26 @@
 function applyWork() {
-    let siteThemeMode = getSiteThemeMode_LightOrDark();
-    console.log(siteThemeMode);  // 调试用
-
-    // 从存储中获取用户定义的图片 URL
     browser.storage.sync.get({
         imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
         textStrokeParams: null
     }).then((data) => {
-        if (data.displayMode === 'disabled') {
-            return;
-        }
+        applyWork_core(data, null);
+    });
+}
+
+async function applyWork_getSyncData() {
+    return await browser.storage.sync.get({
+        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
+        textStrokeParams: null
+    });
+}
+
+function applyWork_core(storagedata_sync, storagedata_local) {
+    let siteThemeMode = getSiteThemeMode_LightOrDark();
+    console.log(siteThemeMode);  // 调试用
+
+    data = storagedata_sync;
+
+    (() => {
 
         let section;
         let old_section = null;
@@ -17,7 +28,7 @@ function applyWork() {
         let sectionID = "background-insert-section-id";
         let chatboxClassName = "chat-history-wrapper";
         section = document.getElementById(sectionID);
-        chatBox = document.querySelector('.'+chatboxClassName);
+        chatBox = document.querySelector('.' + chatboxClassName);
 
         if (data.displayMode === 'default') {
             data.displayMode = 'extended';
@@ -65,7 +76,7 @@ function applyWork() {
             section.textContent = data.displayText || '';
         }
 
-        let inputBoxShadowLineStyleID =  "input-box-shadow-line-removing-style";
+        let inputBoxShadowLineStyleID = "input-box-shadow-line-removing-style";
         let inputBoxShadowLineStyle = document.getElementById(inputBoxShadowLineStyleID);
         let inputBoxShadowLineStyle_isNew = false;
         if (inputBoxShadowLineStyle === null) {
@@ -80,10 +91,16 @@ function applyWork() {
         }
 
         if (old_section) {
-            old_section.parentElement.removeChild(old_section);
+            section.remove();
         }
         // else: new section will be appended to body without deleting old one
-        
+        chatBox.style.removeProperty('background-image');
+
+        if (data.displayMode === 'disabled') {
+            console.log('applyWork_core: displayMode is disabled.');
+            return;
+        }
+
         if (data.displayMode === 'fullscreen') {
             document.body.appendChild(section); // 将 section 插入页面
         }
@@ -100,6 +117,11 @@ function applyWork() {
                 chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
             }
         }
+        if (data.autoResizeBackground) {
+            chatBox.style.backgroundSize = "cover";
+        } else {
+            chatBox.style.backgroundSize = "auto";
+        }
         if (data.displayMode === 'chat-background') {
             chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
             // 接下来删除黑条
@@ -107,7 +129,8 @@ function applyWork() {
                 chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
             }
         }
-        
+
+        let textStrokeStyleID = "text-stroke-style";
         let textStrokeStyle = document.getElementById(textStrokeStyleID);
         let textStrokeStyle_isNew = false;
         textStrokeParams = data.textStrokeParams;
@@ -120,8 +143,6 @@ function applyWork() {
             let style_filter = '';
             let textStrokeColor = null;
             let textStrokeColorToUse = null;
-
-            let textStrokeStyleID = "text-stroke-style";
 
             console.log('text stroke scope: ', textStrokeScope);  // 调试用
             // textStrokeScope = 'all';    // 临时设置
@@ -184,13 +205,16 @@ function applyWork() {
             }
         } else {
             // 未启用，删除已有的 textStrokeStyle
-            textStrokeStyle.parentElement.removeChild(textStrokeStyle);
+            if (textStrokeStyle !== null) {
+                textStrokeStyle.parentElement.removeChild(textStrokeStyle);
+            }
         }
-    });
+    })();
+
 
     const wrap_msg_script_id = "wrap_msg_script-id";
     let wrap_msg_script = document.getElementById(wrap_msg_script_id);
-    if (wrap_msg_script === null) {   
+    if (wrap_msg_script === null) {
         wrap_msg_script = document.createElement('script');
         wrap_msg_script.id = wrap_msg_script_id;
         wrap_msg_script.src = browser.runtime.getURL('utils/wrap_msg.js');

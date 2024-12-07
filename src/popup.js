@@ -67,21 +67,10 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
-
-    let textStrokeParams = {
-        isEnabled: enableTextStrokeCheckbox.checked,
-        autoColor: autoTextStrokeColorCheckbox.checked,
-        width: parseFloat(textStrokeWidthInput.value),
-        color: textStrokeColorPicker.value.trim(),
-        scope: textStrokeScopeSelect.value
-    };
+    collectedInputs = popupPageCollectInputs();
 
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set({
-        imageUrl, displayText, opacityValue: opacitySlider.value,
-        previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
-        displayMode: displayModeSelect.value, textStrokeParams
-    }).then(() => {
+    browser.storage.sync.set(collectedInputs).then(() => {
         alert('Section content saved!');
         if (imageUrl.trim() === "") {
             imageUrl_fullpath = "";
@@ -395,9 +384,21 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('颜色选择器失去焦点，选择的颜色值是:', selectedColor);
     });
 
-    applyButton.addEventListener("click", () => {
+    applyButton.addEventListener("click", async () => {
+        // local_data = await applyWork_getSyncData();
+        temporage_data = popupPageCollectInputs();
+        console.log('temporage_data:', temporage_data);
+        // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-            
-        }
+            console.log('tabs:', tabs);
+            browser.scripting.executeScript({
+                target: { tabId: tabs[0].id },
+                func: function (syncData, localData) {
+                    console.log('syncData:', syncData);
+                    applyWork_core(syncData, localData);
+                },
+                args: [temporage_data, null]  // 传递存储的设置到注入的函数中
+            });
+        });
     });
 });

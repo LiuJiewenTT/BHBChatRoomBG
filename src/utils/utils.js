@@ -1,3 +1,11 @@
+browser_type = null;
+
+if (typeof chrome === 'undefined') {
+    browser_type = 'firefox';
+} else {
+    browser_type = 'chrome';
+}
+
 // 将 RGB 颜色转为反色
 function invertColor(color) {
     // 提取 RGB 数值
@@ -59,32 +67,62 @@ function compareVersion(v1, v2) {
 }
 
 function setElementTextIgnoreVisitedPseudoClass(element) {
-    element.addEventListener('mouseover', function() {
+    element.addEventListener('mouseover', function () {
         if (currentTheme === "dark") {
             element.style.color = "var(--light-purple-bgcolor)";
         } else {
             element.style.color = "var(--hover-bgcolor)";
         }
     });
-    element.addEventListener('mouseout', function() {
+    element.addEventListener('mouseout', function () {
         if (currentTheme === "dark") {
             element.style.color = "var(--lighter-dark-bgcolor)";
         } else {
             element.style.color = "var(--white-smoke)";
         }
     });
-    element.addEventListener('mousedown', function() {
+    element.addEventListener('mousedown', function () {
         if (currentTheme === "dark") {
             element.style.color = "var(--theme-color)";
         } else {
             element.style.color = "var(--theme-color)";
         }
     });
-    element.addEventListener('mouseup', function() {
+    element.addEventListener('mouseup', function () {
         if (currentTheme === "dark") {
             element.style.color = "var(--lighter-dark-bgcolor)";
         } else {
             element.style.color = "var(--white-smoke)";
         }
     });
+}
+
+function popupPageCollectInputs() {
+    const imageUrl = document.getElementById('imageUrl').value.trim();
+    const displayText = document.getElementById('displayText').value;
+    const opacitySlider = document.getElementById("opacitySlider");
+    const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
+    const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
+    const themeToggle = document.getElementById("themeToggle");
+    const displayModeSelect = document.getElementById("display-mode-select");
+    const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
+    const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
+    const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
+    const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
+
+    let textStrokeParams = {
+        isEnabled: enableTextStrokeCheckbox.checked,
+        autoColor: autoTextStrokeColorCheckbox.checked,
+        width: parseFloat(textStrokeWidthInput.value),
+        color: textStrokeColorPicker.value.trim(),
+        scope: textStrokeScopeSelect.value
+    };
+
+    var collected = {
+        imageUrl, displayText, opacityValue: opacitySlider.value,
+        previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
+        displayMode: displayModeSelect.value, textStrokeParams
+    }
+    return collected;
 }
