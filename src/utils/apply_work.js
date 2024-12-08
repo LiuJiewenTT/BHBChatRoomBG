@@ -98,7 +98,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
 
         if (data.displayMode === 'disabled') {
             console.log('applyWork_core: displayMode is disabled.');
-            return;
+            // return;
         }
 
         if (data.displayMode === 'fullscreen') {
