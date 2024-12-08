@@ -21,15 +21,27 @@ function wrap_get_msg() {
     return function (...args) {
         original_get_msg(...args);
         let new_msg_cnt = k - old_k;
-        // console.log('new_msg_cnt: , k-old_k: , c: ', new_msg_cnt, k, old_k, c);  // 调试用
+        let ul_items = document.getElementsByClassName("mk-chat-box")[0].children;
+        let ul_len = ul_items.length;
+        let i_start;
+        // console.log('new_msg_cnt: , k, old_k, c, ul_len: ', new_msg_cnt, k, old_k, c, ul_len);  // 调试用
         if (old_k != k) {
             old_k = k;
         }
-        let ul_items = document.getElementsByClassName("mk-chat-box")[0].children;
-        let ul_len = ul_items.length;
+        if (new_msg_cnt > ul_len) {
+            console.log(`new_msg_cnt > ul_len: ${new_msg_cnt} ${ul_len}. Displayed messages may be incomplete.`);
+            i_start = ul_len;
+        } else {
+            i_start = new_msg_cnt;
+        }
         let li_item;
-        for (let i = new_msg_cnt, j = ul_len - 1; i; i--, j--) {
+        for (let i = i_start, j = ul_len - 1; i; i--, j--) {
             li_item = ul_items[j];
+            if ( li_item === null ) continue;
+            if ( li_item === undefined ) {
+                // console.error('get_msg error: li_item undefined', ul_items, j);     // 调试用
+                continue;
+            }
             let img_item = li_item.querySelector("img");
             // console.log('img: ', img_item);  // 调试用
             if (img_item) {
