@@ -4,7 +4,7 @@
 
 这是一个给BHB聊天室添加图片（外链）的插件，支持5种显示模式，支持暗色模式，且其中两种模式去除了输入框上方“白条/黑条”。
 
-> 这个插件按照W3标准编写，对Chrome的兼容由[polyfill](https://github.com/mozilla/webextension-polyfill)提供。
+> 这个插件按照W3标准编写，对Chrome内核的兼容由[polyfill](https://github.com/mozilla/webextension-polyfill)提供。
 
 ## 特点
 
@@ -66,9 +66,8 @@
 
 <img src="docs/运行效果图6.png" alt="效果图6" style="zoom:50%;" />
 <img src="docs/运行效果图2.png" alt="效果图2" style="zoom:50%;" />
-<img src="docs/运行效果图3.png" alt="效果图3" style="zoom:50%;" />
-<img src="docs/运行效果图4.png" alt="效果图4" style="zoom:50%;" />
-<img src="docs/运行效果图5.png" alt="效果图5" style="zoom:50%;" />
+<img src="docs/运行效果图3.png" alt="效果图3" style="zoom:100%;" />
+
 
 
 
