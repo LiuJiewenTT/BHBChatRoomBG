@@ -387,14 +387,14 @@ document.addEventListener("DOMContentLoaded", () => {
     applyButton.addEventListener("click", async () => {
         // local_data = await applyWork_getSyncData();
         temporage_data = popupPageCollectInputs();
-        console.log('temporage_data:', temporage_data);
+        console.log('temporage_data:', temporage_data);     // 调试用
         // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-            console.log('tabs:', tabs);
+            console.log('tabs:', tabs);     // 调试用
             browser.scripting.executeScript({
                 target: { tabId: tabs[0].id },
                 func: function (syncData, localData) {
-                    console.log('syncData:', syncData);
+                    // console.log('syncData:', syncData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
                 args: [temporage_data, null]  // 传递存储的设置到注入的函数中

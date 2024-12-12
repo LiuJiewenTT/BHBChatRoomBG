@@ -16,7 +16,7 @@ async function applyWork_getSyncData() {
 
 function applyWork_core(storagedata_sync, storagedata_local) {
     let siteThemeMode = getSiteThemeMode_LightOrDark();
-    console.log(siteThemeMode);  // 调试用
+    console.log('siteThemeMode: ', siteThemeMode);  // 调试用
 
     data = storagedata_sync;
 
@@ -134,7 +134,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         let textStrokeStyle = document.getElementById(textStrokeStyleID);
         let textStrokeStyle_isNew = false;
         textStrokeParams = data.textStrokeParams;
-        console.log(textStrokeParams);  // 调试用
+        // console.log('textStrokeParams: ', textStrokeParams);  // 调试用
         textStrokeEnabled = textStrokeParams && textStrokeParams.isEnabled === true;
         if (textStrokeEnabled) {
             let textStrokeScope = textStrokeParams.scope;
