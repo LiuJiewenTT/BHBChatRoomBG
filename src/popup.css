@@ -221,7 +221,7 @@ input.dark[type="checkbox"]:not(:checked):hover {
 }
 
 input[type='range'] {
-    width: 210px;
+    width: 100%;
     height: 30px;
     overflow: hidden;
     cursor: pointer;
@@ -244,7 +244,7 @@ input[type='range'] {
 }
 
 input[type='range']::-webkit-slider-runnable-track {
-    width: 200px;
+    width: 100%;
     height: 24px;
     background: var(--slider-cover-background);
     /* border-radius 设置成 50% 会发生非常幽默的事。 */
@@ -253,7 +253,7 @@ input[type='range']::-webkit-slider-runnable-track {
     /* border-radius: 12px; */
 }
 input[type="range"]::-moz-range-track {
-    width: 200px;
+    width: 100%;
     height: 24px;
     background: var(--slider-cover-background);
     /* border-radius 设置成 50% 会发生非常幽默的事。 */
