@@ -14,6 +14,12 @@ body {
     flex-direction: column;
 }
 
+/* 这段和meta标签配合才正确 */
+@media (max-device-width: 768px) {
+    body {
+        min-width: 300px;
+    }
+}
 
 .popup-header-topmost {
     display: flex;
@@ -112,6 +118,7 @@ hr {
     background: var(--white-smoke);
     height: 3px;
 }
+
 hr.dark {
     background: var(--lighter-dark-bgcolor);
 }
@@ -161,25 +168,34 @@ input[type="checkbox"] {
 
 /* 自定义 Checkbox 外观 */
 input[type="checkbox"] {
-    -webkit-appearance: none;  /* 去除默认样式 */
+    /* 去除默认样式 */
+    -webkit-appearance: none;
     appearance: none;
     aspect-ratio: 1;
     height: 15px;
-    border: 1px solid var(--border-color, #d5d5d5);  /* 边框颜色 */
-    border-radius: 4px;  /* 设置为方角或圆角 */
-    background-color: var(--unchecked-bgcolor, var(--white-smoke));  /* 未勾选状态背景色 */
+    /* 边框颜色 */
+    border: 1px solid var(--border-color, #d5d5d5);
+    /* 设置为方角或圆角 */
+    border-radius: 4px;
+    /* 未勾选状态背景色 */
+    background-color: var(--unchecked-bgcolor, var(--white-smoke));
     position: relative;
     cursor: pointer;
 }
 
 /* 勾选状态 */
 input[type="checkbox"]:checked {
-    background-color: var(--checked-bgcolor, var(--theme-color));  /* 勾选状态背景色 */
-    border-color: var(--checked-border-color, var(--theme-color));  /* 勾选状态边框色 */
+    /* 勾选状态背景色 */
+    background-color: var(--checked-bgcolor, var(--theme-color));
+    /* 勾选状态边框色 */
+    border-color: var(--checked-border-color, var(--theme-color));
 }
+
 input.dark[type="checkbox"]:checked {
-    background-color: var(--lighter-dark-bgcolor);  /* 勾选状态背景色 */
-    border-color: var(--lighter-dark-bgcolor);  /* 勾选状态边框色 */
+    /* 勾选状态背景色 */
+    background-color: var(--lighter-dark-bgcolor);
+    /* 勾选状态边框色 */
+    border-color: var(--lighter-dark-bgcolor);
 }
 
 /* 添加勾选的勾 */
@@ -188,32 +204,41 @@ input[type="checkbox"]:checked::after {
     position: absolute;
     top: 50%;
     left: 50%;
-    line-height: 0; /* 通过设置 line-height 来去除多余的空白 */
-    transform: translate(-50%, -50%);  /* 使用 transform 水平和垂直居中 */
+    /* 通过设置 line-height 来去除多余的空白 */
+    line-height: 0;
+    /* 使用 transform 水平和垂直居中 */
+    transform: translate(-50%, -50%);
     font-size: 14px;
     font-weight: 900;
     color: var(--white-smoke);
     /* color: var(--checked-sign-color); */
 }
+
 input.dark[type="checkbox"]:checked::after {
     color: var(--light-purple-bgcolor);
 }
 
 /* 鼠标悬停时的状态 */
 input[type="checkbox"]:hover {
-    background-color: var(--hover-bgcolor, #e0e0e0);  /* 悬停时未勾选的颜色 */
+    /* 悬停时未勾选的颜色 */
+    background-color: var(--hover-bgcolor, #e0e0e0);
     border-color: var(--hover-bgcolor, #e0e0e0);
 }
 
 /* 只应用于 Edge 和 Firefox 中 */
 input[type="checkbox"]:not(:checked) {
-    background-color: var(--unchecked-bgcolor, var(--white-smoke));  /* 设置未勾选时的颜色 */
+    /* 设置未勾选时的颜色 */
+    background-color: var(--unchecked-bgcolor, var(--white-smoke));
 }
+
 input.dark[type="checkbox"]:not(:checked) {
-    background-color: var(--unchecked-bgcolor, var(--lighter-dark-bgcolor));  /* 设置未勾选时的颜色 */
+    /* 设置未勾选时的颜色 */
+    background-color: var(--unchecked-bgcolor, var(--lighter-dark-bgcolor));
 }
+
 input.dark[type="checkbox"]:not(:checked):hover {
-    background-color: var(--light-purple-bgcolor);  /* 设置未勾选时的颜色 */
+    /* 设置未勾选时的颜色 */
+    background-color: var(--light-purple-bgcolor);
 }
 
 #opacitySlider {
@@ -252,6 +277,7 @@ input[type='range']::-webkit-slider-runnable-track {
     /* border-radius 应当设置成高度的一半。 */
     /* border-radius: 12px; */
 }
+
 input[type="range"]::-moz-range-track {
     width: 100%;
     height: 24px;
@@ -270,6 +296,7 @@ input[type='range']::-webkit-slider-thumb {
     border-radius: 50%;
     border: 2px solid white;
 }
+
 input[type="range"]::-moz-range-thumb {
     position: relative;
     height: 24px;
@@ -283,6 +310,7 @@ input[type="range"]::-moz-range-thumb {
 input.dark[type="range"]::-webkit-slider-runnable-track {
     border-radius: 5px;
 }
+
 input.dark[type="range"]::-moz-range-track {
     border-radius: 5px;
 }
@@ -290,6 +318,7 @@ input.dark[type="range"]::-moz-range-track {
 input.dark[type="range"]::-webkit-slider-thumb {
     border-radius: 5px;
 }
+
 input.dark[type="range"]::-moz-range-thumb {
     border-radius: 5px;
 }

@@ -2,6 +2,14 @@ let baseUrl = "https://boyshelpboys.com/";
 
 var currentTheme;
 
+// // 获取设备的物理屏幕宽度
+// var deviceWidth = window.screen.width;
+// // 获取浏览器视口宽度
+// var viewportWidth = window.innerWidth;
+// // 弹窗显示
+// alert(`Device width: ${deviceWidth} px\nViewport width: ${viewportWidth} px`);
+
+
 function popupPage_checkExtensionUpdate() {
     var ext_currentVersion = document.getElementById('ext_currentVersion');
     ext_currentVersion.textContent = browser.runtime.getManifest().version;
