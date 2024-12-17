@@ -80,6 +80,7 @@ body {
     flex-direction: column;
 }
 
+.customAvatarHorizontalDiv,
 #backgroundSettingsCheckboxDiv,
 .textStrokeSettingsHorizontalDiv {
     display: flex;
@@ -414,6 +415,10 @@ button.dark {
     aspect-ratio: 1;
 }
 
+#customAvatar-saveInitialButton,
+#customAvatar-recoverInitialButton,
+#customAvatar-cleanButton,
+#customAvatar-saveButton,
 #opacityResetButton {
     /* padding: 0.5em; */
     padding: 0%;
@@ -421,14 +426,16 @@ button.dark {
     display: block;
     align-items: center;
     justify-content: center;
-    /* 宽度为父元素宽度 */
     width: auto;
-    /* 高度为父元素高度 */
-    height: 100%;
+    height: 30px;
     /* 保证宽高比为 1:1 */
     aspect-ratio: 1;
 }
 
+#customAvatar-saveInitialButton img,
+#customAvatar-recoverInitialButton img,
+#customAvatar-cleanButton img,
+#customAvatar-saveButton img,
 #opacityResetButton img {
     width: auto;
     height: 70%;

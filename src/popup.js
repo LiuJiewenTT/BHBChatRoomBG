@@ -125,6 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeColorPrintSpan = document.getElementById("textStrokeColorPrint");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
+    const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
+    const enableCustomAvatarCheckbox_afterText = document.getElementById("enableCustomAvatarCheckbox-afterText");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
@@ -181,6 +183,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
             document.getElementById('textStrokeSettingsHorizontalDiv_row1').style.display = 'none';
             document.getElementById('textStrokeSettingsHorizontalDiv_row2').style.display = 'none';
+        }
+    });
+
+    
+    enableCustomAvatarCheckbox_afterText.addEventListener("change", (event) => {
+        const isCustomAvatarEnabled = event.target.checked;
+        enableCustomAvatarCheckbox.checked = isCustomAvatarEnabled;
+        if (isCustomAvatarEnabled) {
+            enableCustomAvatarCheckbox_afterText.setAttribute('hidden', '');
+            enableCustomAvatarCheckbox_afterText.parentElement.children[1].setAttribute('hidden', '');
+            enableCustomAvatarCheckbox_afterText.disabled = true;
+            enableCustomAvatarCheckbox.disabled = false;
+            document.getElementById('customAvatarHorizontalDiv_row1').style.removeProperty('display');
+            document.getElementById('customAvatarHorizontalDiv_row2').style.removeProperty('display');
+        }
+    });
+
+    enableCustomAvatarCheckbox.addEventListener("change", (event) => {
+        const isCustomAvatarEnabled = event.target.checked;
+        enableCustomAvatarCheckbox_afterText.checked = isCustomAvatarEnabled;
+        if (!isCustomAvatarEnabled) {
+            enableCustomAvatarCheckbox.disabled = true;
+            enableCustomAvatarCheckbox_afterText.removeAttribute('hidden');
+            enableCustomAvatarCheckbox_afterText.disabled = false;
+            enableCustomAvatarCheckbox_afterText.parentElement.children[1].removeAttribute('hidden');
+
+            document.getElementById('customAvatarHorizontalDiv_row1').style.display = 'none';
+            document.getElementById('customAvatarHorizontalDiv_row2').style.display = 'none';
         }
     });
 
