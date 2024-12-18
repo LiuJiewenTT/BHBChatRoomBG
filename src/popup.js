@@ -61,6 +61,7 @@ popupPage_checkExtensionUpdate();
     });
 }
 
+loadCustomAvatarParams();
 
 document.getElementById('saveButton').addEventListener('click', () => {
     const imageUrl = document.getElementById('imageUrl').value.trim();
@@ -194,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     enableCustomAvatarCheckbox_afterText.addEventListener("change", (event) => {
         const isCustomAvatarEnabled = event.target.checked;
         enableCustomAvatarCheckbox.checked = isCustomAvatarEnabled;
+        cached_customAvatarParams.isEnabled = isCustomAvatarEnabled;
         if (isCustomAvatarEnabled) {
             enableCustomAvatarCheckbox_afterText.setAttribute('hidden', '');
             enableCustomAvatarCheckbox_afterText.parentElement.children[1].setAttribute('hidden', '');
@@ -207,6 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     enableCustomAvatarCheckbox.addEventListener("change", (event) => {
         const isCustomAvatarEnabled = event.target.checked;
         enableCustomAvatarCheckbox_afterText.checked = isCustomAvatarEnabled;
+        cached_customAvatarParams.isEnabled = isCustomAvatarEnabled;
         if (!isCustomAvatarEnabled) {
             enableCustomAvatarCheckbox.disabled = true;
             enableCustomAvatarCheckbox_afterText.removeAttribute('hidden');
@@ -455,7 +458,12 @@ document.addEventListener("DOMContentLoaded", () => {
     enableCustomAvatar_saveInitialButton.addEventListener("click", () => {
         console.log('保存初始头像');
         browser.cookies.get( { url: baseUrl, name: 'userinfo_avatar' } ).then((cookie) => {
-            console.log('cookie:', cookie);
+            console.log('cached_customAvatarParams (before): ', cached_customAvatarParams);
+            cached_customAvatarParams.initialAvatarUrl = decodeURIComponent(cookie.value);
+            console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);
+            browser.storage.sync.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
+                console.log('已保存初始头像:', cached_customAvatarParams.initialAvatarUrl);
+            });
         });
     });
 

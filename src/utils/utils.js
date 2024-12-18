@@ -12,6 +12,25 @@ const customAvatarParams_defaults = {
     avatarUrl: null,
     initialAvatarUrl: null
 }
+cached_customAvatarParams = structuredClone(customAvatarParams_defaults);
+var cached_customInitialAvatarUrl = null;
+
+async function loadCustomAvatarParams() {
+    let customAvatarParams = await browser.storage.sync.get('customAvatarParams');
+    if (customAvatarParams === null) return;
+    customAvatarParams = customAvatarParams.customAvatarParams;
+    console.log("loadCustomeAvatarParams async (stored): ", customAvatarParams);
+    if (typeof customAvatarParams.isEnabled !== "undefined") {
+        cached_customAvatarParams.isEnabled = customAvatarParams.isEnabled;
+    }
+    if (typeof customAvatarParams.avatarUrl !== "undefined") {
+        cached_customAvatarParams.avatarUrl = customAvatarParams.avatarUrl;
+    }
+    if (typeof customAvatarParams.initialAvatarUrl !== "undefined") {
+        cached_customAvatarParams.initialAvatarUrl = customAvatarParams.initialAvatarUrl;
+    }
+    console.log("loadCustomeAvatarParams async (cached): ", cached_customAvatarParams);
+}
 
 // 将 RGB 颜色转为反色
 function invertColor(color) {
@@ -129,9 +148,6 @@ function popupPageCollectInputs() {
         scope: textStrokeScopeSelect.value
     };
 
-    if (cached_customAvatarParams === null) {
-        cached_customAvatarParams = customAvatarParams_defaults;
-    }
     let customAvatarParams = {
         isEnabled: enableCustomAvatarCheckbox.checked,
         avatarUrl: avatarUrl,
