@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
             enableCustomAvatarCheckbox_afterText.disabled = true;
             enableCustomAvatarCheckbox.disabled = false;
             document.getElementById('customAvatarHorizontalDiv_row1').style.removeProperty('display');
-            document.getElementById('customAvatarHorizontalDiv_row2').style.removeProperty('display');
+            document.getElementById('customAvatarHorizontalDiv_row2').style.setProperty('display', 'block');
         }
     });
 
@@ -214,14 +214,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 加载用户设置的图片背景
+    // 加载用户的设置
     browser.storage.sync.get({
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
         displayMode: 'default',
         textStrokeParams: {
             isEnabled: false, autoColor: false, width: 0.1,
             color: '#000000', scope: 'username'
-        }
+        },
+        customAvatarParams: customAvatarParams_defaults
     }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
@@ -279,6 +280,13 @@ document.addEventListener("DOMContentLoaded", () => {
             textStrokeScopeSelect.value = data.textStrokeParams.scope;
         }
 
+        if (data.customAvatarParams) {
+            enableCustomAvatarCheckbox.checked = data.customAvatarParams.isEnabled;
+            enableCustomAvatarCheckbox_afterText.checked = data.customAvatarParams.isEnabled;
+            enableCustomAvatarCheckbox.dispatchEvent(new Event('change'));
+            enableCustomAvatarCheckbox_afterText.dispatchEvent(new Event('change'));
+        }
+
         // 恢复主题
         if (data.theme) {
             currentTheme = data.theme;
@@ -305,6 +313,8 @@ document.addEventListener("DOMContentLoaded", () => {
         autoTextStrokeColorCheckbox.classList.add(currentTheme);
         textStrokeWidthInput.classList.add(currentTheme);
         textStrokeScopeSelect.classList.add(currentTheme);
+        enableCustomAvatarCheckbox_afterText.classList.add(currentTheme);
+        enableCustomAvatarCheckbox.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
         applyButton.classList.add(currentTheme);
 
@@ -349,6 +359,10 @@ document.addEventListener("DOMContentLoaded", () => {
         textStrokeWidthInput.classList.add(newTheme);
         textStrokeScopeSelect.classList.remove(currentTheme);
         textStrokeScopeSelect.classList.add(newTheme);
+        enableCustomAvatarCheckbox.classList.remove(currentTheme);
+        enableCustomAvatarCheckbox.classList.add(newTheme);
+        enableCustomAvatarCheckbox_afterText.classList.remove(currentTheme);
+        enableCustomAvatarCheckbox_afterText.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
         applyButton.classList.remove(currentTheme);

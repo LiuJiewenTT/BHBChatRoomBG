@@ -6,6 +6,13 @@ if (typeof chrome === 'undefined') {
     browser_type = 'chrome';
 }
 
+var cached_customAvatarParams = null;
+const customAvatarParams_defaults = {
+    isEnabled: false,
+    avatarUrl: null,
+    initialAvatarUrl: null
+}
+
 // 将 RGB 颜色转为反色
 function invertColor(color) {
     // 提取 RGB 数值
@@ -110,6 +117,9 @@ function popupPageCollectInputs() {
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
+    const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
+    const avatarUrl = document.getElementById("avatarUrl").value.trim();
+
 
     let textStrokeParams = {
         isEnabled: enableTextStrokeCheckbox.checked,
@@ -119,10 +129,20 @@ function popupPageCollectInputs() {
         scope: textStrokeScopeSelect.value
     };
 
+    if (cached_customAvatarParams === null) {
+        cached_customAvatarParams = customAvatarParams_defaults;
+    }
+    let customAvatarParams = {
+        isEnabled: enableCustomAvatarCheckbox.checked,
+        avatarUrl: avatarUrl,
+        initialAvatarUrl: cached_customAvatarParams.initialAvatarUrl
+    }
+
     var collected = {
         imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
-        displayMode: displayModeSelect.value, textStrokeParams
+        displayMode: displayModeSelect.value, 
+        textStrokeParams, customAvatarParams
     }
     return collected;
 }
