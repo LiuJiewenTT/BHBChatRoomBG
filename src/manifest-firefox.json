@@ -7,7 +7,7 @@
         "48": "res/icons/icon.png",
         "128": "res/icons/icon.png"
     },
-    "description": "为BHB聊天室网页添加背景图片，5种模式任你选！\nGithub项目：https://github.com/LiuJiewenTT/BHBChatRoomBG。（好评就给个Star吧球球了）",
+    "description": "为BHB聊天室网页添加背景图片，6种模式任你选！\nGithub项目：https://github.com/LiuJiewenTT/BHBChatRoomBG。（好评就给个Star吧球球了）",
     "permissions": [
         "storage",
         "activeTab",

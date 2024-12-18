@@ -27,8 +27,10 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         let sectionClassName = "background-insert-section";
         let sectionID = "background-insert-section-id";
         let chatboxClassName = "chat-history-wrapper";
+        let chatboxContainerClassName = "app-chat-history";
         section = document.getElementById(sectionID);
         chatBox = document.querySelector('.' + chatboxClassName);
+        chatboxContainer = document.querySelector('.' + chatboxContainerClassName);
 
         if (data.displayMode === 'default') {
             data.displayMode = 'extended';
@@ -117,12 +119,19 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
             }
         }
-        if (data.autoResizeBackground) {
-            chatBox.style.backgroundSize = "cover";
-        } else {
-            chatBox.style.backgroundSize = "auto";
+        if (data.displayMode === 'chat-background-extended-clear') {
+            chatboxContainer.parentNode.insertBefore(section, chatboxContainer);
+            // 接下来删除黑条
+            if (inputBoxShadowLineStyle_isNew) {
+                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+            }
         }
         if (data.displayMode === 'chat-background') {
+            if (data.autoResizeBackground) {
+                chatBox.style.backgroundSize = "cover";
+            } else {
+                chatBox.style.backgroundSize = "auto";
+            }
             chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
             // 接下来删除黑条
             if (inputBoxShadowLineStyle_isNew) {
