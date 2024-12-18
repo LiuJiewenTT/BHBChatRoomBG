@@ -452,6 +452,13 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('颜色选择器失去焦点，选择的颜色值是:', selectedColor);
     });
 
+    enableCustomAvatar_saveInitialButton.addEventListener("click", () => {
+        console.log('保存初始头像');
+        browser.cookies.get( { url: baseUrl, name: 'userinfo_avatar' } ).then((cookie) => {
+            console.log('cookie:', cookie);
+        });
+    });
+
     applyButton.addEventListener("click", async () => {
         // local_data = await applyWork_getSyncData();
         temporage_data = popupPageCollectInputs();
