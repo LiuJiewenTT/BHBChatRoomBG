@@ -132,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableCustomAvatar_recoverInitialButton = document.getElementById("customAvatar-recoverInitialButton");
     const enableCustomAvatar_cleanButton = document.getElementById("customAvatar-cleanButton");
     const enableCustomAvatar_saveButton = document.getElementById("customAvatar-saveButton");
+    const customAvatarUrlInput = document.getElementById("avatarUrl");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
@@ -292,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
             enableCustomAvatarCheckbox_afterText.checked = data.customAvatarParams.isEnabled;
             enableCustomAvatarCheckbox.dispatchEvent(new Event('change'));
             enableCustomAvatarCheckbox_afterText.dispatchEvent(new Event('change'));
+            customAvatarUrlInput.value = data.customAvatarParams.avatarUrl;
         }
 
         // 恢复主题
@@ -467,10 +469,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    enableCustomAvatar_recoverInitialButton.addEventListener("click", () => {
+        console.log('恢复初始头像到Cookie');
+        if (!cached_customAvatarParams.initialAvatarUrl) {
+            console.error('没有初始头像缓存，请先保存初始头像');
+            return;
+        }
+        browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(cached_customAvatarParams.initialAvatarUrl) }).then(() => {
+            console.log('已恢复初始头像到Cookie:', cached_customAvatarParams.initialAvatarUrl);
+        });
+    });
+
+    enableCustomAvatar_cleanButton.addEventListener("click", () => {
+        console.log('从Cookie清除头像');
+        browser.cookies.remove({ url: baseUrl, name: 'userinfo_avatar' }).then(() => {
+            console.log('已从Cookie清除头像');
+        });
+    });
+
+    enableCustomAvatar_saveButton.addEventListener("click", () => {
+        console.log('保存头像到Cookie');
+        const customAvatarUrl = customAvatarUrlInput.value.trim();
+        if (!customAvatarUrl) {
+            console.warn('请指定头像图片的链接');
+        }
+        browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(customAvatarUrl) }).then(() => {
+            console.log('已保存头像到Cookie:', customAvatarUrl);
+        });
+    });
+
     applyButton.addEventListener("click", async () => {
         // local_data = await applyWork_getSyncData();
-        temporage_data = popupPageCollectInputs();
-        console.log('temporage_data:', temporage_data);     // 调试用
+        var temporary_data = popupPageCollectInputs();
+        console.log('temporary_data:', temporary_data);     // 调试用
         // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
             console.log('tabs:', tabs);     // 调试用
@@ -480,7 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     // console.log('syncData:', syncData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
-                args: [temporage_data, null]  // 传递存储的设置到注入的函数中
+                args: [temporary_data, null]  // 传递存储的设置到注入的函数中
             });
         });
     });

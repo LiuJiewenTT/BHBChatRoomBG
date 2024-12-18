@@ -6,8 +6,9 @@ function wrap_addmsg() {
         let li_item = document.getElementsByClassName("mk-chat-box")[0].lastElementChild;
         let img_item = li_item.querySelector("img");
         if (img_item) {
-            if (img_item.src.startsWith(".http://") || img_item.src.startsWith(".https://")) {
-                img_item.src = img_item.src.replace(/^\./, '');
+            let img_src = img_item.getAttribute('src');
+            if (img_src.startsWith(".http://") || img_src.startsWith(".https://")) {
+                img_item.src = img_src.replace(/^\./, '');
             }
         } else {
             throw RuntimeError('get_msg error: img null');
@@ -24,7 +25,7 @@ function wrap_get_msg() {
         let ul_items = document.getElementsByClassName("mk-chat-box")[0].children;
         let ul_len = ul_items.length;
         let i_start;
-        // console.log('new_msg_cnt: , k, old_k, c, ul_len: ', new_msg_cnt, k, old_k, c, ul_len);  // 调试用
+        // console.log('new_msg_cnt, k, old_k, c, ul_len: ', new_msg_cnt, k, old_k, c, ul_len);  // 调试用
         if (old_k != k) {
             old_k = k;
         }

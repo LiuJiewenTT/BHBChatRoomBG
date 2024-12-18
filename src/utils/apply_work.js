@@ -1,7 +1,7 @@
 function applyWork() {
     browser.storage.sync.get({
         imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
-        textStrokeParams: null
+        textStrokeParams: null, customAvatarParams: null
     }).then((data) => {
         applyWork_core(data, null);
     });
@@ -10,7 +10,7 @@ function applyWork() {
 async function applyWork_getSyncData() {
     return await browser.storage.sync.get({
         imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
-        textStrokeParams: null
+        textStrokeParams: null, customAvatarParams: null
     });
 }
 
@@ -216,6 +216,18 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             // 未启用，删除已有的 textStrokeStyle
             if (textStrokeStyle !== null) {
                 textStrokeStyle.parentElement.removeChild(textStrokeStyle);
+            }
+        }
+
+        if (data.customAvatarParams) {
+            if (data.customAvatarParams.isEnabled) {
+                if (data.customAvatarParams.avatarUrl !== null) {
+                    console.log('applyWork_core: customAvatarParams.avatarUrl: ', data.customAvatarParams.avatarUrl);
+                    browser.runtime.sendMessage({
+                        action: "apply-custom-avatar",
+                        avatarUrl: data.customAvatarParams.avatarUrl,
+                    });
+                }
             }
         }
     })();
