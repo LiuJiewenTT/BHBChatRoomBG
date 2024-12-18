@@ -127,6 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
     const enableCustomAvatarCheckbox_afterText = document.getElementById("enableCustomAvatarCheckbox-afterText");
+    const enableCustomAvatar_saveInitialButton = document.getElementById("customAvatar-saveInitialButton");
+    const enableCustomAvatar_recoverInitialButton = document.getElementById("customAvatar-recoverInitialButton");
+    const enableCustomAvatar_cleanButton = document.getElementById("customAvatar-cleanButton");
+    const enableCustomAvatar_saveButton = document.getElementById("customAvatar-saveButton");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
@@ -315,6 +319,10 @@ document.addEventListener("DOMContentLoaded", () => {
         textStrokeScopeSelect.classList.add(currentTheme);
         enableCustomAvatarCheckbox_afterText.classList.add(currentTheme);
         enableCustomAvatarCheckbox.classList.add(currentTheme);
+        enableCustomAvatar_saveInitialButton.classList.add(currentTheme);
+        enableCustomAvatar_recoverInitialButton.classList.add(currentTheme);
+        enableCustomAvatar_cleanButton.classList.add(currentTheme);
+        enableCustomAvatar_saveButton.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
         applyButton.classList.add(currentTheme);
 
@@ -363,6 +371,14 @@ document.addEventListener("DOMContentLoaded", () => {
         enableCustomAvatarCheckbox.classList.add(newTheme);
         enableCustomAvatarCheckbox_afterText.classList.remove(currentTheme);
         enableCustomAvatarCheckbox_afterText.classList.add(newTheme);
+        enableCustomAvatar_saveInitialButton.classList.remove(currentTheme);
+        enableCustomAvatar_saveInitialButton.classList.add(newTheme);
+        enableCustomAvatar_recoverInitialButton.classList.remove(currentTheme);
+        enableCustomAvatar_recoverInitialButton.classList.add(newTheme);
+        enableCustomAvatar_cleanButton.classList.remove(currentTheme);
+        enableCustomAvatar_cleanButton.classList.add(newTheme);
+        enableCustomAvatar_saveButton.classList.remove(currentTheme);
+        enableCustomAvatar_saveButton.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
         applyButton.classList.remove(currentTheme);
