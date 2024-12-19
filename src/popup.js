@@ -80,7 +80,8 @@ document.getElementById('saveButton').addEventListener('click', () => {
 
     // 将用户输入的内容保存到存储中
     browser.storage.sync.set(collectedInputs).then(() => {
-        alert('Section content saved!');
+        // notify user that settings have been saved
+        alert('设置已保存!');
         if (imageUrl.trim() === "") {
             imageUrl_fullpath = "";
         } else {
@@ -92,7 +93,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
         }
 
         document.documentElement.style.setProperty("--bg-image", `url('${imageUrl_fullpath}')`);
-        console.log(document.documentElement.style.getPropertyValue("--bg-image"));
+        console.log('预览图片链接: ', document.documentElement.style.getPropertyValue("--bg-image")); // 调试用
         if (previewCheckbox.checked) {
             if (imageUrl) {
                 document.body.classList.remove(currentTheme);
@@ -461,10 +462,25 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('保存初始头像');
         browser.cookies.get( { url: baseUrl, name: 'userinfo_avatar' } ).then((cookie) => {
             console.log('cached_customAvatarParams (before): ', cached_customAvatarParams);
-            cached_customAvatarParams.initialAvatarUrl = decodeURIComponent(cookie.value);
-            console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);
-            browser.storage.sync.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
-                console.log('已保存初始头像:', cached_customAvatarParams.initialAvatarUrl);
+            let initialAvatarUrl = cookie ? decodeURIComponent(cookie.value) : null;
+            browser.storage.sync.get({ customAvatarParams: null }).then((data) => {
+                if ( data.customAvatarParams !== null && data.customAvatarParams.initialAvatarUrl ) {
+                    if (data.customAvatarParams.initialAvatarUrl !== initialAvatarUrl ) {
+                        let confirmResult = confirm('当前头像与保存的初始头像不一致，是否覆盖？');
+                        if (!confirmResult) {
+                            console.log('用户取消覆盖');
+                            return;
+                        }
+                    } else {
+                        console.log('当前头像与保存的初始头像一致，无需覆盖');
+                        return;
+                    }
+                }
+                cached_customAvatarParams.initialAvatarUrl = initialAvatarUrl;
+                console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);
+                browser.storage.sync.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
+                    console.log('已保存初始头像:', cached_customAvatarParams.initialAvatarUrl);
+                });
             });
         });
     });
