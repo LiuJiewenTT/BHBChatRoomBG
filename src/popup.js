@@ -54,13 +54,6 @@ function popupPage_checkExtensionUpdate() {
 }
 popupPage_checkExtensionUpdate();
 
-{
-    const headerTitle = document.querySelector('.header-title');
-    headerTitle.addEventListener('click', () => {
-        popupPage_checkExtensionUpdate();
-    });
-}
-
 loadCustomAvatarParams();
 
 document.getElementById('saveButton').addEventListener('click', () => {
@@ -109,6 +102,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
+    const headerTitle = document.querySelector('.header-title');
     const updateHint = document.getElementById("ext_updateLink");
     const imageUrlInput = document.getElementById("imageUrl");
     const displayTextInput = document.getElementById("displayText");
@@ -127,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeColorPrintSpan = document.getElementById("textStrokeColorPrint");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
+    const horizontalDivider2 = document.getElementById("horizontalDivider2");
     const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
     const enableCustomAvatarCheckbox_afterText = document.getElementById("enableCustomAvatarCheckbox-afterText");
     const enableCustomAvatar_saveInitialButton = document.getElementById("customAvatar-saveInitialButton");
@@ -134,9 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableCustomAvatar_cleanButton = document.getElementById("customAvatar-cleanButton");
     const enableCustomAvatar_saveButton = document.getElementById("customAvatar-saveButton");
     const customAvatarUrlInput = document.getElementById("avatarUrl");
+    const avatarUrlUsedSpan = document.getElementById("avatarUrlUsedSpan");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
+
+    headerTitle.addEventListener('click', () => {
+        popupPage_checkExtensionUpdate();
+    });
 
     // 默认主题
     currentTheme = "light";
@@ -166,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isTextStrokeEnabled = event.target.checked;
         enableTextStrokeCheckbox.checked = isTextStrokeEnabled;
         if (isTextStrokeEnabled) {
+            horizontalDivider1.removeAttribute('hidden');
             enableTextStrokeCheckbox_afterText.setAttribute('hidden', '');
             enableTextStrokeCheckbox_afterText.parentElement.children[1].setAttribute('hidden', '');
             enableTextStrokeCheckbox_afterText.disabled = true;
@@ -181,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const isTextStrokeEnabled = event.target.checked;
         enableTextStrokeCheckbox_afterText.checked = isTextStrokeEnabled;
         if (!isTextStrokeEnabled) {
+            horizontalDivider1.setAttribute('hidden', '');
             // enableTextStrokeCheckbox.setAttribute('hidden', '');
             // enableTextStrokeCheckbox.parentElement.children[1].setAttribute('hidden', '');
             enableTextStrokeCheckbox.disabled = true;
@@ -199,12 +201,14 @@ document.addEventListener("DOMContentLoaded", () => {
         enableCustomAvatarCheckbox.checked = isCustomAvatarEnabled;
         cached_customAvatarParams.isEnabled = isCustomAvatarEnabled;
         if (isCustomAvatarEnabled) {
+            horizontalDivider2.removeAttribute('hidden');
             enableCustomAvatarCheckbox_afterText.setAttribute('hidden', '');
             enableCustomAvatarCheckbox_afterText.parentElement.children[1].setAttribute('hidden', '');
             enableCustomAvatarCheckbox_afterText.disabled = true;
             enableCustomAvatarCheckbox.disabled = false;
             document.getElementById('customAvatarHorizontalDiv_row1').style.removeProperty('display');
             document.getElementById('customAvatarHorizontalDiv_row2').style.setProperty('display', 'block');
+            document.getElementById('customAvatarHorizontalDiv_row3').style.removeProperty('display');
         }
     });
 
@@ -213,6 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         enableCustomAvatarCheckbox_afterText.checked = isCustomAvatarEnabled;
         cached_customAvatarParams.isEnabled = isCustomAvatarEnabled;
         if (!isCustomAvatarEnabled) {
+            horizontalDivider2.setAttribute('hidden', '');
             enableCustomAvatarCheckbox.disabled = true;
             enableCustomAvatarCheckbox_afterText.removeAttribute('hidden');
             enableCustomAvatarCheckbox_afterText.disabled = false;
@@ -220,6 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             document.getElementById('customAvatarHorizontalDiv_row1').style.display = 'none';
             document.getElementById('customAvatarHorizontalDiv_row2').style.display = 'none';
+            document.getElementById('customAvatarHorizontalDiv_row3').style.display = 'none';
         }
     });
 
@@ -323,12 +329,14 @@ document.addEventListener("DOMContentLoaded", () => {
         autoTextStrokeColorCheckbox.classList.add(currentTheme);
         textStrokeWidthInput.classList.add(currentTheme);
         textStrokeScopeSelect.classList.add(currentTheme);
+        horizontalDivider2.classList.add(currentTheme);
         enableCustomAvatarCheckbox_afterText.classList.add(currentTheme);
         enableCustomAvatarCheckbox.classList.add(currentTheme);
         enableCustomAvatar_saveInitialButton.classList.add(currentTheme);
         enableCustomAvatar_recoverInitialButton.classList.add(currentTheme);
         enableCustomAvatar_cleanButton.classList.add(currentTheme);
         enableCustomAvatar_saveButton.classList.add(currentTheme);
+        customAvatarUrlInput.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
         applyButton.classList.add(currentTheme);
 
@@ -373,6 +381,8 @@ document.addEventListener("DOMContentLoaded", () => {
         textStrokeWidthInput.classList.add(newTheme);
         textStrokeScopeSelect.classList.remove(currentTheme);
         textStrokeScopeSelect.classList.add(newTheme);
+        horizontalDivider2.classList.remove(currentTheme);
+        horizontalDivider2.classList.add(newTheme);
         enableCustomAvatarCheckbox.classList.remove(currentTheme);
         enableCustomAvatarCheckbox.classList.add(newTheme);
         enableCustomAvatarCheckbox_afterText.classList.remove(currentTheme);
@@ -385,6 +395,8 @@ document.addEventListener("DOMContentLoaded", () => {
         enableCustomAvatar_cleanButton.classList.add(newTheme);
         enableCustomAvatar_saveButton.classList.remove(currentTheme);
         enableCustomAvatar_saveButton.classList.add(newTheme);
+        customAvatarUrlInput.classList.remove(currentTheme);
+        customAvatarUrlInput.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
         applyButton.classList.remove(currentTheme);
@@ -489,10 +501,12 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('恢复初始头像到Cookie');
         if (!cached_customAvatarParams.initialAvatarUrl) {
             console.error('没有初始头像缓存，请先保存初始头像');
+            alert('请先保存初始头像');
             return;
         }
         browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(cached_customAvatarParams.initialAvatarUrl) }).then(() => {
             console.log('已恢复初始头像到Cookie:', cached_customAvatarParams.initialAvatarUrl);
+            avatarUrlUsedSpan.dispatchEvent(new Event('load'));
         });
     });
 
@@ -500,6 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('从Cookie清除头像');
         browser.cookies.remove({ url: baseUrl, name: 'userinfo_avatar' }).then(() => {
             console.log('已从Cookie清除头像');
+            avatarUrlUsedSpan.dispatchEvent(new Event('load'));
         });
     });
 
@@ -511,8 +526,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(customAvatarUrl) }).then(() => {
             console.log('已保存头像到Cookie:', customAvatarUrl);
+            avatarUrlUsedSpan.dispatchEvent(new Event('load'));
         });
     });
+
+    avatarUrlUsedSpan.addEventListener('load', function () {
+        // 从cookie读取正在使用的头像链接
+        browser.cookies.get({ url: baseUrl, name: 'userinfo_avatar' }).then((cookie) => {
+            if (cookie) {
+                avatarUrlUsedSpan.textContent = decodeURIComponent(cookie.value);
+            }
+        });
+    });
+
+    avatarUrlUsedSpan.addEventListener('click', function () {
+        avatarUrlUsedSpan.dispatchEvent(new Event('load'));
+    });
+
+    avatarUrlUsedSpan.dispatchEvent(new Event('load'));
 
     applyButton.addEventListener("click", async () => {
         // local_data = await applyWork_getSyncData();
