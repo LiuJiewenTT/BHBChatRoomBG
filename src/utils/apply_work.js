@@ -228,6 +228,15 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                         avatarUrl: data.customAvatarParams.avatarUrl,
                     });
                 }
+            } else {
+                // 未启用，删除已有的 customAvatar
+                if (data.customAvatarParams.initialAvatarUrl !== null) {
+                    console.log('applyWork_core: customAvatarParams.initialAvatarUrl: ', data.customAvatarParams.initialAvatarUrl);
+                    browser.runtime.sendMessage({
+                        action: "apply-initial-avatar",
+                        initialAvatarUrl: data.customAvatarParams.initialAvatarUrl,
+                    });
+                }
             }
         }
     })();
