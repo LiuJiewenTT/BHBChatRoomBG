@@ -74,6 +74,7 @@ body {
     width: 100%;
 }
 
+.customAvatarSettingsDiv,
 .textStrokeSettingsDiv {
     row-gap: 5px;
     display: flex;
@@ -118,6 +119,7 @@ hr {
     border-width: 0;
     background: var(--white-smoke);
     height: 3px;
+    margin: 0;
 }
 
 hr.dark {
