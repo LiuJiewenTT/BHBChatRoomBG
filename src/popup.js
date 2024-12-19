@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableCustomAvatar_saveButton = document.getElementById("customAvatar-saveButton");
     const customAvatarUrlInput = document.getElementById("avatarUrl");
     const avatarUrlUsedSpan = document.getElementById("avatarUrlUsedSpan");
+    const avatarUrlUsedImg = document.getElementById("avatarUrlUsedImg");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
@@ -552,6 +553,12 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.cookies.get({ url: baseUrl, name: 'userinfo_avatar' }).then((cookie) => {
             if (cookie) {
                 avatarUrlUsedSpan.textContent = decodeURIComponent(cookie.value);
+                let avatarUrlUsedImgUrl = avatarUrlUsedSpan.textContent;
+                if (! (avatarUrlUsedImgUrl.startsWith("http://") || avatarUrlUsedImgUrl.startsWith("https://")) ) {
+                    // 识别为站内链接
+                    avatarUrlUsedImgUrl = baseUrl + avatarUrlUsedImgUrl;
+                }
+                avatarUrlUsedImg.setAttribute('src', avatarUrlUsedImgUrl);
             }
         });
     });
