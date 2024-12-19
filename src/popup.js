@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const enableTextStrokeCheckbox_afterText = document.getElementById("enableTextStrokeCheckbox-afterText");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const hideScrollbarTrackCheckbox = document.getElementById("hideScrollbarTrackCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeManualColorPickDiv = document.getElementById("textStrokeManualColorPickDiv");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
@@ -229,15 +230,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 加载用户的设置
+    // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
     browser.storage.sync.get({
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
-        displayMode: 'default',
+        displayMode: 'default', hideScrollbarTrack: true,
         textStrokeParams: {
             isEnabled: false, autoColor: false, width: 0.1,
             color: '#000000', scope: 'username'
         },
-        customAvatarParams: customAvatarParams_defaults
+        customAvatarParams: null
     }).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
@@ -281,6 +282,12 @@ document.addEventListener("DOMContentLoaded", () => {
             opacitySliderValueSpan.textContent = `${data.opacityValue}`;
         }
 
+        if (data.hideScrollbarTrack === true) {
+            hideScrollbarTrackCheckbox.checked = true;
+        } else {
+            hideScrollbarTrackCheckbox.checked = false;
+        }
+
         if (data.textStrokeParams) {
             enableTextStrokeCheckbox.checked = data.textStrokeParams.isEnabled;
             enableTextStrokeCheckbox_afterText.checked = data.textStrokeParams.isEnabled;
@@ -295,6 +302,9 @@ document.addEventListener("DOMContentLoaded", () => {
             textStrokeScopeSelect.value = data.textStrokeParams.scope;
         }
 
+        if (data.customAvatarParams === null) {
+            data.customAvatarParams = structuredClone(customAvatarParams_defaults);
+        }
         if (data.customAvatarParams) {
             enableCustomAvatarCheckbox.checked = data.customAvatarParams.isEnabled;
             enableCustomAvatarCheckbox_afterText.checked = data.customAvatarParams.isEnabled;
@@ -323,6 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
         autoResizeBackgroundCheckbox.classList.add(currentTheme);
         displayModeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
+        hideScrollbarTrackCheckbox.classList.add(currentTheme);
         horizontalDivider1.classList.add(currentTheme);
         enableTextStrokeCheckbox_afterText.classList.add(currentTheme);
         enableTextStrokeCheckbox.classList.add(currentTheme);
@@ -369,6 +380,8 @@ document.addEventListener("DOMContentLoaded", () => {
         displayModeSelect.classList.add(newTheme);
         themeToggle.classList.remove(currentTheme);
         themeToggle.classList.add(newTheme);
+        hideScrollbarTrackCheckbox.classList.remove(currentTheme);
+        hideScrollbarTrackCheckbox.classList.add(newTheme);
         horizontalDivider1.classList.remove(currentTheme);
         horizontalDivider1.classList.add(newTheme);
         enableTextStrokeCheckbox_afterText.classList.remove(currentTheme);
@@ -472,11 +485,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     enableCustomAvatar_saveInitialButton.addEventListener("click", () => {
         console.log('保存初始头像');
+        // 获取初始头像链接
         browser.cookies.get( { url: baseUrl, name: 'userinfo_avatar' } ).then((cookie) => {
-            console.log('cached_customAvatarParams (before): ', cached_customAvatarParams);
+            // console.log('cached_customAvatarParams (before): ', cached_customAvatarParams); // 调试用
             let initialAvatarUrl = cookie ? decodeURIComponent(cookie.value) : null;
+
+            // 获取记录的初始头像链接
             browser.storage.sync.get({ customAvatarParams: null }).then((data) => {
                 if ( data.customAvatarParams !== null && data.customAvatarParams.initialAvatarUrl ) {
+                    // 比对初始头像链接
                     if (data.customAvatarParams.initialAvatarUrl !== initialAvatarUrl ) {
                         let confirmResult = confirm('当前头像与保存的初始头像不一致，是否覆盖？');
                         if (!confirmResult) {
@@ -489,7 +506,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
                 cached_customAvatarParams.initialAvatarUrl = initialAvatarUrl;
-                console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);
+                // console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);  // 调试用
                 browser.storage.sync.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
                     console.log('已保存初始头像:', cached_customAvatarParams.initialAvatarUrl);
                 });

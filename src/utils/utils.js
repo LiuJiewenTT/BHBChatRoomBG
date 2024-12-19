@@ -15,7 +15,12 @@ const customAvatarParams_defaults = {
 cached_customAvatarParams = structuredClone(customAvatarParams_defaults);
 var cached_customInitialAvatarUrl = null;
 
+/**
+ * 从同步存储加载自定义头像参数到缓存缓存中（`cached_customAvatarParams`）
+ * @returns 
+ */
 async function loadCustomAvatarParams() {
+    // load from sync storage
     let customAvatarParams = await browser.storage.sync.get('customAvatarParams');
     if (customAvatarParams === null) return;
     customAvatarParams = customAvatarParams.customAvatarParams;
@@ -133,6 +138,7 @@ function popupPageCollectInputs() {
     const displayModeSelect = document.getElementById("display-mode-select");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const hideScrollbarTrackCheckbox = document.getElementById("hideScrollbarTrackCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
@@ -157,7 +163,7 @@ function popupPageCollectInputs() {
     var collected = {
         imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
-        displayMode: displayModeSelect.value, 
+        displayMode: displayModeSelect.value, hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
         textStrokeParams, customAvatarParams
     }
     return collected;

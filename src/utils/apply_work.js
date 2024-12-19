@@ -1,15 +1,13 @@
 function applyWork() {
-    browser.storage.sync.get({
-        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
-        textStrokeParams: null, customAvatarParams: null
-    }).then((data) => {
+    applyWork_getSyncData().then((data) => {
+        console.log('applyWork_getSyncData: ', data);  // 调试用
         applyWork_core(data, null);
     });
 }
 
 async function applyWork_getSyncData() {
     return await browser.storage.sync.get({
-        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false,
+        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, hideScrollbarTrack: true,
         textStrokeParams: null, customAvatarParams: null
     });
 }
@@ -139,6 +137,25 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             }
         }
 
+        let hideScrollbarTrackStyleID = "hide-scrollbar-track-style";
+        let hideScrollbarTrackStyle = document.getElementById(hideScrollbarTrackStyleID);
+        if (data.hideScrollbarTrack === true) {
+            if (hideScrollbarTrackStyle === null) {
+                hideScrollbarTrackStyle = document.createElement('style');
+                hideScrollbarTrackStyle.id = hideScrollbarTrackStyleID;
+            }
+            hideScrollbarTrackStyle.textContent = `
+            ::-webkit-scrollbar-track {
+                display: none;
+            }
+            `;
+            document.head.appendChild(hideScrollbarTrackStyle);
+        } else {
+            if (hideScrollbarTrackStyle !== null) {
+                hideScrollbarTrackStyle.remove();
+            }
+        }
+
         let textStrokeStyleID = "text-stroke-style";
         let textStrokeStyle = document.getElementById(textStrokeStyleID);
         let textStrokeStyle_isNew = false;
@@ -215,14 +232,14 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         } else {
             // 未启用，删除已有的 textStrokeStyle
             if (textStrokeStyle !== null) {
-                textStrokeStyle.parentElement.removeChild(textStrokeStyle);
+                textStrokeStyle.remove();
             }
         }
 
         if (data.customAvatarParams) {
             if (data.customAvatarParams.isEnabled) {
                 if (data.customAvatarParams.avatarUrl !== null) {
-                    console.log('applyWork_core: customAvatarParams.avatarUrl: ', data.customAvatarParams.avatarUrl);
+                    console.log('applyWork_core: customAvatarParams.avatarUrl: ', data.customAvatarParams.avatarUrl);   // 调试用
                     browser.runtime.sendMessage({
                         action: "apply-custom-avatar",
                         avatarUrl: data.customAvatarParams.avatarUrl,
@@ -231,7 +248,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             } else {
                 // 未启用，删除已有的 customAvatar
                 if (data.customAvatarParams.initialAvatarUrl !== null) {
-                    console.log('applyWork_core: customAvatarParams.initialAvatarUrl: ', data.customAvatarParams.initialAvatarUrl);
+                    console.log('applyWork_core: customAvatarParams.initialAvatarUrl: ', data.customAvatarParams.initialAvatarUrl); // 调试用
                     browser.runtime.sendMessage({
                         action: "apply-initial-avatar",
                         initialAvatarUrl: data.customAvatarParams.initialAvatarUrl,
