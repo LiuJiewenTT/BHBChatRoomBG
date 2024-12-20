@@ -271,9 +271,40 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         document.head.appendChild(wrap_msg_script);
     }
 
-    const chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
+    let chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
     if (chatBox_send_button) {
         chatBox_send_button.style.alignItems = "center";
+    } else {
+        const chatBox_send_button_custom_id = "chatBox_send_button";
+        const chatBox_send_button_style_id = "chatBox_send_button-style-id";
+        // let chatBox_send_button_style_isNew = false;
+        let chatBox_send_button_style = document.getElementById(chatBox_send_button_style_id);
+        if (chatBox_send_button_style === null) {
+            // chatBox_send_button_style_isNew = true;
+            chatBox_send_button_style = document.createElement('style');
+            chatBox_send_button_style.id = chatBox_send_button_style_id;
+            chatBox_send_button_style.textContent = `
+            #${chatBox_send_button_custom_id} {
+                border-radius: 50%;
+                width: 26px;
+                height: 26px;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                padding: 0.75rem;
+            }
+            `;
+            document.head.appendChild(chatBox_send_button_style);
+        }
+        chatBox_send_button = document.getElementById(chatBox_send_button_custom_id);
+        if (chatBox_send_button === null) {
+            chatBox_send_button = document.createElement('button');
+            chatBox_send_button.id = chatBox_send_button_custom_id;
+            chatBox_send_button.classList.add('btn', 'btn-primary', 'd-flex', 'write-link', 'send');
+            chatBox_send_button.setAttribute('onclick', 'send()');
+            chatBox_send_button.innerHTML = '<i class="la la-paper-plane bx-sm ms-md-2 ms-0" style="margin: 0 !important;"></i>';
+            document.querySelector('div.form-send-message.d-flex.justify-content-between.align-items-center.talk.write').appendChild(chatBox_send_button);
+        }
     }
 
     console.log('applyWork() done.');
