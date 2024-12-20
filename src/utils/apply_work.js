@@ -31,7 +31,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         chatboxContainer = document.querySelector('.' + chatboxContainerClassName);
 
         if (data.displayMode === 'default') {
-            data.displayMode = 'extended';
+            data.displayMode = 'chat-background-extended-clear';
         }
 
         if (!section) {
