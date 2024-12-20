@@ -15,7 +15,8 @@
         "cookies"
     ],
     "host_permissions": [
-        "*://boyshelpboys.com/*"
+        "*://boyshelpboys.com/*",
+        "https://api.github.com/*"
     ],
     "action": {
         "default_popup": "popup.html",

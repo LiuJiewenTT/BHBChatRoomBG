@@ -455,6 +455,8 @@ button.dark {
     max-height: 3em;
     /* 保证宽高比为 1:1 */
     aspect-ratio: 1;
+    /* 关键，裁剪内容以填充框 */
+    object-fit: cover; 
 }
 
 #saveButton,
