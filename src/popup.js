@@ -503,6 +503,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     } else {
                         console.log('当前头像与保存的初始头像一致，无需覆盖');
+                        alert('已保存初始头像(无需覆盖)');
                         return;
                     }
                 }
@@ -510,6 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);  // 调试用
                 browser.storage.sync.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
                     console.log('已保存初始头像:', cached_customAvatarParams.initialAvatarUrl);
+                    alert('已保存初始头像');
                 });
             });
         });
@@ -523,8 +525,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(cached_customAvatarParams.initialAvatarUrl) }).then(() => {
-            console.log('已恢复初始头像到Cookie:', cached_customAvatarParams.initialAvatarUrl);
+            console.log('已恢复初始头像到Cookie: ', cached_customAvatarParams.initialAvatarUrl);
             avatarUrlUsedSpan.dispatchEvent(new Event('load'));
+            alert('已恢复初始头像');
         });
     });
 
@@ -533,6 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.cookies.remove({ url: baseUrl, name: 'userinfo_avatar' }).then(() => {
             console.log('已从Cookie清除头像');
             avatarUrlUsedSpan.dispatchEvent(new Event('load'));
+            alert('已清除头像');
         });
     });
 
@@ -542,24 +546,46 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!customAvatarUrl) {
             console.warn('请指定头像图片的链接');
         }
-        browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(customAvatarUrl) }).then(() => {
-            console.log('已保存头像到Cookie:', customAvatarUrl);
-            avatarUrlUsedSpan.dispatchEvent(new Event('load'));
+
+        browser.storage.sync.get({ customAvatarParams: null }).then((data) => {
+            if ( !(data.customAvatarParams !== null && data.customAvatarParams.initialAvatarUrl) ) {
+                let confirmResult = confirm('没有存储初始头像，是否继续设置头像？');
+                if (!confirmResult) {
+                    console.log('用户取消继续');
+                    return;
+                }
+            }
+            // 保存头像到cookie
+            browser.cookies.set({ url: baseUrl, name: 'userinfo_avatar', value: encodeURIComponent(customAvatarUrl) }).then(() => {
+                console.log('已保存头像到Cookie: ', customAvatarUrl);
+                avatarUrlUsedSpan.dispatchEvent(new Event('load'));
+                alert('已保存头像');
+            });
         });
     });
 
     avatarUrlUsedSpan.addEventListener('load', function () {
         // 从cookie读取正在使用的头像链接
         browser.cookies.get({ url: baseUrl, name: 'userinfo_avatar' }).then((cookie) => {
+            if (cookie === null || cookie.value === null) {
+                console.error('读取头像失败(未获取到头像)');
+                avatarUrlUsedSpan.textContent = '未获取到头像';
+                avatarUrlUsedImg.setAttribute('src', '');
+                return;
+            }
+            avatarUrlUsedSpan.textContent = decodeURIComponent(cookie.value);
+            let avatarUrlUsedImgUrl = avatarUrlUsedSpan.textContent;
             if (cookie) {
-                avatarUrlUsedSpan.textContent = decodeURIComponent(cookie.value);
-                let avatarUrlUsedImgUrl = avatarUrlUsedSpan.textContent;
                 if (! (avatarUrlUsedImgUrl.startsWith("http://") || avatarUrlUsedImgUrl.startsWith("https://")) ) {
                     // 识别为站内链接
                     avatarUrlUsedImgUrl = baseUrl + avatarUrlUsedImgUrl;
                 }
-                avatarUrlUsedImg.setAttribute('src', avatarUrlUsedImgUrl);
             }
+            avatarUrlUsedImg.setAttribute('src', avatarUrlUsedImgUrl);
+        }).catch((error) => {
+            console.error('读取头像失败: ', error);
+            avatarUrlUsedSpan.textContent = '获取头像失败';
+            avatarUrlUsedImg.setAttribute('src', '');
         });
     });
 
