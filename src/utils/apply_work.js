@@ -275,6 +275,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     if (chatBox_send_button) {
         chatBox_send_button.style.alignItems = "center";
     } else {
+        // 添加替补发送按钮
         const chatBox_send_button_custom_id = "chatBox_send_button";
         const chatBox_send_button_style_id = "chatBox_send_button-style-id";
         // let chatBox_send_button_style_isNew = false;
@@ -295,6 +296,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             }
             `;
             document.head.appendChild(chatBox_send_button_style);
+            console.log('applyWork_core: added chatBox_send_button_style.');
         }
         chatBox_send_button = document.getElementById(chatBox_send_button_custom_id);
         if (chatBox_send_button === null) {
@@ -304,7 +306,15 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             chatBox_send_button.setAttribute('onclick', 'send()');
             chatBox_send_button.innerHTML = '<i class="la la-paper-plane bx-sm ms-md-2 ms-0" style="margin: 0 !important;"></i>';
             document.querySelector('div.form-send-message.d-flex.justify-content-between.align-items-center.talk.write').appendChild(chatBox_send_button);
+            console.log('applyWork_core: added chatBox_send_button.');
         }
+    }
+
+    // 强制修复左导航栏的绅士严选图标
+    let gentleman_icon = document.querySelector('.menu-link img.menu-icon.navbar-icon.avatar-1');
+    if (gentleman_icon) {
+        gentleman_icon.classList.remove('menu-icon');
+        console.log('applyWork_core: fixed gentleman icon.');
     }
 
     console.log('applyWork() done.');
