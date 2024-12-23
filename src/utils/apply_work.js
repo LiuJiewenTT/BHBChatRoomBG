@@ -271,7 +271,12 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         document.head.appendChild(wrap_msg_script);
     }
 
-    let chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
+    let chatBox_send_button = null;
+    chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
+    if (chatBox_send_button === null) {
+        chatBox_send_button = document.querySelector('button.send-btn');
+    }
+    
     if (chatBox_send_button) {
         chatBox_send_button.style.alignItems = "center";
     } else {
