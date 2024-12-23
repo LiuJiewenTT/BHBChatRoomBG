@@ -39,19 +39,20 @@
 >
 > ## How-To
 >
-> <details open="" style="border-top: 0.063em solid rgb(240, 240, 240); margin: 0px; padding: 1em 2em;"><summary style="cursor: pointer;"><b>Install and update extensions</b></summary><br><a href="https://github.com/NeverDecaf" style="color: rgb(25, 103, 210);">NeverDecaf</a><span>&nbsp;</span>has created an extension to make this process easy:<ol style="padding-left: 2em;"><li>Set<span>&nbsp;</span><a href="chrome://flags/#extension-mime-request-handling" style="color: rgb(25, 103, 210);">chrome://flags/#extension-mime-request-handling</a><span>&nbsp;</span>to<span>&nbsp;</span><code style="background: rgba(128, 128, 128, 0.2); padding: 0px 0.5em; border-radius: 0.25em;">Always prompt for install</code><span>&nbsp;</span>and relaunch.</li><li>Then click on the latest<span>&nbsp;</span><code style="background: rgba(128, 128, 128, 0.2); padding: 0px 0.5em; border-radius: 0.25em;">Chromium.Web.Store.crx</code><span>&nbsp;</span>link on<span>&nbsp;</span><a href="https://github.com/NeverDecaf/chromium-web-store/releases" style="color: rgb(25, 103, 210);">the extension's Releases page</a>.</li></ol>Please check out the<span>&nbsp;</span><a href="https://github.com/NeverDecaf/chromium-web-store" style="color: rgb(25, 103, 210);">chromium-web-store</a><span>&nbsp;</span>repo for further details and alternate installation methods for the extension.<br><br>If you do not wish to install this extension, there is still a way to install other extensions albeit without the ability to easily update them. In this case, please refer to the entry on the wiki for<span>&nbsp;</span><a href="https://ungoogled-software.github.io/ungoogled-chromium-wiki/faq#downloading-the-crx-file" style="color: rgb(25, 103, 210);">installing extensions manually</a>.</details>
+> <details style="border-top: 0.063em solid rgb(240, 240, 240); margin: 0px; padding: 1em 2em;"><summary style="cursor: pointer;"><b>Install and update extensions</b></summary><br><a href="https://github.com/NeverDecaf" style="color: rgb(25, 103, 210);">NeverDecaf</a><span>&nbsp;</span>has created an extension to make this process easy:<ol style="padding-left: 2em;"><li>Set<span>&nbsp;</span><a href="chrome://flags/#extension-mime-request-handling" style="color: rgb(25, 103, 210);">chrome://flags/#extension-mime-request-handling</a><span>&nbsp;</span>to<span>&nbsp;</span><code style="background: rgba(128, 128, 128, 0.2); padding: 0px 0.5em; border-radius: 0.25em;">Always prompt for install</code><span>&nbsp;</span>and relaunch.</li><li>Then click on the latest<span>&nbsp;</span><code style="background: rgba(128, 128, 128, 0.2); padding: 0px 0.5em; border-radius: 0.25em;">Chromium.Web.Store.crx</code><span>&nbsp;</span>link on<span>&nbsp;</span><a href="https://github.com/NeverDecaf/chromium-web-store/releases" style="color: rgb(25, 103, 210);">the extension's Releases page</a>.</li></ol>Please check out the<span>&nbsp;</span><a href="https://github.com/NeverDecaf/chromium-web-store" style="color: rgb(25, 103, 210);">chromium-web-store</a><span>&nbsp;</span>repo for further details and alternate installation methods for the extension.<br><br>If you do not wish to install this extension, there is still a way to install other extensions albeit without the ability to easily update them. In this case, please refer to the entry on the wiki for<span>&nbsp;</span><a href="https://ungoogled-software.github.io/ungoogled-chromium-wiki/faq#downloading-the-crx-file" style="color: rgb(25, 103, 210);">installing extensions manually</a>.</details>
 >
-> 其中，第一步更改标志（flag）至关重要，完成了这一步设置，就再也不需要解压crx文件才能使用插件啦！
+> 其中，第一步更改标志（flag）至关重要，完成了这一步设置，就再也不需要解压`.crx`文件才能使用插件啦！
 >
 > > - 如果想要按照教程启用谷歌插件商店直接安装，你还需要给予【谷歌插件商店】插件对网站的访问权限。
 > > - 如果商店页面中发现当前不可添加插件，请关闭插件对应的商店页面，然后在标签栏右键选择“重新打开关闭的标签页”即可。
 
-> <details open="" style="border-top: 0.063em solid rgb(240, 240, 240); margin: 0px; padding: 1em 2em;">
->     <summary style="cursor: pointer;"><b>关于Ungoogled-Chromium</b></summary><br>
->     项目主页：<a href="https://github.com/ungoogled-software/ungoogled-chromium">Project Home</a><br>
->     主页：<a href="https://ungoogled-software.github.io/">Home Page</a><br>
->     <b>下载</b>第三方构建的<b>二进制程序</b>：<a href="https://ungoogled-software.github.io/ungoogled-chromium-binaries/">Third-party binaries</a><br>
+> <details style="border-top: 0.063em solid rgb(240, 240, 240); margin: 0px; padding: 1em 2em;">
+>  <summary style="cursor: pointer;"><b>关于Ungoogled-Chromium</b></summary><br>
+>  项目主页：<a href="https://github.com/ungoogled-software/ungoogled-chromium">Project Home</a><br>
+>  主页：<a href="https://ungoogled-software.github.io/">Home Page</a><br>
+>  <b>下载</b>第三方构建的<b>二进制程序</b>：<a href="https://ungoogled-software.github.io/ungoogled-chromium-binaries/">Third-party binaries</a><br>
 > </details>
+>
 >
 > 想了解Ungoogled-Chromium? 👆
 >
