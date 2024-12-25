@@ -54,6 +54,9 @@ function popupPage_checkExtensionUpdate() {
 }
 popupPage_checkExtensionUpdate();
 
+var browser_storage_sync_obj = browser.storage.sync;
+var browser_storage_local_obj = browser.storage.local;
+
 loadCustomAvatarParams();
 
 document.getElementById('saveButton').addEventListener('click', () => {
@@ -604,6 +607,7 @@ document.addEventListener("DOMContentLoaded", () => {
     applyButton.addEventListener("click", async () => {
         // local_data = await applyWork_getSyncData();
         var temporary_data = popupPageCollectInputs();
+        var local_data = browser.storage.local.get();
         console.log('temporary_data:', temporary_data);     // 调试用
         // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {

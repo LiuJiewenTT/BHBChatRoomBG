@@ -15,27 +15,18 @@ const customAvatarParams_defaults = {
 cached_customAvatarParams = structuredClone(customAvatarParams_defaults);
 var cached_customInitialAvatarUrl = null;
 
-/**
- * 从同步存储加载自定义头像参数到缓存缓存中（`cached_customAvatarParams`）
- * @returns 
- */
-async function loadCustomAvatarParams() {
-    // load from sync storage
-    let customAvatarParams = await browser.storage.sync.get('customAvatarParams');
-    if (customAvatarParams === null) return;
-    customAvatarParams = customAvatarParams.customAvatarParams;
-    console.log("loadCustomeAvatarParams async (stored): ", customAvatarParams);
-    if (typeof customAvatarParams.isEnabled !== "undefined") {
-        cached_customAvatarParams.isEnabled = customAvatarParams.isEnabled;
-    }
-    if (typeof customAvatarParams.avatarUrl !== "undefined") {
-        cached_customAvatarParams.avatarUrl = customAvatarParams.avatarUrl;
-    }
-    if (typeof customAvatarParams.initialAvatarUrl !== "undefined") {
-        cached_customAvatarParams.initialAvatarUrl = customAvatarParams.initialAvatarUrl;
-    }
-    console.log("loadCustomeAvatarParams async (cached): ", cached_customAvatarParams);
+var default_sync_storage_dict_params = {
+    disableStorageSync: false,
+    imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
+    persistTimestampDisplay: false, hideScrollbarTrack: true,
+    textStrokeParams: null, customAvatarParams: null
 }
+var default_local_storage_dict_params = structuredClone(default_sync_storage_dict_params);
+var default_local_storage_dict_params_extra = {localImageData: null};
+default_local_storage_dict_params = {...default_local_storage_dict_params, ...default_local_storage_dict_params_extra};
+
+var localImageData = null;
+
 
 // 将 RGB 颜色转为反色
 function invertColor(color) {
@@ -49,6 +40,7 @@ function invertColor(color) {
 
     return `rgb(${r}, ${g}, ${b})`;
 }
+
 
 function getSiteThemeMode_LightOrDark() {
     const csslink = document.getElementById("stately_core_css");
@@ -65,6 +57,7 @@ function getSiteThemeMode_LightOrDark() {
             return "light";
     }
 }
+
 
 function HexToRgb(hex) {
     // 移除可能存在的 #
@@ -86,6 +79,7 @@ function HexToRgb(hex) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
+
 function compareVersion(v1, v2) {
     const parts1 = v1.split('.').map(num => parseInt(num, 10));
     const parts2 = v2.split('.').map(num => parseInt(num, 10));
@@ -96,6 +90,7 @@ function compareVersion(v1, v2) {
     }
     return 0; // v1 等于 v2
 }
+
 
 function setElementTextIgnoreVisitedPseudoClass(element) {
     element.addEventListener('mouseover', function () {
@@ -127,6 +122,7 @@ function setElementTextIgnoreVisitedPseudoClass(element) {
         }
     });
 }
+
 
 function popupPageCollectInputs() {
     const imageUrl = document.getElementById('imageUrl').value.trim();
@@ -170,4 +166,49 @@ function popupPageCollectInputs() {
         textStrokeParams, customAvatarParams
     }
     return collected;
+}
+
+
+/**
+ * 从同步存储加载自定义头像参数到缓存缓存中（`cached_customAvatarParams`）
+ * @returns 
+ */
+async function loadCustomAvatarParams() {
+    // load from sync storage
+    let customAvatarParams = await browser.storage.sync.get('customAvatarParams');
+    if (customAvatarParams === null) return;
+    customAvatarParams = customAvatarParams.customAvatarParams;
+    console.log("loadCustomeAvatarParams async (stored): ", customAvatarParams);
+    if (typeof customAvatarParams.isEnabled !== "undefined") {
+        cached_customAvatarParams.isEnabled = customAvatarParams.isEnabled;
+    }
+    if (typeof customAvatarParams.avatarUrl !== "undefined") {
+        cached_customAvatarParams.avatarUrl = customAvatarParams.avatarUrl;
+    }
+    if (typeof customAvatarParams.initialAvatarUrl !== "undefined") {
+        cached_customAvatarParams.initialAvatarUrl = customAvatarParams.initialAvatarUrl;
+    }
+    console.log("loadCustomeAvatarParams async (cached): ", cached_customAvatarParams);
+}
+
+
+async function loadLocalImageData() {
+    await browser.storage.local.get({localImageData: null}).then( (data) => {
+        if (data.localImageData) {
+            console.log("getLocalImageData: not null");
+            localImageData = data.localImageData;
+        } else {
+            console.log("getLocalImageData: null");
+            localImageData = null;
+        }
+    });
+}
+
+function ifStorageSyncDisabled(storagedata_sync, storagedata_local) {
+    if (storagedata_local !== null && storagedata_local.disableStorageSync === true
+        || storagedata_sync !== null && storagedata_sync.disableStorageSync === true
+    ) {
+        return true;
+    }
+    return false;
 }

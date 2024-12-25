@@ -1,23 +1,42 @@
 function applyWork() {
-    applyWork_getSyncData().then((data) => {
-        console.log('applyWork_getSyncData: ', data);  // 调试用
-        applyWork_core(data, null);
+    applyWork_getSyncAndLocalData().then((data) => {
+        console.log('applyWork_getSyncData: ', data[0]);  // 调试用
+        console.log('applyWork_getLocalData: ', data[1]);  // 调试用
+        applyWork_core(data[0], data[1]);
     });
 }
 
+
 async function applyWork_getSyncData() {
-    return await browser.storage.sync.get({
-        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
-        persistTimestampDisplay: false, hideScrollbarTrack: true,
-        textStrokeParams: null, customAvatarParams: null
-    });
+    return await browser.storage.sync.get(default_sync_storage_dict_params);
 }
+
+
+async function applyWork_getLocalData() {
+    return await browser.storage.local.get(default_local_storage_dict_params);
+}
+
+
+async function applyWork_getSyncAndLocalData() {
+    let storagedata_sync = await browser.storage.sync.get(default_sync_storage_dict_params);
+    let storagedata_local = await browser.storage.local.get(default_local_storage_dict_params);
+    return [storagedata_sync, storagedata_local];
+}
+
 
 function applyWork_core(storagedata_sync, storagedata_local) {
     let siteThemeMode = getSiteThemeMode_LightOrDark();
     console.log('siteThemeMode: ', siteThemeMode);  // 调试用
 
-    data = storagedata_sync;
+    let flag_disable_storage_sync = ifStorageSyncDisabled(storagedata_sync, storagedata_local);
+    if (flag_disable_storage_sync === true) {
+        data = storagedata_local;
+        console.log('applyWork_core: storagedata_local is used.');
+    } else {
+        data = storagedata_sync;
+        console.log('applyWork_core: storagedata_sync is used.');
+    }
+
 
     (() => {
 
@@ -295,7 +314,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     if (chatBox_send_button === null) {
         chatBox_send_button = document.querySelector('button.send-btn');
     }
-    
+
     if (chatBox_send_button) {
         chatBox_send_button.style.alignItems = "center";
     } else {
