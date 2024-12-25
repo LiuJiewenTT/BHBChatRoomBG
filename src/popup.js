@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const enableTextStrokeCheckbox_afterText = document.getElementById("enableTextStrokeCheckbox-afterText");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const persistTimestampDisplayCheckbox = document.getElementById("persistTimestampDisplayCheckbox");
     const hideScrollbarTrackCheckbox = document.getElementById("hideScrollbarTrackCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeManualColorPickDiv = document.getElementById("textStrokeManualColorPickDiv");
@@ -289,6 +290,8 @@ document.addEventListener("DOMContentLoaded", () => {
             hideScrollbarTrackCheckbox.checked = false;
         }
 
+        persistTimestampDisplayCheckbox.checked = data.persistTimestampDisplay;
+
         if (data.textStrokeParams) {
             enableTextStrokeCheckbox.checked = data.textStrokeParams.isEnabled;
             enableTextStrokeCheckbox_afterText.checked = data.textStrokeParams.isEnabled;
@@ -334,6 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
         autoResizeBackgroundCheckbox.classList.add(currentTheme);
         displayModeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
+        persistTimestampDisplayCheckbox.classList.add(currentTheme);
         hideScrollbarTrackCheckbox.classList.add(currentTheme);
         horizontalDivider1.classList.add(currentTheme);
         enableTextStrokeCheckbox_afterText.classList.add(currentTheme);
@@ -381,6 +385,8 @@ document.addEventListener("DOMContentLoaded", () => {
         displayModeSelect.classList.add(newTheme);
         themeToggle.classList.remove(currentTheme);
         themeToggle.classList.add(newTheme);
+        persistTimestampDisplayCheckbox.classList.remove(currentTheme);
+        persistTimestampDisplayCheckbox.classList.add(newTheme);
         hideScrollbarTrackCheckbox.classList.remove(currentTheme);
         hideScrollbarTrackCheckbox.classList.add(newTheme);
         horizontalDivider1.classList.remove(currentTheme);

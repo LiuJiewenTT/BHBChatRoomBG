@@ -137,6 +137,24 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             }
         }
 
+        let persistTimestampDisplayStyleID = "persist-timestamp-display-style";
+        let persistTimestampDisplayStyle = document.getElementById(persistTimestampDisplayStyleID);
+        if (data.persistTimestampDisplay === true) {
+            if (persistTimestampDisplayStyle === null) {
+                persistTimestampDisplayStyle = document.createElement('style');
+                persistTimestampDisplayStyle.id = persistTimestampDisplayStyleID;
+                persistTimestampDisplayStyle.textContent = `
+                .message-time {
+                    opacity: 1;
+                }`;
+                document.head.appendChild(persistTimestampDisplayStyle);
+            }
+        } else {
+            if (persistTimestampDisplayStyle !== null) {
+                persistTimestampDisplayStyle.remove();
+            }
+        }
+
         let hideScrollbarTrackStyleID = "hide-scrollbar-track-style";
         let hideScrollbarTrackStyle = document.getElementById(hideScrollbarTrackStyleID);
         if (data.hideScrollbarTrack === true) {

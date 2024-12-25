@@ -138,6 +138,7 @@ function popupPageCollectInputs() {
     const displayModeSelect = document.getElementById("display-mode-select");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
+    const persistTimestampDisplayCheckbox = document.getElementById("persistTimestampDisplayCheckbox");
     const hideScrollbarTrackCheckbox = document.getElementById("hideScrollbarTrackCheckbox");
     const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
@@ -163,7 +164,9 @@ function popupPageCollectInputs() {
     var collected = {
         imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
-        displayMode: displayModeSelect.value, hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
+        displayMode: displayModeSelect.value, 
+        persistTimestampDisplay: persistTimestampDisplayCheckbox.checked,
+        hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
         textStrokeParams, customAvatarParams
     }
     return collected;
