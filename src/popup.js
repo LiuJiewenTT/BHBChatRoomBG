@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
     browser.storage.sync.get({
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
-        displayMode: 'default', hideScrollbarTrack: true,
+        displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: {
             isEnabled: false, autoColor: false, width: 0.1,
             color: '#000000', scope: 'username'

@@ -7,7 +7,8 @@ function applyWork() {
 
 async function applyWork_getSyncData() {
     return await browser.storage.sync.get({
-        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, hideScrollbarTrack: true,
+        imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
+        persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: null, customAvatarParams: null
     });
 }
