@@ -74,6 +74,12 @@ body {
     width: 100%;
 }
 
+.SyncSettingsDiv {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
 .customAvatarSettingsDiv,
 .textStrokeSettingsDiv {
     row-gap: 5px;
@@ -417,6 +423,7 @@ button.dark {
     aspect-ratio: 1;
 }
 
+#syncSettingsCheckButton,
 #customAvatar-saveInitialButton,
 #customAvatar-recoverInitialButton,
 #customAvatar-cleanButton,
@@ -434,15 +441,15 @@ button.dark {
     aspect-ratio: 1;
 }
 
+#syncSettingsCheckButton img,
 #customAvatar-saveInitialButton img,
 #customAvatar-recoverInitialButton img,
 #customAvatar-cleanButton img,
 #customAvatar-saveButton img,
 #opacityResetButton img {
     width: auto;
-    height: 70%;
-    /* 保证宽高比为 1:1 */
-    aspect-ratio: 1;
+    max-width: 70%;
+    max-height: 70%;
 }
 
 #avatarUrlUsedSpan {

@@ -204,6 +204,7 @@ async function loadLocalImageData() {
     });
 }
 
+
 function ifStorageSyncDisabled(storagedata_sync, storagedata_local) {
     if (storagedata_local !== null && storagedata_local.disableStorageSync === true
         || storagedata_sync !== null && storagedata_sync.disableStorageSync === true
@@ -211,4 +212,17 @@ function ifStorageSyncDisabled(storagedata_sync, storagedata_local) {
         return true;
     }
     return false;
+}
+
+
+async function getDisableSyncSettings() {
+    let storagedata_sync = await browser.storage.sync.get({disableStorageSync: false});
+    let storagedata_local = await browser.storage.local.get({disableStorageSync: false});
+    return [storagedata_sync, storagedata_local];
+}
+
+
+async function ifStorageSyncDisabled_checkStorage() {
+    let [storagedata_sync, storagedata_local] = await getDisableSyncSettings();
+    return ifStorageSyncDisabled(storagedata_sync, storagedata_local);
 }

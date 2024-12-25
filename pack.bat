@@ -15,6 +15,7 @@ if not exist ".\build\BHBChatRoomBG\res\icons" exit /B 1
 xcopy /E /Y ".\src\*" ".\build\BHBChatRoomBG\"
 copy ".\res\icons\icon.png" ".\build\BHBChatRoomBG\res\icons\icon.png"
 copy ".\res\icons\lamp_121067.svg" ".\build\BHBChatRoomBG\res\icons\lamp_121067.svg"
+copy ".\res\icons\cloudrefresh_icon-icons.com_54403.svg" ".\build\BHBChatRoomBG\res\icons\cloudrefresh_icon-icons.com_54403.svg"
 copy ".\res\icons\arrow_reset_filled_icon_202577.svg" ".\build\BHBChatRoomBG\res\icons\arrow_reset_filled_icon_202577.svg"
 copy ".\res\icons\blueray_disc_cd_dvd_icon_190780.svg" ".\build\BHBChatRoomBG\res\icons\blueray_disc_cd_dvd_icon_190780.svg"
 copy ".\res\icons\dvdplayer_86273.svg" ".\build\BHBChatRoomBG\res\icons\dvdplayer_86273.svg"

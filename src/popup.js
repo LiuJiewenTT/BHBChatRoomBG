@@ -9,6 +9,11 @@ var currentTheme;
 // // 弹窗显示
 // alert(`Device width: ${deviceWidth} px\nViewport width: ${viewportWidth} px`);
 
+let flag_disable_storage_sync = null;
+ifStorageSyncDisabled_checkStorage().then(result => {
+    flag_disable_storage_sync = result;
+});
+
 
 function popupPage_checkExtensionUpdate() {
     var ext_currentVersion = document.getElementById('ext_currentVersion');
@@ -107,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const body = document.body;
     const headerTitle = document.querySelector('.header-title');
     const updateHint = document.getElementById("ext_updateLink");
+    const syncSettingsCheckButton = document.getElementById("syncSettingsCheckButton");
+    const syncSettingsStatusSpan = document.getElementById("syncSettingsStatusSpan");
     const imageUrlInput = document.getElementById("imageUrl");
     const displayTextInput = document.getElementById("displayText");
     const opacitySlider = document.getElementById("opacitySlider");
@@ -235,8 +242,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    let browser_storage_obj = null;
+    if (flag_disable_storage_sync) {
+        syncSettingsStatusSpan.textContent = "Disabled";
+        browser_storage_obj = browser.storage.local;
+    } else {
+        syncSettingsStatusSpan.textContent = "Enabled";
+        browser_storage_obj = browser.storage.sync;
+    }
+
     // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
-    browser.storage.sync.get({
+    browser_storage_obj.get({
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
         displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: {
@@ -331,6 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         updateHint.classList.add(currentTheme);
+        syncSettingsCheckButton.classList.add(currentTheme);
         imageUrlInput.classList.add(currentTheme);
         displayTextInput.classList.add(currentTheme);
         opacitySlider.classList.add(currentTheme);
@@ -372,6 +389,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateHint.classList.remove(currentTheme);
         updateHint.classList.add(newTheme);
+        syncSettingsCheckButton.classList.remove(currentTheme);
+        syncSettingsCheckButton.classList.add(newTheme);
         imageUrlInput.classList.remove(currentTheme);
         imageUrlInput.classList.add(newTheme);
         displayTextInput.classList.remove(currentTheme);
