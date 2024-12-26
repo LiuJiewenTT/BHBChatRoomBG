@@ -10,9 +10,6 @@ var currentTheme;
 // alert(`Device width: ${deviceWidth} px\nViewport width: ${viewportWidth} px`);
 
 let flag_disable_storage_sync = null;
-ifStorageSyncDisabled_checkStorage().then(result => {
-    flag_disable_storage_sync = result;
-});
 var browser_storage_obj = null;
 var storage_type_string = "";
 
@@ -107,10 +104,16 @@ document.getElementById('saveButton').addEventListener('click', () => {
             }
         }
     });
+
+    if (flag_disable_storage_sync) {
+        browser_storage_local_obj.set({disableStorageSync: true});
+    } else {
+        browser_storage_local_obj.set({disableStorageSync: false});
+    }
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const body = document.body;
     const headerTitle = document.querySelector('.header-title');
     const updateHint = document.getElementById("ext_updateLink");
@@ -256,7 +259,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    if (flag_disable_storage_sync) {
+    await ifStorageSyncDisabled_checkStorage().then(result => {
+        flag_disable_storage_sync = result;
+        console.log("flag_disable_storage_sync: " + flag_disable_storage_sync);  // 调试用
+    });
+
+    if (flag_disable_storage_sync === true) {
         syncSettingsStatusSpan.textContent = "Disabled";
         browser_storage_obj = browser.storage.local;
         storage_type_string = "local storage";
@@ -464,7 +472,28 @@ document.addEventListener("DOMContentLoaded", () => {
         browser_storage_obj.set({ theme: currentTheme });
     });
 
-    syncSettingsCheckButton
+    syncSettingsCheckButton.addEventListener("click", () => {
+        if (flag_disable_storage_sync) {
+            console.log('原同步设置状态：已禁用');
+        } else {
+            console.log('原同步设置状态：已启用');
+        }
+
+        // 切换同步设置状态
+        flag_disable_storage_sync = !flag_disable_storage_sync;
+        if (flag_disable_storage_sync) {
+            console.log('同步设置状态：已禁用');
+            syncSettingsStatusSpan.textContent = "Disabled";
+            browser_storage_obj = browser.storage.local;
+            storage_type_string = "local storage";
+        } else {
+            console.log('同步设置状态：已启用');
+            syncSettingsStatusSpan.textContent = "Enabled";
+            browser_storage_obj = browser.storage.sync;
+            storage_type_string = "sync storage";
+        }
+        saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
+    });
 
     opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
@@ -662,8 +691,8 @@ document.addEventListener("DOMContentLoaded", () => {
             browser.scripting.executeScript({
                 target: { tabId: tabs[0].id },
                 func: function (syncData, localData) {
-                    console.log('syncData:', syncData);     // 调试用
-                    console.log('localData:', localData);     // 调试用
+                    console.log('syncData: ', syncData);     // 调试用
+                    console.log('localData: ', localData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
                 args: [sync_data, local_data]  // 传递存储的设置到注入的函数中
