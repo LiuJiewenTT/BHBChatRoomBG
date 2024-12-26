@@ -16,14 +16,21 @@ function wrap_addmsg() {
     }
 }
 
+let ul_len = 0;
+let old_ul_len = 0;
+let last_msg_id = "";
+let old_last_msg_id = "";
 
 function wrap_get_msg() {
     original_get_msg = get_msg;
     return function (...args) {
         original_get_msg(...args);
-        let new_msg_cnt = k - old_k;
+        // let new_msg_cnt = k - old_k;
         let ul_items = document.getElementsByClassName("mk-chat-box")[0].children;
-        let ul_len = ul_items.length;
+        ul_len = ul_items.length;
+        last_msg_id = ul_items[ul_len - 1].getAttribute('data-index');
+        let new_msg_cnt = ul_len - old_ul_len;
+        old_ul_len = ul_len;
         let i_start;
         // console.log('new_msg_cnt, k, old_k, c, ul_len: ', new_msg_cnt, k, old_k, c, ul_len);  // 调试用
         if (old_k != k) {
@@ -33,14 +40,26 @@ function wrap_get_msg() {
             console.log(`new_msg_cnt > ul_len: ${new_msg_cnt} ${ul_len}. Displayed messages may be incomplete.`);
             i_start = ul_len;
         } else {
-            i_start = new_msg_cnt;
+            if (last_msg_id === old_last_msg_id) {
+                i_start = ul_len;
+            } else {
+                i_start = new_msg_cnt;
+            }
         }
+        old_last_msg_id = last_msg_id;
+
         let li_item;
         for (let i = i_start, j = ul_len - 1; i; i--, j--) {
             li_item = ul_items[j];
             if ( li_item === null ) continue;
             if ( li_item === undefined ) {
                 // console.error('get_msg error: li_item undefined', ul_items, j);     // 调试用
+                continue;
+            }
+            if ( li_item.classList.contains('loading-more') ) {
+                continue;
+            }
+            if ( !li_item.classList.contains('chat-message') ) {
                 continue;
             }
             let img_item = li_item.querySelector("img");
@@ -50,7 +69,8 @@ function wrap_get_msg() {
                     img_item.src = img_item.getAttribute('src').replace(/^\./, '');
                 }
             } else {
-                throw Error('get_msg error: img null');
+                // console.error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);
+                throw Error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);
             }
         }
     }
