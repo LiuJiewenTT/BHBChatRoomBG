@@ -79,10 +79,20 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     collectedInputs = popupPageCollectInputs();
 
+    let browser_storage_obj = null;
+    let storage_type_string = "";
+    if (flag_disable_storage_sync) {
+        browser_storage_obj = browser_storage_local_obj;
+        storage_type_string = "local storage";
+    } else {
+        browser_storage_obj = browser_storage_sync_obj;
+        storage_type_string = "sync storage";
+    }
+
     // 将用户输入的内容保存到存储中
-    browser.storage.sync.set(collectedInputs).then(() => {
+    browser_storage_obj.set(collectedInputs).then(() => {
         // notify user that settings have been saved
-        alert('设置已保存!');
+        alert(`设置已保存! (${storage_type_string})`);
         if (imageUrl.trim() === "") {
             imageUrl_fullpath = "";
         } else {
@@ -143,6 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const customAvatarUrlInput = document.getElementById("avatarUrl");
     const avatarUrlUsedSpan = document.getElementById("avatarUrlUsedSpan");
     const avatarUrlUsedImg = document.getElementById("avatarUrlUsedImg");
+    const saveTo_HintSpan = document.getElementById("saveTo-HintSpan");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
@@ -243,13 +254,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     let browser_storage_obj = null;
+    let storage_type_string = "";
     if (flag_disable_storage_sync) {
         syncSettingsStatusSpan.textContent = "Disabled";
         browser_storage_obj = browser.storage.local;
+        storage_type_string = "local storage";
     } else {
         syncSettingsStatusSpan.textContent = "Enabled";
         browser_storage_obj = browser.storage.sync;
+        storage_type_string = "sync storage";
     }
+
+    saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
 
     // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
     browser_storage_obj.get({
