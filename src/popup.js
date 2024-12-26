@@ -13,6 +13,8 @@ let flag_disable_storage_sync = null;
 ifStorageSyncDisabled_checkStorage().then(result => {
     flag_disable_storage_sync = result;
 });
+var browser_storage_obj = null;
+var storage_type_string = "";
 
 
 function popupPage_checkExtensionUpdate() {
@@ -78,16 +80,6 @@ document.getElementById('saveButton').addEventListener('click', () => {
     const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     collectedInputs = popupPageCollectInputs();
-
-    let browser_storage_obj = null;
-    let storage_type_string = "";
-    if (flag_disable_storage_sync) {
-        browser_storage_obj = browser_storage_local_obj;
-        storage_type_string = "local storage";
-    } else {
-        browser_storage_obj = browser_storage_sync_obj;
-        storage_type_string = "sync storage";
-    }
 
     // 将用户输入的内容保存到存储中
     browser_storage_obj.set(collectedInputs).then(() => {
@@ -253,8 +245,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    let browser_storage_obj = null;
-    let storage_type_string = "";
     if (flag_disable_storage_sync) {
         syncSettingsStatusSpan.textContent = "Disabled";
         browser_storage_obj = browser.storage.local;
@@ -468,8 +458,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log('[body.className:' + body.className + ']');
 
         // 保存主题到存储
-        browser.storage.sync.set({ theme: currentTheme });
+        browser_storage_obj.set({ theme: currentTheme });
     });
+
+    syncSettingsCheckButton
 
     opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
@@ -499,7 +491,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 保存预览状态
         console.log('[previewEnabled:' + isPreviewEnabled + ']');
-        browser.storage.sync.set({ previewEnabled: isPreviewEnabled });
+        browser_storage_obj.set({ previewEnabled: isPreviewEnabled });
     });
 
     // 启用自动颜色时禁用并隐藏颜色选择器
@@ -536,7 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let initialAvatarUrl = cookie ? decodeURIComponent(cookie.value) : null;
 
             // 获取记录的初始头像链接
-            browser.storage.sync.get({ customAvatarParams: null }).then((data) => {
+            browser_storage_obj.get({ customAvatarParams: null }).then((data) => {
                 if ( data.customAvatarParams !== null && data.customAvatarParams.initialAvatarUrl ) {
                     // 比对初始头像链接
                     if (data.customAvatarParams.initialAvatarUrl !== initialAvatarUrl ) {
@@ -553,7 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 cached_customAvatarParams.initialAvatarUrl = initialAvatarUrl;
                 // console.log('cached_customAvatarParams (after): ', cached_customAvatarParams);  // 调试用
-                browser.storage.sync.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
+                browser_storage_obj.set({ customAvatarParams: cached_customAvatarParams }).then(() => {
                     console.log('已保存初始头像:', cached_customAvatarParams.initialAvatarUrl);
                     alert('已保存初始头像');
                 });
@@ -591,7 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.warn('请指定头像图片的链接');
         }
 
-        browser.storage.sync.get({ customAvatarParams: null }).then((data) => {
+        browser_storage_obj.get({ customAvatarParams: null }).then((data) => {
             if ( !(data.customAvatarParams !== null && data.customAvatarParams.initialAvatarUrl) ) {
                 let confirmResult = confirm('没有存储初始头像，是否继续设置头像？');
                 if (!confirmResult) {
