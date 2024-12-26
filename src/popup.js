@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await ifStorageSyncDisabled_checkStorage().then(result => {
         flag_disable_storage_sync = result;
-        console.log("flag_disable_storage_sync: " + flag_disable_storage_sync);  // 调试用
+        // console.log("flag_disable_storage_sync: " + flag_disable_storage_sync);  // 调试用
     });
 
     if (flag_disable_storage_sync === true) {
@@ -482,12 +482,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 切换同步设置状态
         flag_disable_storage_sync = !flag_disable_storage_sync;
         if (flag_disable_storage_sync) {
-            console.log('同步设置状态：已禁用');
+            console.log('新同步设置状态：已禁用');
             syncSettingsStatusSpan.textContent = "Disabled";
             browser_storage_obj = browser.storage.local;
             storage_type_string = "local storage";
         } else {
-            console.log('同步设置状态：已启用');
+            console.log('新同步设置状态：已启用');
             syncSettingsStatusSpan.textContent = "Enabled";
             browser_storage_obj = browser.storage.sync;
             storage_type_string = "sync storage";
@@ -671,7 +671,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (flag_disable_storage_sync === true) {
             // 使用本地存储
-            console.log('使用本地存储');
+            console.log('使用本地存储应用');
             local_data = temporary_data;
             if (local_data === null) {
                 local_data = {disableStorageSync: true};
@@ -680,19 +680,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         } else {
             // 使用同步存储
-            console.log('使用同步存储');
+            console.log('使用同步存储应用');
             sync_data = temporary_data;
         }
 
-        console.log('temporary_data: ', temporary_data);     // 调试用
+        // console.log('temporary_data: ', temporary_data);     // 调试用
         // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-            console.log('tabs:', tabs);     // 调试用
+            // console.log('tabs:', tabs);     // 调试用
             browser.scripting.executeScript({
                 target: { tabId: tabs[0].id },
                 func: function (syncData, localData) {
-                    console.log('syncData: ', syncData);     // 调试用
-                    console.log('localData: ', localData);     // 调试用
+                    // console.log('syncData: ', syncData);     // 调试用
+                    // console.log('localData: ', localData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
                 args: [sync_data, local_data]  // 传递存储的设置到注入的函数中
