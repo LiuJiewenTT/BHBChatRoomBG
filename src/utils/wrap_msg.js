@@ -28,6 +28,9 @@ function wrap_get_msg() {
         // let new_msg_cnt = k - old_k;
         let ul_items = document.getElementsByClassName("mk-chat-box")[0].children;
         ul_len = ul_items.length;
+        if (ul_len === 0) {
+            return;
+        }
         last_msg_id = ul_items[ul_len - 1].getAttribute('data-index');
         let new_msg_cnt = ul_len - old_ul_len;
         old_ul_len = ul_len;
