@@ -150,6 +150,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("themeToggle");
     const applyButton = document.getElementById('applyButton');
 
+    var default_get_storage_dict_params = {
+        imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
+        displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
+        textStrokeParams: {
+            isEnabled: false, autoColor: false, width: 0.1,
+            color: '#000000', scope: 'username'
+        },
+        customAvatarParams: null
+    };
+
+
     headerTitle.addEventListener('click', () => {
         popupPage_checkExtensionUpdate();
     });
@@ -258,15 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
     saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
 
     // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
-    browser_storage_obj.get({
-        imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
-        displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
-        textStrokeParams: {
-            isEnabled: false, autoColor: false, width: 0.1,
-            color: '#000000', scope: 'username'
-        },
-        customAvatarParams: null
-    }).then((data) => {
+    browser_storage_obj.get(default_get_storage_dict_params).then((data) => {
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
         }
@@ -634,18 +637,36 @@ document.addEventListener("DOMContentLoaded", () => {
     applyButton.addEventListener("click", async () => {
         // local_data = await applyWork_getSyncData();
         var temporary_data = popupPageCollectInputs();
-        var local_data = browser.storage.local.get();
-        console.log('temporary_data:', temporary_data);     // 调试用
+        var sync_data = null;
+        var local_data = null;
+
+        if (flag_disable_storage_sync === true) {
+            // 使用本地存储
+            console.log('使用本地存储');
+            local_data = temporary_data;
+            if (local_data === null) {
+                local_data = {disableStorageSync: true};
+            } else if (typeof local_data['disableStorageSync'] === 'undefined') {
+                local_data['disableStorageSync'] = true;
+            }
+        } else {
+            // 使用同步存储
+            console.log('使用同步存储');
+            sync_data = temporary_data;
+        }
+
+        console.log('temporary_data: ', temporary_data);     // 调试用
         // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
             console.log('tabs:', tabs);     // 调试用
             browser.scripting.executeScript({
                 target: { tabId: tabs[0].id },
                 func: function (syncData, localData) {
-                    // console.log('syncData:', syncData);     // 调试用
+                    console.log('syncData:', syncData);     // 调试用
+                    console.log('localData:', localData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
-                args: [temporary_data, null]  // 传递存储的设置到注入的函数中
+                args: [sync_data, local_data]  // 传递存储的设置到注入的函数中
             });
         });
     });
