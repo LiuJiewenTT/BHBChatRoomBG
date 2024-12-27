@@ -119,6 +119,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const updateHint = document.getElementById("ext_updateLink");
     const syncSettingsCheckButton = document.getElementById("syncSettingsCheckButton");
     const syncSettingsStatusSpan = document.getElementById("syncSettingsStatusSpan");
+    const useLocalImageBackgroundCheckbox = document.getElementById("useLocalImageBackgroundCheckbox");
+    const selectLocalImageBackgroundButton = document.getElementById("selectLocalImageBackgroundButton");
+    const deleteLocalImageBackgroundButton = document.getElementById("deleteLocalImageBackgroundButton");
     const imageUrlInput = document.getElementById("imageUrl");
     const displayTextInput = document.getElementById("displayText");
     const opacitySlider = document.getElementById("opacitySlider");
@@ -365,6 +368,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         updateHint.classList.add(currentTheme);
         syncSettingsCheckButton.classList.add(currentTheme);
+        useLocalImageBackgroundCheckbox.classList.add(currentTheme);
+        selectLocalImageBackgroundButton.classList.add(currentTheme);
+        deleteLocalImageBackgroundButton.classList.add(currentTheme);
         imageUrlInput.classList.add(currentTheme);
         displayTextInput.classList.add(currentTheme);
         opacitySlider.classList.add(currentTheme);
@@ -408,6 +414,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateHint.classList.add(newTheme);
         syncSettingsCheckButton.classList.remove(currentTheme);
         syncSettingsCheckButton.classList.add(newTheme);
+        useLocalImageBackgroundCheckbox.classList.remove(currentTheme);
+        useLocalImageBackgroundCheckbox.classList.add(newTheme);
+        selectLocalImageBackgroundButton.classList.remove(currentTheme);
+        selectLocalImageBackgroundButton.classList.add(newTheme);
+        deleteLocalImageBackgroundButton.classList.remove(currentTheme);
+        deleteLocalImageBackgroundButton.classList.add(newTheme);
         imageUrlInput.classList.remove(currentTheme);
         imageUrlInput.classList.add(newTheme);
         displayTextInput.classList.remove(currentTheme);

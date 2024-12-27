@@ -55,10 +55,11 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     width: 90%;
 }
 
+#useLocalImageBackgroundDiv,
 #opacityInputDiv {
     display: flex;
     flex-direction: row;
@@ -70,8 +71,9 @@ body {
 
 .select-container {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     width: 100%;
+    align-items: center;
 }
 
 .SyncSettingsDiv {
@@ -252,6 +254,7 @@ input.dark[type="checkbox"]:not(:checked):hover {
 
 #opacitySlider {
     width: 100%;
+    margin: 0;
 }
 
 input[type='range'] {
@@ -423,6 +426,8 @@ button.dark {
     aspect-ratio: 1;
 }
 
+#selectLocalImageBackgroundButton,
+#deleteLocalImageBackgroundButton,
 #syncSettingsCheckButton,
 #customAvatar-saveInitialButton,
 #customAvatar-recoverInitialButton,
@@ -441,6 +446,8 @@ button.dark {
     aspect-ratio: 1;
 }
 
+#selectLocalImageBackgroundButton img,
+#deleteLocalImageBackgroundButton img,
 #syncSettingsCheckButton img,
 #customAvatar-saveInitialButton img,
 #customAvatar-recoverInitialButton img,
