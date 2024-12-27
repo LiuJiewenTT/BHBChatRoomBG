@@ -16,13 +16,15 @@ cached_customAvatarParams = structuredClone(customAvatarParams_defaults);
 var cached_customInitialAvatarUrl = null;
 
 var default_sync_storage_dict_params = {
+    useLocalImageBackground: false,
+    localImageBackground_Data: null,
     disableStorageSync: false,
     imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
     persistTimestampDisplay: false, hideScrollbarTrack: true,
     textStrokeParams: null, customAvatarParams: null
 }
 var default_local_storage_dict_params = structuredClone(default_sync_storage_dict_params);
-var default_local_storage_dict_params_extra = {localImageData: null};
+var default_local_storage_dict_params_extra = {localImageBackground_Data: null};
 default_local_storage_dict_params = {...default_local_storage_dict_params, ...default_local_storage_dict_params_extra};
 
 var localImageData = null;
@@ -125,6 +127,7 @@ function setElementTextIgnoreVisitedPseudoClass(element) {
 
 
 function popupPageCollectInputs() {
+    const useLocalImageBackgroundCheckbox = document.getElementById("useLocalImageBackgroundCheckbox");
     const imageUrl = document.getElementById('imageUrl').value.trim();
     const displayText = document.getElementById('displayText').value;
     const opacitySlider = document.getElementById("opacitySlider");
@@ -158,6 +161,7 @@ function popupPageCollectInputs() {
     }
 
     var collected = {
+        useLocalImageBackground: useLocalImageBackgroundCheckbox.checked,
         imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
         displayMode: displayModeSelect.value, 
@@ -192,19 +196,6 @@ async function loadCustomAvatarParams() {
 }
 
 
-async function loadLocalImageData() {
-    await browser.storage.local.get({localImageData: null}).then( (data) => {
-        if (data.localImageData) {
-            console.log("getLocalImageData: not null");
-            localImageData = data.localImageData;
-        } else {
-            console.log("getLocalImageData: null");
-            localImageData = null;
-        }
-    });
-}
-
-
 function ifStorageSyncDisabled(storagedata_sync, storagedata_local) {
     if (storagedata_local !== null && storagedata_local.disableStorageSync === true
         || storagedata_sync !== null && storagedata_sync.disableStorageSync === true
@@ -225,4 +216,31 @@ async function getDisableSyncSettings() {
 async function ifStorageSyncDisabled_checkStorage() {
     let [storagedata_sync, storagedata_local] = await getDisableSyncSettings();
     return ifStorageSyncDisabled(storagedata_sync, storagedata_local);
+}
+
+function getUrlFullpath(theUrl) {
+    let theUrl_fullpath = "";
+    if (theUrl.trim() !== "") {
+        if (theUrl.startsWith("http") || theUrl.startsWith("https")) {
+            theUrl_fullpath = theUrl;
+        } else {
+            theUrl_fullpath = baseUrl + theUrl;
+        }
+    }
+    return theUrl_fullpath;
+}
+
+async function getBackgroundImageSrc(useLocalImageBackground, imageUrl) {
+    let backgroundImageSrc = "";
+    if ( useLocalImageBackground === true ) {
+        await browser.storage.local.get('localImageBackground_Data').then((storagedata_local) => {
+            if (storagedata_local.localImageBackground_Data !== null) {
+                backgroundImageSrc = `url('${storagedata_local.localImageBackground_Data}')`;
+            }
+        });
+    } else {
+        imageUrl_fullpath = getUrlFullpath(imageUrl);
+        backgroundImageSrc = `url('${imageUrl_fullpath}')`;
+    }
+    return backgroundImageSrc;
 }

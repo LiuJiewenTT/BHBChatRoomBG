@@ -61,10 +61,13 @@ popupPage_checkExtensionUpdate();
 var browser_storage_sync_obj = browser.storage.sync;
 var browser_storage_local_obj = browser.storage.local;
 
+let imageUrl_fullpath = "";
+
 loadCustomAvatarParams();
 
-document.getElementById('saveButton').addEventListener('click', () => {
-    const imageUrl = document.getElementById('imageUrl').value.trim();
+document.getElementById('saveButton').addEventListener('click', async () => {
+    const useLocalImageBackgroundCheckbox = document.getElementById("useLocalImageBackgroundCheckbox");
+    const imageUrl = document.getElementById('imageUrl').value;
     const displayText = document.getElementById('displayText').value;
     const opacitySlider = document.getElementById("opacitySlider");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
@@ -79,29 +82,24 @@ document.getElementById('saveButton').addEventListener('click', () => {
     collectedInputs = popupPageCollectInputs();
 
     // 将用户输入的内容保存到存储中
-    browser_storage_obj.set(collectedInputs).then(() => {
+    browser_storage_obj.set(collectedInputs).then(async () => {
         // notify user that settings have been saved
         alert(`设置已保存! (${storage_type_string})`);
-        if (imageUrl.trim() === "") {
-            imageUrl_fullpath = "";
-        } else {
-            if (imageUrl.startsWith("http") || imageUrl.startsWith("https")) {
-                imageUrl_fullpath = imageUrl;
-            } else {
-                imageUrl_fullpath = baseUrl + imageUrl;
-            }
-        }
+        let backgroundImageSrc = await getBackgroundImageSrc(useLocalImageBackgroundCheckbox.checked, imageUrl);
 
-        document.documentElement.style.setProperty("--bg-image", `url('${imageUrl_fullpath}')`);
-        console.log('预览图片链接: ', document.documentElement.style.getPropertyValue("--bg-image")); // 调试用
+        document.documentElement.style.setProperty("--bg-image", backgroundImageSrc);
+        if (useLocalImageBackgroundCheckbox.checked !== true) {
+            console.log('预览图片链接: ', document.documentElement.style.getPropertyValue("--bg-image")); // 调试用
+        } else {
+            console.log('预览图片链接是本地图片base64'); // 调试用
+        }
+        
         if (previewCheckbox.checked) {
-            if (imageUrl) {
-                document.body.classList.remove(currentTheme);
-                document.body.classList.add("has-bg-image")
-                document.body.classList.add(currentTheme);
-            } else {
-                document.body.className = `${currentTheme}`;
-            }
+            document.body.classList.remove(currentTheme);
+            document.body.classList.add("has-bg-image")
+            document.body.classList.add(currentTheme);
+        } else {
+            document.body.className = `${currentTheme}`;
         }
     });
 
@@ -157,6 +155,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const applyButton = document.getElementById('applyButton');
 
     var default_get_storage_dict_params = {
+        useLocalImageBackground: false,
+        localImageBackground_Data: null,
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
         displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: {
@@ -280,7 +280,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
 
     // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
-    browser_storage_obj.get(default_get_storage_dict_params).then((data) => {
+    await browser_storage_obj.get(default_get_storage_dict_params).then(async (data) => {
+        if (data.useLocalImageBackground === true) {
+            useLocalImageBackgroundCheckbox.checked = true;
+        } else {
+            useLocalImageBackgroundCheckbox.checked = false;
+        }
+
+        // 恢复图片背景
+        let backgroundImageSrc = "";
+        backgroundImageSrc = await getBackgroundImageSrc(data.useLocalImageBackground, data.imageUrl);
+        // console.log("backgroundImageSrc: " + backgroundImageSrc); // 调试用
+        document.documentElement.style.setProperty("--bg-image", backgroundImageSrc);
+        if (data.useLocalImageBackground !== true) {
+            console.log('图片背景: ', document.documentElement.style.getPropertyValue("--bg-image"));
+        } else {
+            console.log('图片背景是本地图片base64');
+        }
+
         if (data.imageUrl) {
             document.getElementById('imageUrl').value = data.imageUrl;
         }
@@ -295,26 +312,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             previewCheckbox.checked = false;
         }
 
+        if (previewCheckbox.checked) {
+            body.classList.add("has-bg-image"); // 标记启用背景图片
+        }
+
         if (data.autoResizeBackground === true) {
             autoResizeBackgroundCheckbox.checked = true;
         } else {
             autoResizeBackgroundCheckbox.checked = false;
-        }
-
-        // 恢复图片背景
-        if (data.imageUrl) {
-            if (data.imageUrl.startsWith("http") || data.imageUrl.startsWith("https")) {
-                imageUrl_fullpath = data.imageUrl;
-            } else {
-                imageUrl_fullpath = baseUrl + data.imageUrl;
-            }
-            document.documentElement.style.setProperty("--bg-image", `url('${imageUrl_fullpath}')`);
-            console.log(document.documentElement.style.getPropertyValue("--bg-image"));
-            if (previewCheckbox.checked) {
-                body.classList.add("has-bg-image"); // 标记启用背景图片
-            }
-        } else {
-            imageUrl_fullpath = "";
         }
 
         if (data.opacityValue != null) {
@@ -507,6 +512,52 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
     });
 
+    useLocalImageBackgroundCheckbox.addEventListener("change", async (event) => {
+        const isEnabled = event.target.checked;
+    
+        let backgroundImageSrc = "";
+        backgroundImageSrc = await getBackgroundImageSrc(useLocalImageBackgroundCheckbox.checked, imageUrlInput.value);
+        // console.log("backgroundImageSrc: " + backgroundImageSrc); // 调试用
+        document.documentElement.style.setProperty("--bg-image", backgroundImageSrc);
+        if (useLocalImageBackgroundCheckbox.checked !== true) {
+            console.log('图片背景: ', document.documentElement.style.getPropertyValue("--bg-image"));
+        } else {
+            console.log('图片背景是本地图片base64');
+        }
+    });
+
+    selectLocalImageBackgroundButton.addEventListener("click", () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', (event) => {
+                browser.storage.local.set({ localImageBackground_Data: event.target.result }).then(() => {
+                    let length = event.target.result.byteLength;
+                    console.log('已保存本地图片，长度: ', length);
+                    alert(`已保存本地图片，长度: ${length}`);
+                }).catch((error) => {
+                    console.error('保存本地图片失败: ', error);
+                    alert('保存本地图片失败');
+                });
+            });
+            reader.readAsDataURL(file);
+        });
+        input.click();
+    });
+
+    deleteLocalImageBackgroundButton.addEventListener("click", () => {
+        browser.storage.local.remove('localImageBackground_Data').then(() => {
+            console.log('已删除本地图片');
+            alert('已删除本地图片');
+        }).catch((error) => {
+            console.error('删除本地图片失败: ', error);
+            alert('删除本地图片失败');
+        });
+    });
+
     opacitySlider.addEventListener("input", function () {
         opacitySliderValueSpan.textContent = opacitySlider.value;  // 显示当前滑动条的值
         slider_colorChange(this);  // 背景色适配
@@ -523,7 +574,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const isPreviewEnabled = event.target.checked;
 
 
-        if (isPreviewEnabled && imageUrl_fullpath) {
+        if (isPreviewEnabled) {
             body.classList.remove(currentTheme);
             body.classList.add("has-bg-image")
             body.classList.add(currentTheme);
@@ -656,10 +707,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             avatarUrlUsedSpan.textContent = decodeURIComponent(cookie.value);
             let avatarUrlUsedImgUrl = avatarUrlUsedSpan.textContent;
             if (cookie) {
-                if (! (avatarUrlUsedImgUrl.startsWith("http://") || avatarUrlUsedImgUrl.startsWith("https://")) ) {
-                    // 识别为站内链接
-                    avatarUrlUsedImgUrl = baseUrl + avatarUrlUsedImgUrl;
-                }
+                avatarUrlUsedImgUrl = getUrlFullpath(avatarUrlUsedImgUrl);
             }
             avatarUrlUsedImg.setAttribute('src', avatarUrlUsedImgUrl);
         }).catch((error) => {
@@ -696,6 +744,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             sync_data = temporary_data;
         }
 
+        if (temporary_data.useLocalImageBackground === true) {
+            // 启用本地图片背景
+            console.log('启用本地图片背景');
+            await browser.storage.local.get('localImageBackground_Data').then((data) => {
+                local_data['localImageBackground_Data'] = data.localImageBackground_Data;
+            });
+        }
+
         // console.log('temporary_data: ', temporary_data);     // 调试用
         // 获取当前活动标签页并注入脚本
         browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
@@ -704,7 +760,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 target: { tabId: tabs[0].id },
                 func: function (syncData, localData) {
                     // console.log('syncData: ', syncData);     // 调试用
-                    // console.log('localData: ', localData);     // 调试用
+                    console.log('localData: ', localData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
                 args: [sync_data, local_data]  // 传递存储的设置到注入的函数中

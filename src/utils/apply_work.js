@@ -18,8 +18,8 @@ async function applyWork_getLocalData() {
 
 
 async function applyWork_getSyncAndLocalData() {
-    let storagedata_sync = await browser.storage.sync.get(default_sync_storage_dict_params);
-    let storagedata_local = await browser.storage.local.get(default_local_storage_dict_params);
+    let storagedata_sync = await applyWork_getSyncData();
+    let storagedata_local = await applyWork_getLocalData();
     return [storagedata_sync, storagedata_local];
 }
 
@@ -41,7 +41,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     (() => {
 
         let section;
-        let old_section = null;
+        let flag_new_section = false;
         let sectionClassName = "background-insert-section";
         let sectionID = "background-insert-section-id";
         let chatboxClassName = "chat-history-wrapper";
@@ -49,6 +49,13 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         section = document.getElementById(sectionID);
         chatBox = document.querySelector('.' + chatboxClassName);
         chatboxContainer = document.querySelector('.' + chatboxContainerClassName);
+
+        let backgroundImageSrc = "";
+        if ( data.useLocalImageBackground === true && data.localImageBackground_Data !== null ) {
+            backgroundImageSrc = `url('${storagedata_local.localImageBackground_Data}')`;
+        } else {
+            backgroundImageSrc = `url('${data.imageUrl}')`;
+        }
 
         if (data.displayMode === 'default') {
             data.displayMode = 'chat-background-extended-clear';
@@ -60,18 +67,16 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             section.className = "background-insert-section"
             section.id = sectionID;
         }
-        else {
-            flag_new_section = false;
-            // 创建一个深拷贝（包含子节点）
-            // old_section = section.cloneNode(true);
-            // 创建一个浅拷贝（不包含子节点）
-            old_section = section.cloneNode(false);
-        }
-        if (data.imageUrl) {
-            section.style.backgroundImage = `url('${data.imageUrl}')`;
+
+        if (data.imageUrl 
+            || (data.useLocalImageBackground === true && data.localImageBackground_Data !== null)
+        ) {
+            section.style.backgroundImage = backgroundImageSrc;
             section.style.backgroundRepeat = "repeat";
             if (data.autoResizeBackground) {
                 section.style.backgroundSize = "cover";
+            } else {
+                section.style.backgroundSize = "auto";
             }
             section.style.display = "flex";
             section.style.alignItems = "center";
@@ -110,7 +115,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             `;
         }
 
-        if (old_section) {
+        if (!flag_new_section) {
             section.remove();
         }
         // else: new section will be appended to body without deleting old one
@@ -150,7 +155,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             } else {
                 chatBox.style.backgroundSize = "auto";
             }
-            chatBox.style.setProperty('background-image', `url('${data.imageUrl}')`);
+            chatBox.style.setProperty('background-image', backgroundImageSrc);
             // 接下来删除黑条
             if (inputBoxShadowLineStyle_isNew) {
                 chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
