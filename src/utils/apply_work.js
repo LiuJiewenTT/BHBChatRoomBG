@@ -147,7 +147,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         // else: new section will be appended to body without deleting old one
         
         if (chatBox !== null) {
-            chatBox.style.removeProperty('background-image');
+            chatBox.style.backgroundImage = "";
         }
 
         if (data.displayMode === 'disabled') {
@@ -163,6 +163,14 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         }
         if (data.displayMode === 'page-background') {
             document.body.insertBefore(section, document.body.firstChild);
+        }
+        if (data.displayMode === 'pure-page-background') {
+            if (data.autoResizeBackground) {
+                document.body.style.backgroundSize = "contain";
+            } else {
+                document.body.style.backgroundSize = "auto";
+            }
+            document.body.style.backgroundImage = backgroundImageSrc;
         }
         if (data.displayMode === 'chat-background-extended') {
             if (chatBox !== null) {
@@ -195,7 +203,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 } else {
                     chatBox.style.backgroundSize = "auto";
                 }
-                chatBox.style.setProperty('background-image', backgroundImageSrc);
+                chatBox.style.backgroundImage = backgroundImageSrc;
                 // 接下来删除黑条
                 if (inputBoxShadowLineStyle_isNew) {
                     chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
