@@ -12,7 +12,8 @@
         "storage",
         "activeTab",
         "scripting",
-        "cookies"
+        "cookies",
+        "unlimitedStorage"
     ],
     "host_permissions": [
         "*://boyshelpboys.com/*",
