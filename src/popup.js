@@ -144,7 +144,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     var default_get_storage_dict_params = {
         useLocalImageBackground: false,
-        localImageBackground_Data: null,
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
         displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: {
@@ -153,7 +152,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
         customAvatarParams: null
     };
-
+    var default_get_storage_dict_params2 = {
+        useLocalImageBackground: false,
+        localImageBackground_Data: null,
+        previewEnabled: false
+    }
 
     headerTitle.addEventListener('click', () => {
         popupPage_checkExtensionUpdate();
@@ -268,22 +271,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
 
     // 加载用户的设置（此处不可混用apply_work.js当中的，因为需要获取的列表不同）。
-    await browser_storage_obj.get(default_get_storage_dict_params).then(async (data) => {
+    browser_storage_obj.get(default_get_storage_dict_params).then(async (data) => {
         if (data.useLocalImageBackground === true) {
             useLocalImageBackgroundCheckbox.checked = true;
         } else {
             useLocalImageBackgroundCheckbox.checked = false;
-        }
-
-        // 恢复图片背景
-        let backgroundImageSrc = "";
-        backgroundImageSrc = await getBackgroundImageSrc(data.useLocalImageBackground, data.imageUrl);
-        // console.log("backgroundImageSrc: " + backgroundImageSrc); // 调试用
-        cached_background_image_src = backgroundImageSrc;
-        if (data.useLocalImageBackground !== true) {
-            console.log('图片背景: ', backgroundImageSrc);
-        } else {
-            console.log('图片背景是本地图片base64');
         }
 
         if (data.imageUrl) {
@@ -297,7 +289,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (data.previewEnabled === true) {
             previewCheckbox.checked = true;
             body.classList.add("has-bg-image"); // 标记启用背景图片
-            document.body.style.backgroundImage = cached_background_image_src;
         } else {
             previewCheckbox.checked = false;
         }
@@ -393,6 +384,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         body.classList.add(currentTheme);
     });
 
+    browser_storage_obj.get(default_get_storage_dict_params2).then(async (data) => {
+        // 恢复图片背景
+        let backgroundImageSrc = "";
+        backgroundImageSrc = await getBackgroundImageSrc(data.useLocalImageBackground, data.imageUrl);
+        // console.log("backgroundImageSrc: " + backgroundImageSrc); // 调试用
+        cached_background_image_src = backgroundImageSrc;
+        if (data.useLocalImageBackground !== true) {
+            console.log('图片背景: ', backgroundImageSrc);
+        } else {
+            console.log('图片背景是本地图片base64');
+        }
+        if (data.previewEnabled === true) {
+            document.body.style.backgroundImage = cached_background_image_src;
+        }
+    });
     // 监听主题切换
     themeToggle.addEventListener("click", () => {
         newTheme = currentTheme === "light" ? "dark" : "light";
