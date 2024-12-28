@@ -470,7 +470,7 @@ button.dark {
     /* 保证宽高比为 1:1 */
     aspect-ratio: 1;
     /* 关键，裁剪内容以填充框 */
-    object-fit: cover; 
+    object-fit: cover;
 }
 
 #saveButton,
@@ -479,15 +479,8 @@ button.dark {
 }
 
 /* 背景图片样式 */
-body.has-bg-image.light {
-    background-image: var(--bg-image);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-body.has-bg-image.dark {
-    background-image: var(--bg-image);
+body.has-bg-image {
+    /* background-image: var(--bg-image); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -495,7 +488,7 @@ body.has-bg-image.dark {
 
 /* 主题背景图片 */
 :root {
-    --bg-image: url('');
+    /* --bg-image: url(''); */
     --theme-color: #FF8FA2;
     --checked-sign-color: #d66c7e;
     --hover-bgcolor: #FFB2B8;

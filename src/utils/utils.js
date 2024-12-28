@@ -259,3 +259,8 @@ function formatStorageSize(size) {
     let sizeStr = (size / Math.pow(1000, index)).toFixed(2);
     return sizeStr + unitArr[index];
 }
+
+async function eventTrigger(target, process_function, event_name) {
+    let event = {type: event_name, target: target};
+    await process_function(event);
+}

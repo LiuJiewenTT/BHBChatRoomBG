@@ -62,6 +62,7 @@ var browser_storage_sync_obj = browser.storage.sync;
 var browser_storage_local_obj = browser.storage.local;
 
 let imageUrl_fullpath = "";
+let cached_background_image_src = "";
 
 loadCustomAvatarParams();
 
@@ -85,22 +86,9 @@ document.getElementById('saveButton').addEventListener('click', async () => {
     browser_storage_obj.set(collectedInputs).then(async () => {
         // notify user that settings have been saved
         alert(`设置已保存! (${storage_type_string})`);
-        let backgroundImageSrc = await getBackgroundImageSrc(useLocalImageBackgroundCheckbox.checked, imageUrl);
-
-        document.documentElement.style.setProperty("--bg-image", backgroundImageSrc);
-        if (useLocalImageBackgroundCheckbox.checked !== true) {
-            console.log('预览图片链接: ', document.documentElement.style.getPropertyValue("--bg-image")); // 调试用
-        } else {
-            console.log('预览图片链接是本地图片base64'); // 调试用
-        }
+        // let backgroundImageSrc = await getBackgroundImageSrc(useLocalImageBackgroundCheckbox.checked, imageUrl);
         
-        if (previewCheckbox.checked) {
-            document.body.classList.remove(currentTheme);
-            document.body.classList.add("has-bg-image")
-            document.body.classList.add(currentTheme);
-        } else {
-            document.body.className = `${currentTheme}`;
-        }
+        await eventTrigger(previewCheckbox, previewCheckbox_change, 'change');
     });
 
     if (flag_disable_storage_sync) {
@@ -291,9 +279,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         let backgroundImageSrc = "";
         backgroundImageSrc = await getBackgroundImageSrc(data.useLocalImageBackground, data.imageUrl);
         // console.log("backgroundImageSrc: " + backgroundImageSrc); // 调试用
-        document.documentElement.style.setProperty("--bg-image", backgroundImageSrc);
+        cached_background_image_src = backgroundImageSrc;
         if (data.useLocalImageBackground !== true) {
-            console.log('图片背景: ', document.documentElement.style.getPropertyValue("--bg-image"));
+            console.log('图片背景: ', backgroundImageSrc);
         } else {
             console.log('图片背景是本地图片base64');
         }
@@ -308,12 +296,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 恢复预览开关状态
         if (data.previewEnabled === true) {
             previewCheckbox.checked = true;
+            body.classList.add("has-bg-image"); // 标记启用背景图片
+            document.body.style.backgroundImage = cached_background_image_src;
         } else {
             previewCheckbox.checked = false;
-        }
-
-        if (previewCheckbox.checked) {
-            body.classList.add("has-bg-image"); // 标记启用背景图片
         }
 
         if (data.autoResizeBackground === true) {
@@ -512,19 +498,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
     });
 
-    useLocalImageBackgroundCheckbox.addEventListener("change", async (event) => {
+    async function useLocalImageBackgroundCheckbox_change(event) {
         const isEnabled = event.target.checked;
     
         let backgroundImageSrc = "";
         backgroundImageSrc = await getBackgroundImageSrc(useLocalImageBackgroundCheckbox.checked, imageUrlInput.value);
         // console.log("backgroundImageSrc: " + backgroundImageSrc); // 调试用
-        document.documentElement.style.setProperty("--bg-image", backgroundImageSrc);
-        if (useLocalImageBackgroundCheckbox.checked !== true) {
-            console.log('图片背景: ', document.documentElement.style.getPropertyValue("--bg-image"));
+        cached_background_image_src = backgroundImageSrc;
+        if (isEnabled !== true) {
+            console.log('图片背景: ', backgroundImageSrc);
         } else {
             console.log('图片背景是本地图片base64');
         }
-    });
+    }
+    useLocalImageBackgroundCheckbox.addEventListener("change", useLocalImageBackgroundCheckbox_change);
 
     selectLocalImageBackgroundButton.addEventListener("click", () => {
         const input = document.createElement('input');
@@ -537,8 +524,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // 获取result中的base64编码数据的长度
                 let length = event.target.result.length;
                 let length_string = formatSize(length);
-                browser.storage.local.set({ localImageBackground_Data: event.target.result }).then(() => {
-                    useLocalImageBackgroundCheckbox.dispatchEvent(new Event('change'));
+                browser.storage.local.set({ localImageBackground_Data: event.target.result }).then(async () => {
+                    await eventTrigger(useLocalImageBackgroundCheckbox, useLocalImageBackgroundCheckbox_change, 'change');
+                    await eventTrigger(previewCheckbox, previewCheckbox_change, 'change');
                     console.log('已保存本地图片，长度: ', length_string);
                     alert(`已保存本地图片，长度: ${length_string}`);
                 }).catch((error) => {
@@ -552,8 +540,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     deleteLocalImageBackgroundButton.addEventListener("click", () => {
-        browser.storage.local.remove('localImageBackground_Data').then(() => {
-            useLocalImageBackgroundCheckbox.dispatchEvent(new Event('change'));
+        browser.storage.local.remove('localImageBackground_Data').then(async () => {
+            await eventTrigger(useLocalImageBackgroundCheckbox, useLocalImageBackgroundCheckbox_change, 'change');
+            await eventTrigger(previewCheckbox, previewCheckbox_change, 'change');
             console.log('已删除本地图片');
             alert('已删除本地图片');
         }).catch((error) => {
@@ -574,24 +563,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // 监听预览复选框变化
-    previewCheckbox.addEventListener("change", (event) => {
+    async function previewCheckbox_change(event) {
         const isPreviewEnabled = event.target.checked;
-
 
         if (isPreviewEnabled) {
             body.classList.remove(currentTheme);
-            body.classList.add("has-bg-image")
+            body.classList.add("has-bg-image");
+            body.style.backgroundImage = cached_background_image_src;
             body.classList.add(currentTheme);
         } else {
             body.classList.remove(currentTheme);
-            body.classList.remove("has-bg-image")
+            body.style.backgroundImage = "";
+            body.classList.remove("has-bg-image");
             body.classList.add(currentTheme);
         }
 
         // 保存预览状态
         console.log('[previewEnabled:' + isPreviewEnabled + ']');
         browser_storage_obj.set({ previewEnabled: isPreviewEnabled });
-    });
+    }
+    previewCheckbox.addEventListener("change", previewCheckbox_change);
 
     // 启用自动颜色时禁用并隐藏颜色选择器
     autoTextStrokeColorCheckbox.addEventListener("change", (event) => {
