@@ -534,16 +534,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             const file = event.target.files[0];
             const reader = new FileReader();
             reader.addEventListener('load', (event) => {
+                // 获取result中的base64编码数据的长度
+                let length = event.target.result.length;
+                let length_string = formatSize(length);
                 browser.storage.local.set({ localImageBackground_Data: event.target.result }).then(() => {
-                    // 获取result中的base64编码数据的长度
-                    let length = event.target.result.length;
-                    let length_string = formatSize(length);
                     useLocalImageBackgroundCheckbox.dispatchEvent(new Event('change'));
                     console.log('已保存本地图片，长度: ', length_string);
                     alert(`已保存本地图片，长度: ${length_string}`);
                 }).catch((error) => {
-                    console.error('保存本地图片失败: ', error);
-                    alert('保存本地图片失败');
+                    console.error('保存本地图片失败，长度: ', length_string, error);
+                    alert(`保存本地图片失败，长度: ${length_string}`);
                 });
             });
             reader.readAsDataURL(file);

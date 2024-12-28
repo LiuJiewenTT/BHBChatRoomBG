@@ -252,3 +252,10 @@ function formatSize(size) {
     let sizeStr = (size / Math.pow(1024, index)).toFixed(2);
     return sizeStr + unitArr[index];
 }
+
+function formatStorageSize(size) {
+    let unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let index = Math.floor(Math.log(size) / Math.log(1000));
+    let sizeStr = (size / Math.pow(1000, index)).toFixed(2);
+    return sizeStr + unitArr[index];
+}
