@@ -1,3 +1,10 @@
+let matchlists_scope_all_pages = ["*://boyshelpboys.com/*",];
+let matchlists_scope_chat_rooms = [
+    "*://boyshelpboys.com/chat.htm",
+    "*://boyshelpboys.com/my-notice.htm"
+];
+let flag_isChatRoomPage = false;
+
 function applyWork() {
     applyWork_getSyncAndLocalData().then((data) => {
         console.log('applyWork_getSyncData: ', data[0]);  // 调试用
@@ -25,8 +32,8 @@ async function applyWork_getSyncAndLocalData() {
 
 
 function applyWork_core(storagedata_sync, storagedata_local) {
-    let siteThemeMode = getSiteThemeMode_LightOrDark();
-    console.log('siteThemeMode: ', siteThemeMode);  // 调试用
+    const urlWithoutQuery = getUrlWithoutQuery();
+    flag_isChatRoomPage = isChatRoomPage();
 
     let flag_disable_storage_sync = ifStorageSyncDisabled(storagedata_sync, storagedata_local);
     if (flag_disable_storage_sync === true) {
@@ -37,6 +44,23 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         console.log('applyWork_core: storagedata_sync is used.');
     }
 
+    if (data.displayScope === 'default') {
+        data.displayScope = 'chat-rooms';
+    }
+    if (data.displayScope === 'all-pages') {
+        // 检查当前url是否通过matchlists_scope_all_pages的wildcard匹配
+        if (!matchlists_scope_all_pages.some(pattern => wildcardMatch(urlWithoutQuery, pattern))) {
+            return;
+        }
+    } else if (data.displayScope === 'chat-rooms') {
+        // 检查当前url是否通过matchlists_scope_chat_rooms的wildcard匹配
+        if (!matchlists_scope_chat_rooms.some(pattern => wildcardMatch(urlWithoutQuery, pattern))) {
+            return;
+        }
+    }
+
+    let siteThemeMode = getSiteThemeMode_LightOrDark();
+    console.log('siteThemeMode: ', siteThemeMode);  // 调试用
 
     (() => {
 
@@ -46,9 +70,11 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         let sectionID = "background-insert-section-id";
         let chatboxClassName = "chat-history-wrapper";
         let chatboxContainerClassName = "app-chat-history";
+        let cardContainerClassName = "card";
         section = document.getElementById(sectionID);
         chatBox = document.querySelector('.' + chatboxClassName);
         chatboxContainer = document.querySelector('.' + chatboxContainerClassName);
+        cardContainer = document.querySelector('.' + cardContainerClassName);
 
         let backgroundImageSrc = "";
         if ( data.useLocalImageBackground === true && data.localImageBackground_Data !== null ) {
@@ -119,7 +145,10 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             section.remove();
         }
         // else: new section will be appended to body without deleting old one
-        chatBox.style.removeProperty('background-image');
+        
+        if (chatBox !== null) {
+            chatBox.style.removeProperty('background-image');
+        }
 
         if (data.displayMode === 'disabled') {
             console.log('applyWork_core: displayMode is disabled.');
@@ -136,29 +165,41 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             document.body.insertBefore(section, document.body.firstChild);
         }
         if (data.displayMode === 'chat-background-extended') {
-            chatBox.insertBefore(section, chatBox.firstChild);
-            // 接下来删除黑条
-            if (inputBoxShadowLineStyle_isNew) {
-                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+            if (chatBox !== null) {
+                chatBox.insertBefore(section, chatBox.firstChild);
+                // 接下来删除黑条
+                if (inputBoxShadowLineStyle_isNew) {
+                    chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+                }
+            }
+            if (cardContainer !== null) {
+                cardContainer.parentNode.appendChild(section);
             }
         }
         if (data.displayMode === 'chat-background-extended-clear') {
-            chatboxContainer.parentNode.insertBefore(section, chatboxContainer);
-            // 接下来删除黑条
-            if (inputBoxShadowLineStyle_isNew) {
-                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+            if (chatBox !== null && chatboxContainer !== null) {
+                chatboxContainer.parentNode.insertBefore(section, chatboxContainer);
+                // 接下来删除黑条
+                if (inputBoxShadowLineStyle_isNew) {
+                    chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+                }
+            }
+            if (cardContainer !== null) {
+                cardContainer.insertBefore(section, cardContainer.firstChild);
             }
         }
         if (data.displayMode === 'chat-background') {
-            if (data.autoResizeBackground) {
-                chatBox.style.backgroundSize = "cover";
-            } else {
-                chatBox.style.backgroundSize = "auto";
-            }
-            chatBox.style.setProperty('background-image', backgroundImageSrc);
-            // 接下来删除黑条
-            if (inputBoxShadowLineStyle_isNew) {
-                chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+            if (chatBox !== null) {
+                if (data.autoResizeBackground) {
+                    chatBox.style.backgroundSize = "cover";
+                } else {
+                    chatBox.style.backgroundSize = "auto";
+                }
+                chatBox.style.setProperty('background-image', backgroundImageSrc);
+                // 接下来删除黑条
+                if (inputBoxShadowLineStyle_isNew) {
+                    chatBox.parentNode.insertBefore(inputBoxShadowLineStyle, chatBox);
+                }
             }
         }
 
@@ -301,60 +342,61 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         }
     })();
 
-
-    const wrap_msg_script_id = "wrap_msg_script-id";
-    let wrap_msg_script = document.getElementById(wrap_msg_script_id);
-    if (wrap_msg_script === null) {
-        wrap_msg_script = document.createElement('script');
-        wrap_msg_script.id = wrap_msg_script_id;
-        wrap_msg_script.src = browser.runtime.getURL('utils/wrap_msg.js');
-        wrap_msg_script.onload = function () {
-            console.log("wrap_msg_script loaded.");
-        };
-        document.head.appendChild(wrap_msg_script);
-    }
-
-    let chatBox_send_button = null;
-    chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
-    if (chatBox_send_button === null) {
-        chatBox_send_button = document.querySelector('button.send-btn');
-    }
-
-    if (chatBox_send_button) {
-        chatBox_send_button.style.alignItems = "center";
-    } else {
-        // 添加替补发送按钮
-        const chatBox_send_button_custom_id = "chatBox_send_button";
-        const chatBox_send_button_style_id = "chatBox_send_button-style-id";
-        // let chatBox_send_button_style_isNew = false;
-        let chatBox_send_button_style = document.getElementById(chatBox_send_button_style_id);
-        if (chatBox_send_button_style === null) {
-            // chatBox_send_button_style_isNew = true;
-            chatBox_send_button_style = document.createElement('style');
-            chatBox_send_button_style.id = chatBox_send_button_style_id;
-            chatBox_send_button_style.textContent = `
-            #${chatBox_send_button_custom_id} {
-                border-radius: 50%;
-                width: 26px;
-                height: 26px;
-                align-items: center;
-                justify-content: center;
-                display: flex;
-                padding: 0.75rem;
-            }
-            `;
-            document.head.appendChild(chatBox_send_button_style);
-            console.log('applyWork_core: added chatBox_send_button_style.');
+    if (isChatRoomPage()) {
+        const wrap_msg_script_id = "wrap_msg_script-id";
+        let wrap_msg_script = document.getElementById(wrap_msg_script_id);
+        if (wrap_msg_script === null) {
+            wrap_msg_script = document.createElement('script');
+            wrap_msg_script.id = wrap_msg_script_id;
+            wrap_msg_script.src = browser.runtime.getURL('utils/wrap_msg.js');
+            wrap_msg_script.onload = function () {
+                console.log("wrap_msg_script loaded.");
+            };
+            document.head.appendChild(wrap_msg_script);
         }
-        chatBox_send_button = document.getElementById(chatBox_send_button_custom_id);
+
+        let chatBox_send_button = null;
+        chatBox_send_button = document.querySelector('button.btn.btn-primary.d-flex.write-link.send');
         if (chatBox_send_button === null) {
-            chatBox_send_button = document.createElement('button');
-            chatBox_send_button.id = chatBox_send_button_custom_id;
-            chatBox_send_button.classList.add('btn', 'btn-primary', 'd-flex', 'write-link', 'send');
-            chatBox_send_button.setAttribute('onclick', 'send()');
-            chatBox_send_button.innerHTML = '<i class="la la-paper-plane bx-sm ms-md-2 ms-0" style="margin: 0 !important;"></i>';
-            document.querySelector('div.form-send-message.d-flex.justify-content-between.align-items-center.talk.write').appendChild(chatBox_send_button);
-            console.log('applyWork_core: added chatBox_send_button.');
+            chatBox_send_button = document.querySelector('button.send-btn');
+        }
+
+        if (chatBox_send_button) {
+            chatBox_send_button.style.alignItems = "center";
+        } else {
+            // 添加替补发送按钮
+            const chatBox_send_button_custom_id = "chatBox_send_button";
+            const chatBox_send_button_style_id = "chatBox_send_button-style-id";
+            // let chatBox_send_button_style_isNew = false;
+            let chatBox_send_button_style = document.getElementById(chatBox_send_button_style_id);
+            if (chatBox_send_button_style === null) {
+                // chatBox_send_button_style_isNew = true;
+                chatBox_send_button_style = document.createElement('style');
+                chatBox_send_button_style.id = chatBox_send_button_style_id;
+                chatBox_send_button_style.textContent = `
+                #${chatBox_send_button_custom_id} {
+                    border-radius: 50%;
+                    width: 26px;
+                    height: 26px;
+                    align-items: center;
+                    justify-content: center;
+                    display: flex;
+                    padding: 0.75rem;
+                }
+                `;
+                document.head.appendChild(chatBox_send_button_style);
+                console.log('applyWork_core: added chatBox_send_button_style.');
+            }
+            chatBox_send_button = document.getElementById(chatBox_send_button_custom_id);
+            if (chatBox_send_button === null) {
+                chatBox_send_button = document.createElement('button');
+                chatBox_send_button.id = chatBox_send_button_custom_id;
+                chatBox_send_button.classList.add('btn', 'btn-primary', 'd-flex', 'write-link', 'send');
+                chatBox_send_button.setAttribute('onclick', 'send()');
+                chatBox_send_button.innerHTML = '<i class="la la-paper-plane bx-sm ms-md-2 ms-0" style="margin: 0 !important;"></i>';
+                document.querySelector('div.form-send-message.d-flex.justify-content-between.align-items-center.talk.write').appendChild(chatBox_send_button);
+                console.log('applyWork_core: added chatBox_send_button.');
+            }
         }
     }
 
@@ -366,4 +408,9 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     }
 
     console.log('applyWork() done.');
+}
+
+function isChatRoomPage() {
+    const urlWithoutQuery = getUrlWithoutQuery();
+    return matchlists_scope_chat_rooms.some(pattern => wildcardMatch(urlWithoutQuery, pattern));
 }

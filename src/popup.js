@@ -67,27 +67,13 @@ let cached_background_image_src = "";
 loadCustomAvatarParams();
 
 document.getElementById('saveButton').addEventListener('click', async () => {
-    const useLocalImageBackgroundCheckbox = document.getElementById("useLocalImageBackgroundCheckbox");
-    const imageUrl = document.getElementById('imageUrl').value;
-    const displayText = document.getElementById('displayText').value;
-    const opacitySlider = document.getElementById("opacitySlider");
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
-    const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
-    const themeToggle = document.getElementById("themeToggle");
-    const displayModeSelect = document.getElementById("display-mode-select");
-    const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
-    const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
-    const textStrokeWidthInput = document.getElementById("textStrokeWidthText");
-    const textStrokeColorPicker = document.getElementById("textStrokeColorPicker");
-    const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     collectedInputs = popupPageCollectInputs();
 
     // 将用户输入的内容保存到存储中
     browser_storage_obj.set(collectedInputs).then(async () => {
         // notify user that settings have been saved
-        alert(`设置已保存! (${storage_type_string})`);
-        // let backgroundImageSrc = await getBackgroundImageSrc(useLocalImageBackgroundCheckbox.checked, imageUrl);
-        
+        alert(`设置已保存! (${storage_type_string})`);        
         await eventTrigger(previewCheckbox, previewCheckbox_change, 'change');
     });
 
@@ -116,6 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
     const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
     const displayModeSelect = document.getElementById("display-mode-select");
+    const displayScopeSelect = document.getElementById("display-scope-select");
     const horizontalDivider1 = document.getElementById("horizontalDivider1");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const enableTextStrokeCheckbox_afterText = document.getElementById("enableTextStrokeCheckbox-afterText");
@@ -145,7 +132,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     var default_get_storage_dict_params = {
         useLocalImageBackground: false,
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
-        displayMode: 'default', persistTimestampDisplay: false, hideScrollbarTrack: true,
+        displayMode: 'default', displayScope: 'default',
+        persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: {
             isEnabled: false, autoColor: false, width: 0.1,
             color: '#000000', scope: 'username'
@@ -348,6 +336,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             displayModeSelect.value = data.displayMode;
         }
 
+        if (data.displayScope) {
+            displayScopeSelect.value = data.displayScope;
+        }
+
         updateHint.classList.add(currentTheme);
         syncSettingsCheckButton.classList.add(currentTheme);
         useLocalImageBackgroundCheckbox.classList.add(currentTheme);
@@ -361,6 +353,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         previewCheckbox.classList.add(currentTheme);
         autoResizeBackgroundCheckbox.classList.add(currentTheme);
         displayModeSelect.classList.add(currentTheme);
+        displayScopeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
         persistTimestampDisplayCheckbox.classList.add(currentTheme);
         hideScrollbarTrackCheckbox.classList.add(currentTheme);
@@ -431,6 +424,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         autoResizeBackgroundCheckbox.classList.add(newTheme);
         displayModeSelect.classList.remove(currentTheme);
         displayModeSelect.classList.add(newTheme);
+        displayScopeSelect.classList.remove(currentTheme);
+        displayScopeSelect.classList.add(newTheme);
         themeToggle.classList.remove(currentTheme);
         themeToggle.classList.add(newTheme);
         persistTimestampDisplayCheckbox.classList.remove(currentTheme);
@@ -569,25 +564,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // 监听预览复选框变化
-    async function previewCheckbox_change(event) {
-        const isPreviewEnabled = event.target.checked;
-
-        if (isPreviewEnabled) {
-            body.classList.remove(currentTheme);
-            body.classList.add("has-bg-image");
-            body.style.backgroundImage = cached_background_image_src;
-            body.classList.add(currentTheme);
-        } else {
-            body.classList.remove(currentTheme);
-            body.style.backgroundImage = "";
-            body.classList.remove("has-bg-image");
-            body.classList.add(currentTheme);
-        }
-
-        // 保存预览状态
-        console.log('[previewEnabled:' + isPreviewEnabled + ']');
-        browser_storage_obj.set({ previewEnabled: isPreviewEnabled });
-    }
     previewCheckbox.addEventListener("change", previewCheckbox_change);
 
     // 启用自动颜色时禁用并隐藏颜色选择器
@@ -769,3 +745,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 });
+
+async function previewCheckbox_change(event) {
+    const isPreviewEnabled = event.target.checked;
+
+    if (isPreviewEnabled) {
+        document.body.classList.remove(currentTheme);
+        document.body.classList.add("has-bg-image");
+        document.body.style.backgroundImage = cached_background_image_src;
+        document.body.classList.add(currentTheme);
+    } else {
+        document.body.classList.remove(currentTheme);
+        document.body.style.backgroundImage = "";
+        document.body.classList.remove("has-bg-image");
+        document.body.classList.add(currentTheme);
+    }
+
+    // 保存预览状态
+    console.log('[previewEnabled:' + isPreviewEnabled + ']');
+    browser_storage_obj.set({ previewEnabled: isPreviewEnabled });
+}

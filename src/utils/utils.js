@@ -19,7 +19,7 @@ var default_sync_storage_dict_params = {
     useLocalImageBackground: false,
     localImageBackground_Data: null,
     disableStorageSync: false,
-    imageUrl: '', displayText: '', displayMode: 'extended', opacityValue: 0.3, autoResizeBackground: false, 
+    imageUrl: '', displayText: '', opacityValue: 0.3, autoResizeBackground: false, displayMode: 'extended', displayScope: 'chat-rooms',
     persistTimestampDisplay: false, hideScrollbarTrack: true,
     textStrokeParams: null, customAvatarParams: null
 }
@@ -135,6 +135,7 @@ function popupPageCollectInputs() {
     const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
     const themeToggle = document.getElementById("themeToggle");
     const displayModeSelect = document.getElementById("display-mode-select");
+    const displayScopeSelect = document.getElementById("display-scope-select");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const persistTimestampDisplayCheckbox = document.getElementById("persistTimestampDisplayCheckbox");
@@ -164,7 +165,7 @@ function popupPageCollectInputs() {
         useLocalImageBackground: useLocalImageBackgroundCheckbox.checked,
         imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
-        displayMode: displayModeSelect.value, 
+        displayMode: displayModeSelect.value, displayScope: displayScopeSelect.value,
         persistTimestampDisplay: persistTimestampDisplayCheckbox.checked,
         hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
         textStrokeParams, customAvatarParams
@@ -263,4 +264,21 @@ function formatStorageSize(size) {
 async function eventTrigger(target, process_function, event_name) {
     let event = {type: event_name, target: target};
     await process_function(event);
+}
+
+function getUrlWithoutQuery() {
+    const urlWithoutQuery = window.location.origin + window.location.pathname;
+    return urlWithoutQuery;
+}
+
+function wildcardMatch(url, pattern) {
+    // 把通配符（*）替换为正则的 `.*`，然后用正则进行匹配
+    const regexPattern = '^' + pattern.split('*').map(escapeRegExp).join('.*') + '$';
+    const regex = new RegExp(regexPattern);
+    return regex.test(url);
+}
+
+// 转义正则表达式的特殊字符
+function escapeRegExp(str) {
+    return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&');
 }

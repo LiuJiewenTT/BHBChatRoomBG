@@ -36,7 +36,8 @@
         {
             "matches": [
                 "*://boyshelpboys.com/chat.htm",
-                "*://boyshelpboys.com/my-notice.htm"
+                "*://boyshelpboys.com/my-notice.htm",
+                "*://boyshelpboys.com/*"
             ],
             "js": [
                 "libs/browser-polyfill.js",
