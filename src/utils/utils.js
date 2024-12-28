@@ -244,3 +244,11 @@ async function getBackgroundImageSrc(useLocalImageBackground, imageUrl) {
     }
     return backgroundImageSrc;
 }
+
+// 一个自动进行单位转换的函数，从Byte到MB都兼容，以最高一级为准，保留两位小数
+function formatSize(size) {
+    let unitArr = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let index = Math.floor(Math.log(size) / Math.log(1024));
+    let sizeStr = (size / Math.pow(1024, index)).toFixed(2);
+    return sizeStr + unitArr[index];
+}

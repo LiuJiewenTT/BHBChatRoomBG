@@ -535,9 +535,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             const reader = new FileReader();
             reader.addEventListener('load', (event) => {
                 browser.storage.local.set({ localImageBackground_Data: event.target.result }).then(() => {
-                    let length = event.target.result.byteLength;
-                    console.log('已保存本地图片，长度: ', length);
-                    alert(`已保存本地图片，长度: ${length}`);
+                    // 获取result中的base64编码数据的长度
+                    let length = event.target.result.length;
+                    let length_string = formatSize(length);
+                    useLocalImageBackgroundCheckbox.dispatchEvent(new Event('change'));
+                    console.log('已保存本地图片，长度: ', length_string);
+                    alert(`已保存本地图片，长度: ${length_string}`);
                 }).catch((error) => {
                     console.error('保存本地图片失败: ', error);
                     alert('保存本地图片失败');
@@ -550,6 +553,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     deleteLocalImageBackgroundButton.addEventListener("click", () => {
         browser.storage.local.remove('localImageBackground_Data').then(() => {
+            useLocalImageBackgroundCheckbox.dispatchEvent(new Event('change'));
             console.log('已删除本地图片');
             alert('已删除本地图片');
         }).catch((error) => {
