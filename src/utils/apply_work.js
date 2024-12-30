@@ -415,6 +415,12 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         console.log('applyWork_core: fixed gentleman icon.');
     }
 
+    // 强制删除搜索框自动补全属性
+    let search_inputs = document.querySelectorAll('#search_form input[name="keyword"]');
+    search_inputs.forEach(input => {
+        input.setAttribute('autocomplete', 'off');
+    });
+
     console.log('applyWork() done.');
 }
 
