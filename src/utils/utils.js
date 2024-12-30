@@ -21,7 +21,8 @@ var default_sync_storage_dict_params = {
     disableStorageSync: false,
     imageUrl: '', displayText: '', opacityValue: 0.3, autoResizeBackground: false, displayMode: 'extended', displayScope: 'chat-rooms',
     persistTimestampDisplay: false, hideScrollbarTrack: true,
-    textStrokeParams: null, customAvatarParams: null
+    textStrokeParams: null, customAvatarParams: null,
+    disableSearchBoxAutoComplete: true
 }
 var default_local_storage_dict_params = structuredClone(default_sync_storage_dict_params);
 var default_local_storage_dict_params_extra = {localImageBackground_Data: null};
@@ -145,7 +146,7 @@ function popupPageCollectInputs() {
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
     const avatarUrl = document.getElementById("avatarUrl").value.trim();
-    const searchBoxAutoCompleteScopeSelect = document.getElementById("searchbox-autocomplete-scope-select");
+    const disableSearchBoxAutoCompleteCheckbox = document.getElementById("disableSearchBoxAutoCompleteCheckbox");
 
 
     let textStrokeParams = {
@@ -170,7 +171,7 @@ function popupPageCollectInputs() {
         persistTimestampDisplay: persistTimestampDisplayCheckbox.checked,
         hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
         textStrokeParams, customAvatarParams,
-        searchBoxAutoCompleteScope: searchBoxAutoCompleteScopeSelect.value,
+        disableSearchBoxAutoComplete: disableSearchBoxAutoCompleteCheckbox.checked,
     }
     return collected;
 }
@@ -223,7 +224,9 @@ async function ifStorageSyncDisabled_checkStorage() {
 
 function getUrlFullpath(theUrl) {
     let theUrl_fullpath = "";
-    if (theUrl.trim() !== "") {
+    if (typeof theUrl !== "undefined" && theUrl !== null 
+        && theUrl.trim() !== ""
+    ) {
         if (theUrl.startsWith("http") || theUrl.startsWith("https")) {
             theUrl_fullpath = theUrl;
         } else {

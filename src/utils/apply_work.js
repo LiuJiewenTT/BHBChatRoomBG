@@ -424,16 +424,12 @@ function applyWork_core(storagedata_sync, storagedata_local) {
 
     // 强制删除搜索框自动补全属性
     let search_inputs = document.querySelectorAll('#search_form input[name="keyword"]');
-    search_inputs.forEach(input => {
-        if (data.searchBoxAutoCompleteScope === 'default') {
-            data.searchBoxAutoCompleteScope = 'site';
-        }
-        if (data.searchBoxAutoCompleteScope === 'disabled') {
+    if (data.disableSearchBoxAutoComplete === true) {
+        search_inputs.forEach(input => {
             input.setAttribute('autocomplete', 'off');
-        } else if (data.searchBoxAutoCompleteScope === 'site') {
-            input.setAttribute('autocomplete', searchBoxAutoCompleteScope_ScopeName);
-        }
-    });
+        });
+        console.log('applyWork_core: disabled search box autocomplete.');
+    }
 
     console.log('applyWork() done.');
 }
