@@ -145,6 +145,7 @@ function popupPageCollectInputs() {
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
     const avatarUrl = document.getElementById("avatarUrl").value.trim();
+    const searchBoxAutoCompleteScopeSelect = document.getElementById("searchbox-autocomplete-scope-select");
 
 
     let textStrokeParams = {
@@ -168,7 +169,8 @@ function popupPageCollectInputs() {
         displayMode: displayModeSelect.value, displayScope: displayScopeSelect.value,
         persistTimestampDisplay: persistTimestampDisplayCheckbox.checked,
         hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
-        textStrokeParams, customAvatarParams
+        textStrokeParams, customAvatarParams,
+        searchBoxAutoCompleteScope: searchBoxAutoCompleteScopeSelect.value,
     }
     return collected;
 }

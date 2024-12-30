@@ -5,6 +5,8 @@ let matchlists_scope_chat_rooms = [
 ];
 let flag_isChatRoomPage = false;
 
+var searchBoxAutoCompleteScope_ScopeName = "boyshelpboys.com - search keyword";
+
 function applyWork() {
     applyWork_getSyncAndLocalData().then((data) => {
         console.log('applyWork_getSyncData: ', data[0]);  // 调试用
@@ -397,13 +399,18 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             }
             chatBox_send_button = document.getElementById(chatBox_send_button_custom_id);
             if (chatBox_send_button === null) {
-                chatBox_send_button = document.createElement('button');
-                chatBox_send_button.id = chatBox_send_button_custom_id;
-                chatBox_send_button.classList.add('btn', 'btn-primary', 'd-flex', 'write-link', 'send');
-                chatBox_send_button.setAttribute('onclick', 'send()');
-                chatBox_send_button.innerHTML = '<i class="la la-paper-plane bx-sm ms-md-2 ms-0" style="margin: 0 !important;"></i>';
-                document.querySelector('div.form-send-message.d-flex.justify-content-between.align-items-center.talk.write').appendChild(chatBox_send_button);
-                console.log('applyWork_core: added chatBox_send_button.');
+                let chatBoxInputObject = document.querySelector('div.form-send-message.d-flex.justify-content-between.align-items-center.talk.write');
+                
+                if (chatBoxInputObject !== null) {
+                    chatBox_send_button = document.createElement('button');
+                    chatBox_send_button.id = chatBox_send_button_custom_id;
+                    chatBox_send_button.classList.add('btn', 'btn-primary', 'd-flex', 'write-link', 'send');
+                    chatBox_send_button.setAttribute('onclick', 'send()');
+                    chatBox_send_button.innerHTML = '<i class="la la-paper-plane bx-sm ms-md-2 ms-0" style="margin: 0 !important;"></i>';
+
+                    chatBoxInputObject.appendChild(chatBox_send_button);
+                    console.log('applyWork_core: added chatBox_send_button.');
+                }
             }
         }
     }
@@ -418,7 +425,14 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     // 强制删除搜索框自动补全属性
     let search_inputs = document.querySelectorAll('#search_form input[name="keyword"]');
     search_inputs.forEach(input => {
-        input.setAttribute('autocomplete', 'off');
+        if (data.searchBoxAutoCompleteScope === 'default') {
+            data.searchBoxAutoCompleteScope = 'site';
+        }
+        if (data.searchBoxAutoCompleteScope === 'disabled') {
+            input.setAttribute('autocomplete', 'off');
+        } else if (data.searchBoxAutoCompleteScope === 'site') {
+            input.setAttribute('autocomplete', searchBoxAutoCompleteScope_ScopeName);
+        }
     });
 
     console.log('applyWork() done.');

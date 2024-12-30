@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const customAvatarUrlInput = document.getElementById("avatarUrl");
     const avatarUrlUsedSpan = document.getElementById("avatarUrlUsedSpan");
     const avatarUrlUsedImg = document.getElementById("avatarUrlUsedImg");
+    const searchBoxAutoCompleteScopeSelect = document.getElementById("searchbox-autocomplete-scope-select");
+    
     const saveTo_HintSpan = document.getElementById("saveTo-HintSpan");
     const saveButton = document.getElementById('saveButton');
     const themeToggle = document.getElementById("themeToggle");
@@ -138,7 +140,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             isEnabled: false, autoColor: false, width: 0.1,
             color: '#000000', scope: 'username'
         },
-        customAvatarParams: null
+        customAvatarParams: null,
+        searchBoxAutoCompleteScope: 'default'
     };
     var default_get_storage_dict_params2 = {
         useLocalImageBackground: false,
@@ -340,6 +343,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             displayScopeSelect.value = data.displayScope;
         }
 
+        if (data.searchBoxAutoCompleteScope) {
+            searchBoxAutoCompleteScopeSelect.value = data.searchBoxAutoCompleteScope;
+        }
+
         updateHint.classList.add(currentTheme);
         syncSettingsCheckButton.classList.add(currentTheme);
         useLocalImageBackgroundCheckbox.classList.add(currentTheme);
@@ -371,6 +378,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         enableCustomAvatar_cleanButton.classList.add(currentTheme);
         enableCustomAvatar_saveButton.classList.add(currentTheme);
         customAvatarUrlInput.classList.add(currentTheme);
+        searchBoxAutoCompleteScopeSelect.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
         applyButton.classList.add(currentTheme);
 
@@ -460,6 +468,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         enableCustomAvatar_saveButton.classList.add(newTheme);
         customAvatarUrlInput.classList.remove(currentTheme);
         customAvatarUrlInput.classList.add(newTheme);
+        searchBoxAutoCompleteScopeSelect.classList.remove(currentTheme);
+        searchBoxAutoCompleteScopeSelect.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);
         saveButton.classList.add(newTheme);
         applyButton.classList.remove(currentTheme);
