@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     var default_get_storage_dict_params2 = {
         useLocalImageBackground: false,
         localImageBackground_Data: null,
+        imageUrl: '',
         previewEnabled: false
     }
 
@@ -521,6 +522,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             console.log('图片背景是本地图片base64');
         }
+        await eventTrigger(previewCheckbox, previewCheckbox_change, 'change');
     }
     useLocalImageBackgroundCheckbox.addEventListener("change", useLocalImageBackgroundCheckbox_change);
 
