@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const customAvatarUrlInput = document.getElementById("avatarUrl");
     const avatarUrlUsedSpan = document.getElementById("avatarUrlUsedSpan");
     const avatarUrlUsedImg = document.getElementById("avatarUrlUsedImg");
+    const disableChatInputBoxAutoCompleteCheckbox = document.getElementById("disableChatInputBoxAutoCompleteCheckbox");
     const disableSearchBoxAutoCompleteCheckbox = document.getElementById("disableSearchBoxAutoCompleteCheckbox");
     
     const saveTo_HintSpan = document.getElementById("saveTo-HintSpan");
@@ -141,6 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             color: '#000000', scope: 'username'
         },
         customAvatarParams: null,
+        disableChatInputBoxAutoComplete: true,
         disableSearchBoxAutoComplete: true
     };
     var default_get_storage_dict_params2 = {
@@ -344,6 +346,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             displayScopeSelect.value = data.displayScope;
         }
 
+        if (data.disableChatInputBoxAutoComplete) {
+            disableChatInputBoxAutoCompleteCheckbox.checked = data.disableChatInputBoxAutoComplete;
+        }
+
         if (data.disableSearchBoxAutoComplete) {
             disableSearchBoxAutoCompleteCheckbox.checked = data.disableSearchBoxAutoComplete;
         }
@@ -379,6 +385,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         enableCustomAvatar_cleanButton.classList.add(currentTheme);
         enableCustomAvatar_saveButton.classList.add(currentTheme);
         customAvatarUrlInput.classList.add(currentTheme);
+        disableChatInputBoxAutoCompleteCheckbox.classList.add(currentTheme);
         disableSearchBoxAutoCompleteCheckbox.classList.add(currentTheme);
         saveButton.classList.add(currentTheme);
         applyButton.classList.add(currentTheme);
@@ -469,6 +476,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         enableCustomAvatar_saveButton.classList.add(newTheme);
         customAvatarUrlInput.classList.remove(currentTheme);
         customAvatarUrlInput.classList.add(newTheme);
+        disableChatInputBoxAutoCompleteCheckbox.classList.remove(currentTheme);
+        disableChatInputBoxAutoCompleteCheckbox.classList.add(newTheme);
         disableSearchBoxAutoCompleteCheckbox.classList.remove(currentTheme);
         disableSearchBoxAutoCompleteCheckbox.classList.add(newTheme);
         saveButton.classList.remove(currentTheme);

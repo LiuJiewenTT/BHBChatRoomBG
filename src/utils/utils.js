@@ -22,6 +22,7 @@ var default_sync_storage_dict_params = {
     imageUrl: '', displayText: '', opacityValue: 0.3, autoResizeBackground: false, displayMode: 'extended', displayScope: 'chat-rooms',
     persistTimestampDisplay: false, hideScrollbarTrack: true,
     textStrokeParams: null, customAvatarParams: null,
+    disableChatInputBoxAutoComplete: true,
     disableSearchBoxAutoComplete: true
 }
 var default_local_storage_dict_params = structuredClone(default_sync_storage_dict_params);
@@ -146,6 +147,7 @@ function popupPageCollectInputs() {
     const textStrokeScopeSelect = document.getElementById("text-stroke-scope-select");
     const enableCustomAvatarCheckbox = document.getElementById("enableCustomAvatarCheckbox");
     const avatarUrl = document.getElementById("avatarUrl").value.trim();
+    const disableChatInputBoxAutoCompleteCheckbox = document.getElementById("disableChatInputBoxAutoCompleteCheckbox");
     const disableSearchBoxAutoCompleteCheckbox = document.getElementById("disableSearchBoxAutoCompleteCheckbox");
 
 
@@ -171,6 +173,7 @@ function popupPageCollectInputs() {
         persistTimestampDisplay: persistTimestampDisplayCheckbox.checked,
         hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
         textStrokeParams, customAvatarParams,
+        disableChatInputBoxAutoComplete: disableChatInputBoxAutoCompleteCheckbox.checked,
         disableSearchBoxAutoComplete: disableSearchBoxAutoCompleteCheckbox.checked,
     }
     return collected;

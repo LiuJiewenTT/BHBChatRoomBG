@@ -432,7 +432,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     }
 
     let chatInput = document.querySelector('input#msg');
-    if (chatInput) {
+    if (chatInput && data.disableChatInputBoxAutoComplete === true) {
         chatInput.setAttribute('autocomplete', 'off');
         console.log('applyWork_core: disabled chat input autocomplete.');
     }
