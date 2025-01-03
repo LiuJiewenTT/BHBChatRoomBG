@@ -431,6 +431,12 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         console.log('applyWork_core: disabled search box autocomplete.');
     }
 
+    let chatInput = document.querySelector('input#msg');
+    if (chatInput) {
+        chatInput.setAttribute('autocomplete', 'off');
+        console.log('applyWork_core: disabled chat input autocomplete.');
+    }
+
     console.log('applyWork() done.');
 }
 
