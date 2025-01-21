@@ -1,5 +1,14 @@
 # BHBChatRoomBG
 
+<div style="align-items: center; justify-content: center; display: flex; margin: 10px; gap: 10px">
+    <img alt="Mozilla Add-on Rating" src="https://img.shields.io/amo/rating/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6">
+    <img alt="Mozilla Add-on Stars" src="https://img.shields.io/amo/stars/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6">
+    <img alt="Mozilla Add-on Users" src="https://img.shields.io/amo/users/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6">
+    <img alt="Mozilla Add-on Version" src="https://img.shields.io/amo/v/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6">
+    <img alt="Mozilla Add-on Downloads" src="https://img.shields.io/amo/dw/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6?label=AMO%20downloads">
+</div>
+
+
 ## 简介
 
 这是一个给BHB聊天室添加图片（外链）的插件，支持7种显示模式，支持暗色模式，且其中两种模式去除了输入框上方“白条/黑条”。
