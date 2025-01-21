@@ -6,6 +6,7 @@
     <img alt="Mozilla Add-on Users" src="https://img.shields.io/amo/users/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6">
     <img alt="Mozilla Add-on Version" src="https://img.shields.io/amo/v/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6">
     <img alt="Mozilla Add-on Downloads" src="https://img.shields.io/amo/dw/bhb%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%83%8C%E6%99%AF%E6%8F%92%E5%85%A5%E6%8F%92%E4%BB%B6?label=AMO%20downloads">
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/LiuJiewenTT/BHBChatRoomBG/total?label=Github%20downloads">
 </div>
 
 
