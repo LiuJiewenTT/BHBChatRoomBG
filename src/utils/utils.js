@@ -1,9 +1,9 @@
 browser_type = null;
 
-if (typeof chrome === 'undefined') {
-    browser_type = 'firefox';
-} else {
+if (typeof browser === "undefined") {
     browser_type = 'chrome';
+} else {
+    browser_type = 'firefox';
 }
 
 var cached_customAvatarParams = null;
@@ -289,4 +289,31 @@ function wildcardMatch(url, pattern) {
 // 转义正则表达式的特殊字符
 function escapeRegExp(str) {
     return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&');
+}
+
+function get_browser_type_general(type) {
+    if ( type === 'chrome' ) {
+        return 'Chromium';
+    } else if ( type === 'firefox' ) {
+        return 'Gecko';
+    }
+    return 'Unknown';
+}
+
+browser_type_general = get_browser_type_general(browser_type);
+
+function getMessageTypePrefixString(type) {
+    let prefix_string = '❔';
+    if ( type === 'log' || type === 'normal' || type === 'info' ) {
+        prefix_string = '💬';
+    } else if ( type === 'panic' ) {
+        prefix_string = '💥❌';
+    } else if ( type === 'error' || type === 'fail' ) {
+        prefix_string = '❌';
+    } else if ( type === 'success' ) {
+        prefix_string = '✔';
+    } else if ( type === 'warn' ) {
+        prefix_string = '⚡❕';
+    }
+    return prefix_string;
 }

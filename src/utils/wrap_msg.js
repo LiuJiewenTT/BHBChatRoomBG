@@ -65,6 +65,14 @@ function wrap_get_msg() {
             if ( !li_item.classList.contains('chat-message') ) {
                 continue;
             }
+            // browser.runtime.sendMessage({
+            //     action: 'notify',
+            //     message: '新消息',
+            //     message_type: 'normal'
+            // });
+            console.log('new message');
+            new Notification("消息通知", { body: "新消息" });
+
             let img_item = li_item.querySelector("img");
             // console.log('img: ', img_item);  // 调试用
             if (img_item) {

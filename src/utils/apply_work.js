@@ -1,11 +1,19 @@
 let matchlists_scope_all_pages = ["*://boyshelpboys.com/*",];
 let matchlists_scope_chat_rooms = [
-    "*://boyshelpboys.com/chat.htm",
-    "*://boyshelpboys.com/my-notice.htm"
+    "/chat.htm",
+    "/my-notice.htm"
 ];
 let flag_isChatRoomPage = false;
 
 var searchBoxAutoCompleteScope_ScopeName = "boyshelpboys.com - search keyword";
+
+console.log(`通知权限: ${Notification.permission}`);
+
+if (Notification.permission === "granted") {
+    new Notification("通知标题", { body: "通知内容" });
+} else if (Notification.permission !== "denied") {
+    Notification.requestPermission();
+}
 
 function applyWork() {
     applyWork_getSyncAndLocalData().then((data) => {
@@ -51,9 +59,9 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     }
     if (data.displayScope === 'all-pages') {
         // 检查当前url是否通过matchlists_scope_all_pages的wildcard匹配
-        if (!matchlists_scope_all_pages.some(pattern => wildcardMatch(urlWithoutQuery, pattern))) {
-            return;
-        }
+        // if (!matchlists_scope_all_pages.some(pattern => wildcardMatch(urlWithoutQuery, pattern))) {
+        //     return;
+        // }
     } else if (data.displayScope === 'chat-rooms') {
         // 检查当前url是否通过matchlists_scope_chat_rooms的wildcard匹配
         if (!matchlists_scope_chat_rooms.some(pattern => wildcardMatch(urlWithoutQuery, pattern))) {
@@ -441,6 +449,6 @@ function applyWork_core(storagedata_sync, storagedata_local) {
 }
 
 function isChatRoomPage() {
-    const urlWithoutQuery = getUrlWithoutQuery();
-    return matchlists_scope_chat_rooms.some(pattern => wildcardMatch(urlWithoutQuery, pattern));
+    const url = window.location.pathname;
+    return matchlists_scope_chat_rooms.some(pattern => wildcardMatch(url, pattern));
 }

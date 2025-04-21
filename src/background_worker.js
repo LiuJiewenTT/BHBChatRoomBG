@@ -27,6 +27,14 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         browser.cookies.set({ url: "https://boyshelpboys.com/", name: "userinfo_avatar", value: encodeURIComponent(initialAvatarUrl) }).then(() => {
             console.log('已保存头像到Cookie:', initialAvatarUrl);
         });
+    } else if (request.action === "notify") {
+        let prefix_string = getMessageTypePrefixString(request?.message_type);
+        browser.notifications.create({
+            type: "basic",
+            iconUrl: browser.runtime.getURL("res/icons/icon.png"),
+            title: request.title || `BHB聊天室的消息`,
+            message: prefix_string + request.message
+        });
     }
 });
 
