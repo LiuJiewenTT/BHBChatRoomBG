@@ -55,12 +55,19 @@ function fetch_message(url) {
                 } else {
                     message = `(${staged_new_messages_cnt_to_notify}条未读)\n${normal_msg_cnt}条新消息`;
                 }
-                browser.runtime.sendMessage({
-                    action: 'notify', 
-                    message: message,
-                    message_type: 'normal',
-                    message_icon_url: message_icon_url
-                }); 
+                // browser.runtime.sendMessage({
+                //     action: 'notify', 
+                //     message: message,
+                //     message_type: 'normal',
+                //     message_icon_url: message_icon_url
+                // }); 
+                let prefix_string = getMessageTypePrefixString('normal');
+                browser.notifications.create({
+                    type: "basic",
+                    iconUrl: message_icon_url || browser.runtime.getURL("res/icons/icon.png"),
+                    title: `BHB聊天室的消息`,
+                    message: prefix_string + message
+                });
             }
         });
 }
