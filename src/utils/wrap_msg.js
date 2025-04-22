@@ -20,6 +20,7 @@ let ul_len = 0;
 let old_ul_len = 0;
 let last_msg_id = "";
 let old_last_msg_id = "";
+let new_normal_msg_cnt = 0;
 
 function wrap_get_msg() {
     original_get_msg = get_msg;
@@ -49,9 +50,11 @@ function wrap_get_msg() {
                 i_start = new_msg_cnt;
             }
         }
-        old_last_msg_id = last_msg_id;
+        
 
         let li_item;
+        let new_normal_msg_cnt_stop_flag = false;
+        new_normal_msg_cnt = 0;
         for (let i = i_start, j = ul_len - 1; i; i--, j--) {
             li_item = ul_items[j];
             if ( li_item === null ) continue;
@@ -59,19 +62,26 @@ function wrap_get_msg() {
                 // console.error('get_msg error: li_item undefined', ul_items, j);     // 调试用
                 continue;
             }
+            if ( li_item.getAttribute('data-index') === old_last_msg_id ) {
+                new_normal_msg_cnt_stop_flag = true;
+            }
+
             if ( li_item.classList.contains('loading-more') ) {
                 continue;
             }
             if ( !li_item.classList.contains('chat-message') ) {
                 continue;
             }
+            if ( !new_normal_msg_cnt_stop_flag ) {
+                new_normal_msg_cnt = new_normal_msg_cnt + 1;
+            }
             // browser.runtime.sendMessage({
             //     action: 'notify',
             //     message: '新消息',
             //     message_type: 'normal'
             // });
-            console.log('new message');
-            new Notification("消息通知", { body: "新消息" });
+            // console.log('new message');
+            // new Notification("消息通知", { body: "新消息" });
 
             let img_item = li_item.querySelector("img");
             // console.log('img: ', img_item);  // 调试用
@@ -83,6 +93,18 @@ function wrap_get_msg() {
                 // console.error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);
                 throw Error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);
             }
+        }
+
+        old_last_msg_id = last_msg_id;
+
+        if ( new_normal_msg_cnt > 0 ) {
+            window.postMessage({
+                receiver_name: 'addon_BHBChatRoomBG',
+                message: {
+                    type: 'new_message_received_notification',
+                    data: new_normal_msg_cnt
+                }
+            });
         }
     }
 }

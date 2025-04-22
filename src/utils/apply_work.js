@@ -7,13 +7,6 @@ let flag_isChatRoomPage = false;
 
 var searchBoxAutoCompleteScope_ScopeName = "boyshelpboys.com - search keyword";
 
-console.log(`通知权限: ${Notification.permission}`);
-
-if (Notification.permission === "granted") {
-    new Notification("通知标题", { body: "通知内容" });
-} else if (Notification.permission !== "denied") {
-    Notification.requestPermission();
-}
 
 function applyWork() {
     applyWork_getSyncAndLocalData().then((data) => {
@@ -64,7 +57,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         // }
     } else if (data.displayScope === 'chat-rooms') {
         // 检查当前url是否通过matchlists_scope_chat_rooms的wildcard匹配
-        if (!matchlists_scope_chat_rooms.some(pattern => wildcardMatch(urlWithoutQuery, pattern))) {
+        if (!matchlists_scope_chat_rooms.some(pattern => wildcardMatch(window.location.pathname, pattern))) {
             return;
         }
     }
@@ -371,6 +364,10 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 console.log("wrap_msg_script loaded.");
             };
             document.head.appendChild(wrap_msg_script);
+            // browser.scripting.executeScript({
+            //     target: 
+            // });
+            // importScript('utils/wrap_msg.js');
         }
 
         let chatBox_send_button = null;
