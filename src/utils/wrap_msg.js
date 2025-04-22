@@ -118,10 +118,11 @@ get_msg = wrapped_get_msg;
 if (typeof c !== 'undefined' && c) {
     console.log('c (old): ', c);  // 调试用
     clearInterval(c);
+    c = 0;
 }
 c_wrapped = setInterval(wrapped_get_msg, 1000);
 // c = c_wrapped;
-c = 0;
+
 console.log('c (wrapped_get_msg): ', c_wrapped);  // 调试用
 old_k = 0;
 setInterval(function () {
