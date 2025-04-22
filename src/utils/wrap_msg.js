@@ -62,7 +62,11 @@ function wrap_get_msg() {
                 // console.error('get_msg error: li_item undefined', ul_items, j);     // 调试用
                 continue;
             }
-            if ( li_item.getAttribute('data-index') === old_last_msg_id ) {
+            let msg_id = li_item.getAttribute('data-index');
+            if ( !msg_id ) {
+                continue;
+            }
+            if ( msg_id === old_last_msg_id ) {
                 new_normal_msg_cnt_stop_flag = true;
             }
 
@@ -102,7 +106,8 @@ function wrap_get_msg() {
                 receiver_name: 'addon_BHBChatRoomBG',
                 message: {
                     type: 'new_message_received_notification',
-                    data: new_normal_msg_cnt
+                    msg_cnt: new_normal_msg_cnt,
+                    lastMsgID: last_msg_id
                 }
             });
         }
