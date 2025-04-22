@@ -56,12 +56,11 @@ document.addEventListener("visibilitychange", () => {
                 const li_item = document.createElement('li');
                 const message = document.createElement('div');
                 message.style.cssText = `
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: rgba(0,0,0,0.6);
+                    background: rgba(0,0,0,0.3);
                     color: white;
-                    padding: 10px 20px;
+                    padding: 10px;
                     border-radius: 4px;
+                    text-align: center;
                 `;
                 message.textContent = `离开期间收到${staged_new_messages_cnt_to_notify}条新消息`;
                 li_item.appendChild(message);
