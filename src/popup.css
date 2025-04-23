@@ -59,6 +59,7 @@ body {
     width: 90%;
 }
 
+#systemNotificationPushDiv,
 #useLocalImageBackgroundDiv,
 #opacityInputDiv {
     display: flex;
@@ -433,6 +434,7 @@ button.dark {
 #customAvatar-recoverInitialButton,
 #customAvatar-cleanButton,
 #customAvatar-saveButton,
+#pauseSystemNotificationPushButton,
 #opacityResetButton {
     /* padding: 0.5em; */
     padding: 0%;
@@ -453,6 +455,7 @@ button.dark {
 #customAvatar-recoverInitialButton img,
 #customAvatar-cleanButton img,
 #customAvatar-saveButton img,
+#pauseSystemNotificationPushButton img,
 #opacityResetButton img {
     width: auto;
     max-width: 70%;

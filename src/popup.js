@@ -14,6 +14,9 @@ var browser_storage_obj = null;
 var storage_type_string = "";
 
 
+/**
+ * 检查更新
+ */
 function popupPage_checkExtensionUpdate() {
     var ext_currentVersion = document.getElementById('ext_currentVersion');
     ext_currentVersion.textContent = browser.runtime.getManifest().version;
@@ -66,7 +69,11 @@ let cached_background_image_src = "";
 
 loadCustomAvatarParams();
 
-document.getElementById('saveButton').addEventListener('click', async () => {
+document.getElementById('saveButton').addEventListener('click', 
+    /**
+     * 保存参数
+     */
+    async () => {
     const previewCheckbox = document.getElementById("previewBackgroundCheckbox");
     collectedInputs = popupPageCollectInputs();
 
@@ -85,7 +92,11 @@ document.getElementById('saveButton').addEventListener('click', async () => {
 });
 
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", 
+    /**
+     * 加载参数并应用，载入UI
+     */
+    async () => {
     const body = document.body;
     const headerTitle = document.querySelector('.header-title');
     const updateHint = document.getElementById("ext_updateLink");
@@ -103,6 +114,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const autoResizeBackgroundCheckbox = document.getElementById("autoResizeBackgroundCheckbox");
     const displayModeSelect = document.getElementById("display-mode-select");
     const displayScopeSelect = document.getElementById("display-scope-select");
+    const trySystemNotificationPushCheckbox = document.getElementById("trySystemNotificationPushCheckbox");
+    const pauseSystemNotificationPushButton = document.getElementById("pauseSystemNotificationPushButton");
     const horizontalDivider1 = document.getElementById("horizontalDivider1");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const enableTextStrokeCheckbox_afterText = document.getElementById("enableTextStrokeCheckbox-afterText");
@@ -136,6 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         useLocalImageBackground: false,
         imageUrl: '', displayText: '', opacityValue: 0.3, theme: '', previewEnabled: false, autoResizeBackground: false,
         displayMode: 'default', displayScope: 'default',
+        trySystemNotificationPush: true,
         persistTimestampDisplay: false, hideScrollbarTrack: true,
         textStrokeParams: {
             isEnabled: false, autoColor: false, width: 0.1,
@@ -167,6 +181,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     sliderFgColor_dark = "var(--light-purple-bgcolor)";
     sliderBgColor_dark = "var(--lighter-dark-bgcolor)";
 
+    /**
+     * 滑动条背景色更新
+     * @param {*} slider 
+     */
     function slider_colorChange(slider) {
         // 滑动条背景色适配
         if (currentTheme === "light") {
@@ -195,6 +213,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById('textStrokeSettingsHorizontalDiv_row2').style.removeProperty('display');
         }
     });
+
+
+    // 加载后续需要在应用参数时触发事件的元素的监听器
 
     enableTextStrokeCheckbox.addEventListener("change", (event) => {
         const isTextStrokeEnabled = event.target.checked;
@@ -247,11 +268,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    // 获取配置同步开关状态
     await ifStorageSyncDisabled_checkStorage().then(result => {
         flag_disable_storage_sync = result;
         // console.log("flag_disable_storage_sync: " + flag_disable_storage_sync);  // 调试用
     });
 
+    // 应用配置同步开关和功能状态
     if (flag_disable_storage_sync === true) {
         syncSettingsStatusSpan.textContent = "Disabled";
         browser_storage_obj = browser.storage.local;
@@ -297,6 +320,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             // 设置 opacitySilder 的数值为 data.opacityValue;
             opacitySlider.value = data.opacityValue;
             opacitySliderValueSpan.textContent = `${data.opacityValue}`;
+        }
+
+        if (data.trySystemNotificationPush != null) {
+            trySystemNotificationPushCheckbox.checked = data.trySystemNotificationPush;
         }
 
         if (data.hideScrollbarTrack === true) {
@@ -369,6 +396,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         displayModeSelect.classList.add(currentTheme);
         displayScopeSelect.classList.add(currentTheme);
         themeToggle.classList.add(currentTheme);
+        trySystemNotificationPushCheckbox.classList.add(currentTheme);
+        pauseSystemNotificationPushButton.classList.add(currentTheme);
         persistTimestampDisplayCheckbox.classList.add(currentTheme);
         hideScrollbarTrackCheckbox.classList.add(currentTheme);
         horizontalDivider1.classList.add(currentTheme);
@@ -393,7 +422,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         body.classList.add(currentTheme);
     });
 
-    browser_storage_obj.get(default_get_storage_dict_params2).then(async (data) => {
+    browser_storage_obj.get(default_get_storage_dict_params2).then(
+        /**
+         * 加载参数并应用，载入UI背景
+         * @param {*} data 
+         */
+        async (data) => {
         // 恢复图片背景
         let backgroundImageSrc = "";
         backgroundImageSrc = await getBackgroundImageSrc(data.useLocalImageBackground, data.imageUrl);
@@ -408,6 +442,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.body.style.backgroundImage = cached_background_image_src;
         }
     });
+
     // 监听主题切换
     themeToggle.addEventListener("click", () => {
         newTheme = currentTheme === "light" ? "dark" : "light";
@@ -444,6 +479,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         displayScopeSelect.classList.add(newTheme);
         themeToggle.classList.remove(currentTheme);
         themeToggle.classList.add(newTheme);
+        trySystemNotificationPushCheckbox.classList.remove(currentTheme);
+        trySystemNotificationPushCheckbox.classList.add(newTheme);
+        pauseSystemNotificationPushButton.classList.remove(currentTheme);
+        pauseSystemNotificationPushButton.classList.add(newTheme);
         persistTimestampDisplayCheckbox.classList.remove(currentTheme);
         persistTimestampDisplayCheckbox.classList.add(newTheme);
         hideScrollbarTrackCheckbox.classList.remove(currentTheme);
@@ -519,6 +558,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveTo_HintSpan.textContent = `Save to: ${storage_type_string}`;
     });
 
+    /**
+     * 切换是否使用本地背景图
+     * @param {*} event 
+     */
     async function useLocalImageBackgroundCheckbox_change(event) {
         const isEnabled = event.target.checked;
     
@@ -586,6 +629,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 监听预览复选框变化
     previewCheckbox.addEventListener("change", previewCheckbox_change);
+
+    pauseSystemNotificationPushButton.addEventListener("click", () => {
+        browser.runtime.sendMessage({
+            action: 'pause_message_fetch'
+        });
+    });
 
     // 启用自动颜色时禁用并隐藏颜色选择器
     autoTextStrokeColorCheckbox.addEventListener("change", (event) => {

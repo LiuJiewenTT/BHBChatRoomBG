@@ -11,6 +11,7 @@ var staged_new_messages_cnt_to_notify = 0;
 var messageIds = new Set();
 var fetch_message_timer_handle;
 var flag_clear_messageIds = false;
+var notify_new_message_flag = true;
 
 
 function fetch_message(url) {
@@ -112,33 +113,57 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             title: request.title || `BHB聊天室的消息`,
             message: prefix_string + request.message
         });
-    } else if (request.action === 'start_message_fetch' || request.action === 'stop_message_fetch') {
-        if ( fetch_message_timer_handle ) {
-            clearInterval(fetch_message_timer_handle);
-            fetch_message_timer_handle = 0;
-        }
-        
-        if (request.action === 'start_message_fetch') {
-            flag_clear_messageIds = false;
-            fetch_message_timer_handle = setInterval(() => { 
-                console.log(`request.lastMsgID: ${request.lastMsgID}`);
-                if ( request.lastMsgID ) {
-                    messageIds.add(request.lastMsgID);
-                }
-                fetch_message(request.url); 
-                if ( flag_clear_messageIds ) {
-                    messageIds.clear();
-                }
-            }, request.interval || 1000);
-        } else {
-            // stop_message_fetch
-            sendResponse({
-                staged_new_messages_cnt_to_notify: staged_new_messages_cnt_to_notify
-            });
-            staged_new_messages_cnt_to_notify = 0;
+    } else if ( request.action === 'start_message_fetch' 
+        || request.action === 'stop_message_fetch'
+        || request.action === 'pause_message_fetch'
+        || request.action === 'resume_message_fetch' ) {
 
-            // chrome已计划的不会立刻取消，需要延迟清空操作。
-            flag_clear_messageIds = true;
+        if ( request.action === 'start_message_fetch' 
+            || request.action === 'stop_message_fetch' ) {
+            if ( fetch_message_timer_handle ) {
+                clearInterval(fetch_message_timer_handle);
+                fetch_message_timer_handle = 0;
+            }
+
+            if (request.action === 'start_message_fetch') {
+                flag_clear_messageIds = false;
+                fetch_message_timer_handle = setInterval(() => { 
+                    if ( !notify_new_message_flag ) {
+                        return;
+                    }
+                    
+                    console.log(`request.lastMsgID: ${request.lastMsgID}`);
+                    if ( request.lastMsgID ) {
+                        messageIds.add(request.lastMsgID);
+                    }
+                    fetch_message(request.url); 
+                    if ( flag_clear_messageIds ) {
+                        messageIds.clear();
+                    }
+                }, request.interval || 1000);
+            } else {
+                // stop_message_fetch
+                sendResponse({
+                    staged_new_messages_cnt_to_notify: staged_new_messages_cnt_to_notify
+                });
+                staged_new_messages_cnt_to_notify = 0;
+    
+                // chrome已计划的不会立刻取消，需要延迟清空操作。
+                flag_clear_messageIds = true;
+            }
+        } else {
+            if (request.action === 'pause_message_fetch') {
+                notify_new_message_flag = false;
+                // browser.runtime.sendMessage({
+                //     action: 'stop_message_fetch'
+                // });
+            } else {
+                // resume_message_fetch
+                notify_new_message_flag = true;
+                // browser.runtime.sendMessage({
+                //     action: 'start_message_fetch'
+                // });
+            }
         }
     }
 });

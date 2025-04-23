@@ -21,6 +21,7 @@ var default_sync_storage_dict_params = {
     localImageBackground_Data: null,
     disableStorageSync: false,
     imageUrl: '', displayText: '', opacityValue: 0.3, autoResizeBackground: false, displayMode: 'extended', displayScope: 'chat-rooms',
+    trySystemNotificationPush: true,
     persistTimestampDisplay: false, hideScrollbarTrack: true,
     textStrokeParams: null, customAvatarParams: null,
     disableChatInputBoxAutoComplete: true,
@@ -139,6 +140,7 @@ function popupPageCollectInputs() {
     const themeToggle = document.getElementById("themeToggle");
     const displayModeSelect = document.getElementById("display-mode-select");
     const displayScopeSelect = document.getElementById("display-scope-select");
+    const trySystemNotificationPushCheckbox = document.getElementById("trySystemNotificationPush");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const persistTimestampDisplayCheckbox = document.getElementById("persistTimestampDisplayCheckbox");
@@ -171,6 +173,7 @@ function popupPageCollectInputs() {
         imageUrl, displayText, opacityValue: opacitySlider.value,
         previewEnabled: previewCheckbox.checked, autoResizeBackground: autoResizeBackgroundCheckbox.checked,
         displayMode: displayModeSelect.value, displayScope: displayScopeSelect.value,
+        trySystemNotificationPush: trySystemNotificationPushCheckbox.checked,
         persistTimestampDisplay: persistTimestampDisplayCheckbox.checked,
         hideScrollbarTrack: hideScrollbarTrackCheckbox.checked,
         textStrokeParams, customAvatarParams,

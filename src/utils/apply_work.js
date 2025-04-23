@@ -207,6 +207,10 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 }
             }
         }
+        
+        if ( data.trySystemNotificationPush !== null ) {
+            notify_new_message_flag = data.trySystemNotificationPush;
+        }
 
         let persistTimestampDisplayStyleID = "persist-timestamp-display-style";
         let persistTimestampDisplayStyle = document.getElementById(persistTimestampDisplayStyleID);
@@ -347,6 +351,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         }
     })();
 
+    // 以下设置仅在聊天室生效
     if (isChatRoomPage()) {
         const wrap_msg_script_id = "wrap_msg_script-id";
         let wrap_msg_script = document.getElementById(wrap_msg_script_id);
@@ -358,10 +363,6 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 console.log("wrap_msg_script loaded.");
             };
             document.head.appendChild(wrap_msg_script);
-            // browser.scripting.executeScript({
-            //     target: 
-            // });
-            // importScript('utils/wrap_msg.js');
         }
 
         let chatBox_send_button = null;
