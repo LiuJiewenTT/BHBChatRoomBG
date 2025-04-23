@@ -20,24 +20,6 @@ if ( isChatRoomPage() ) {
         let message = event.data.message;
         if (message.type === 'new_message_received_notification') {
             lastMsgID = message.lastMsgID;
-            // if (document.visibilityState === "visible") {
-            //     // browser.runtime.sendMessage({
-            //     //     action: 'notify',
-            //     //     message: `新收到${message.data}条消息`,
-            //     //     message_type: 'normal'
-            //     // });
-            // } else {
-            //     staged_new_messages_cnt_to_notify += message.data;
-            // }
-            if (document.visibilityState !== "visible") {
-                staged_new_messages_cnt_to_notify += message.msg_cnt;
-                console.log('网页在后台，尝试通知');
-                browser.runtime.sendMessage({
-                    action: 'notify',
-                    message: `新收到${message.msg_cnt}条消息`,
-                    message_type: 'normal'
-                });
-            }
         }
     });
     
@@ -50,15 +32,7 @@ if ( isChatRoomPage() ) {
                 staged_new_messages_cnt_to_notify += response.staged_new_messages_cnt_to_notify;
     
                 if (staged_new_messages_cnt_to_notify > 0) {
-                    // browser.runtime.sendMessage({
-                    //     action: 'notify',
-                    //     message: `新收到${staged_new_messages_cnt_to_notify}条消息`,
-                    //     message_type: 'normal'
-                    // });
                     createNewUnreadMessagesCountTip();
-                    // setTimeout(() => {
-                    //     document.body.removeChild(message);
-                    // }, 3000);
                     staged_new_messages_cnt_to_notify = 0;
                 }
             });

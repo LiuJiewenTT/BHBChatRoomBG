@@ -61,6 +61,7 @@ function fetch_message(url) {
                     message = `(${staged_new_messages_cnt_to_notify}条未读)\n${normal_msg_cnt}条新消息`;
                     message_icon_url = null;
                 }
+                // 此处不可使用消息，chrome会找不到监听接收器。
                 // browser.runtime.sendMessage({
                 //     action: 'notify', 
                 //     message: message,
@@ -135,6 +136,8 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                 staged_new_messages_cnt_to_notify: staged_new_messages_cnt_to_notify
             });
             staged_new_messages_cnt_to_notify = 0;
+
+            // chrome已计划的不会立刻取消，需要延迟清空操作。
             flag_clear_messageIds = true;
         }
     }
