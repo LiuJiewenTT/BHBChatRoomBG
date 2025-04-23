@@ -165,7 +165,7 @@ function popupPageCollectInputs() {
     let customAvatarParams = {
         isEnabled: enableCustomAvatarCheckbox.checked,
         avatarUrl: avatarUrl,
-        initialAvatarUrl: cached_customAvatarParams.initialAvatarUrl
+        initialAvatarUrl: cached_customAvatarParams?.initialAvatarUrl || null
     }
 
     var collected = {

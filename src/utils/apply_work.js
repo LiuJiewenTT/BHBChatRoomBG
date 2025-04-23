@@ -346,7 +346,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 }
             } else {
                 // 未启用，删除已有的 customAvatar
-                if (data.customAvatarParams.initialAvatarUrl !== null) {
+                if (data.customAvatarParams.initialAvatarUrl || null !== null) {
                     console.log('applyWork_core: customAvatarParams.initialAvatarUrl: ', data.customAvatarParams.initialAvatarUrl); // 调试用
                     browser.runtime.sendMessage({
                         action: "apply-initial-avatar",

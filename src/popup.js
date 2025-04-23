@@ -816,7 +816,7 @@ document.addEventListener("DOMContentLoaded",
             browser.scripting.executeScript({
                 target: { tabId: tabs[0].id },
                 func: function (syncData, localData) {
-                    // console.log('syncData: ', syncData);     // 调试用
+                    console.log('syncData: ', syncData);     // 调试用
                     console.log('localData: ', localData);     // 调试用
                     applyWork_core(syncData, localData);
                 },
