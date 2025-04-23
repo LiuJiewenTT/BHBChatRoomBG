@@ -10,6 +10,7 @@ if (typeof browser === "undefined") {
 var staged_new_messages_cnt_to_notify = 0;
 var messageIds = new Set();
 var fetch_message_timer_handle;
+var flag_clear_messageIds = false;
 
 
 function fetch_message(url) {
@@ -22,8 +23,9 @@ function fetch_message(url) {
             let length = data.list.length;
             let normal_msg_cnt = 0;
             let last_msg_index;
+            let i;
             // console.log(messages);
-            for (let i=length; i>0; i-=1) {
+            for (i=length; i>0; i-=1) {
                 // console.log(messages[i-1]);
                 let msg = JSON.parse(messages[i-1]);
                 // 跳过系统信令消息，但保存已撤的消息
@@ -41,7 +43,7 @@ function fetch_message(url) {
                 if ( messageIds.has(msg.id) ) {
                     break;
                 }
-                last_msg_index = i-1;
+                last_msg_index = i ? i-1 : 0;
                 messageIds.add(msg.id);
                 normal_msg_cnt += 1;
             }
@@ -116,20 +118,24 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         }
         
         if (request.action === 'start_message_fetch') {
+            flag_clear_messageIds = false;
             fetch_message_timer_handle = setInterval(() => { 
                 console.log(`request.lastMsgID: ${request.lastMsgID}`);
                 if ( request.lastMsgID ) {
                     messageIds.add(request.lastMsgID);
                 }
                 fetch_message(request.url); 
+                if ( flag_clear_messageIds ) {
+                    messageIds.clear();
+                }
             }, request.interval || 1000);
         } else {
             // stop_message_fetch
-            messageIds.clear();
             sendResponse({
                 staged_new_messages_cnt_to_notify: staged_new_messages_cnt_to_notify
             });
             staged_new_messages_cnt_to_notify = 0;
+            flag_clear_messageIds = true;
         }
     }
 });
