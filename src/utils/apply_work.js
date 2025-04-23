@@ -228,7 +228,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 .message-time {
                     opacity: 1;
                 }`;
-                document.head.appendChild(persistTimestampDisplayStyle);
+                chatboxContainer.appendChild(persistTimestampDisplayStyle);
             }
         } else {
             if (persistTimestampDisplayStyle !== null) {
