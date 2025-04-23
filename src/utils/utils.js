@@ -1,10 +1,11 @@
-browser_type = null;
 
-if (typeof browser === "undefined") {
-    browser_type = 'chrome';
-} else {
-    browser_type = 'firefox';
-}
+let matchlists_scope_all_pages = ["*://boyshelpboys.com/*",];
+let matchlists_scope_chat_rooms = [
+    "/chat.htm",
+    "/my-notice.htm"
+];
+let flag_isChatRoomPage = false;
+
 
 var cached_customAvatarParams = null;
 const customAvatarParams_defaults = {
@@ -316,4 +317,24 @@ function getMessageTypePrefixString(type) {
         prefix_string = '⚡❕';
     }
     return prefix_string;
+}
+
+function isChatRoomPage() {
+    const url = window.location.pathname;
+    return matchlists_scope_chat_rooms.some(pattern => wildcardMatch(url, pattern));
+}
+
+function createNewUnreadMessagesCountTip() {
+    const li_item = document.createElement('li');
+    const message = document.createElement('div');
+    message.style.cssText = `
+        background: rgba(0,0,0,0.3);
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        text-align: center;
+    `;
+    message.textContent = `离开期间收到${staged_new_messages_cnt_to_notify}条新消息`;
+    li_item.appendChild(message);
+    document.querySelector('.mk-chat-box').appendChild(li_item);
 }

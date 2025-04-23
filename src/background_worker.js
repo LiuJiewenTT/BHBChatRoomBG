@@ -1,5 +1,7 @@
 // 如果是 Chrome，加载 polyfill
 if (typeof browser === "undefined") {
+    // Chrome
+    importScripts("utils/browser_type.js");
     importScripts("libs/browser-polyfill.js");
     importScripts("utils/utils.js");
 }
@@ -7,6 +9,7 @@ if (typeof browser === "undefined") {
 
 var staged_new_messages_cnt_to_notify = 0;
 var messageIds = new Set();
+var fetch_message_timer_handle;
 
 
 function fetch_message(url) {
@@ -54,6 +57,7 @@ function fetch_message(url) {
                     message_icon_url = site_base + '/' + msg.pic;
                 } else {
                     message = `(${staged_new_messages_cnt_to_notify}条未读)\n${normal_msg_cnt}条新消息`;
+                    message_icon_url = null;
                 }
                 // browser.runtime.sendMessage({
                 //     action: 'notify', 
@@ -106,15 +110,21 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             message: prefix_string + request.message
         });
     } else if (request.action === 'start_message_fetch' || request.action === 'stop_message_fetch') {
+        if ( fetch_message_timer_handle ) {
+            clearInterval(fetch_message_timer_handle);
+            fetch_message_timer_handle = 0;
+        }
+        
         if (request.action === 'start_message_fetch') {
             fetch_message_timer_handle = setInterval(() => { 
-                messageIds.add(request.lastMsgID);
+                console.log(`request.lastMsgID: ${request.lastMsgID}`);
+                if ( request.lastMsgID ) {
+                    messageIds.add(request.lastMsgID);
+                }
                 fetch_message(request.url); 
             }, request.interval || 1000);
         } else {
             // stop_message_fetch
-            clearInterval(fetch_message_timer_handle);
-            fetch_message_timer_handle = 0;
             messageIds.clear();
             sendResponse({
                 staged_new_messages_cnt_to_notify: staged_new_messages_cnt_to_notify

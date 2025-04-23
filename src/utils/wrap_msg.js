@@ -20,7 +20,6 @@ let ul_len = 0;
 let old_ul_len = 0;
 let last_msg_id = "";
 let old_last_msg_id = "";
-let new_normal_msg_cnt = 0;
 
 function wrap_get_msg() {
     original_get_msg = get_msg;
@@ -32,7 +31,16 @@ function wrap_get_msg() {
         if (ul_len === 0) {
             return;
         }
-        last_msg_id = ul_items[ul_len - 1].getAttribute('data-index');
+        for (let i = ul_len - 1; i >= 0; i -= 1) {
+            if ( ul_items[i].classList.contains('loading-more')
+                || !ul_items[i].classList.contains('chat-message') ) {
+                continue;
+            }
+            last_msg_id = ul_items[i].getAttribute('data-index');
+            if ( last_msg_id ) {
+                break;
+            }
+        }
         let new_msg_cnt = ul_len - old_ul_len;
         old_ul_len = ul_len;
         let i_start;
@@ -54,7 +62,7 @@ function wrap_get_msg() {
 
         let li_item;
         let new_normal_msg_cnt_stop_flag = false;
-        new_normal_msg_cnt = 0;
+        let new_normal_msg_cnt = 0;
         for (let i = i_start, j = ul_len - 1; i; i--, j--) {
             li_item = ul_items[j];
             if ( li_item === null ) continue;
@@ -66,7 +74,8 @@ function wrap_get_msg() {
             if ( !msg_id ) {
                 continue;
             }
-            if ( msg_id === old_last_msg_id ) {
+            if ( old_last_msg_id !== "" 
+                && msg_id === old_last_msg_id ) {
                 new_normal_msg_cnt_stop_flag = true;
             }
 

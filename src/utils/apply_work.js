@@ -1,9 +1,3 @@
-let matchlists_scope_all_pages = ["*://boyshelpboys.com/*",];
-let matchlists_scope_chat_rooms = [
-    "/chat.htm",
-    "/my-notice.htm"
-];
-let flag_isChatRoomPage = false;
 
 var searchBoxAutoCompleteScope_ScopeName = "boyshelpboys.com - search keyword";
 
@@ -445,7 +439,4 @@ function applyWork_core(storagedata_sync, storagedata_local) {
     console.log('applyWork() done.');
 }
 
-function isChatRoomPage() {
-    const url = window.location.pathname;
-    return matchlists_scope_chat_rooms.some(pattern => wildcardMatch(url, pattern));
-}
+
