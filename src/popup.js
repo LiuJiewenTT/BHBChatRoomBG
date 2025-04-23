@@ -325,20 +325,6 @@ document.addEventListener("DOMContentLoaded",
 
         if (data.trySystemNotificationPush != null) {
             trySystemNotificationPushCheckbox.checked = data.trySystemNotificationPush;
-            if ( data.trySystemNotificationPush === true ) {
-                browser.runtime.sendMessage({
-                    action: 'resume_message_fetch'
-                });
-            } else if ( data.trySystemNotificationPush === false ) {
-                browser.runtime.sendMessage({
-                    action: 'pause_message_fetch'
-                });
-                browser.runtime.sendMessage({
-                    action: 'stop_message_fetch'
-                });
-            } else {
-                console.error(`trySystemNotificationPush value invalid: ${data.trySystemNotificationPush}`);
-            }
         }
 
         if (data.hideScrollbarTrack === true) {

@@ -209,7 +209,13 @@ function applyWork_core(storagedata_sync, storagedata_local) {
         }
         
         if ( data.trySystemNotificationPush !== null ) {
-            notify_new_message_flag = data.trySystemNotificationPush;
+            if ( data.trySystemNotificationPush !== false
+                && data.trySystemNotificationPush !== true ) {
+                console.error(`trySystemNotificationPush value invalid: ${data.trySystemNotificationPush}`);
+            } else {
+                notify_new_message_flag = data.trySystemNotificationPush;
+                console.log(`notify_new_message_flag = trySystemNotificationPush = ${notify_new_message_flag}`);
+            }
         }
 
         let persistTimestampDisplayStyleID = "persist-timestamp-display-style";
