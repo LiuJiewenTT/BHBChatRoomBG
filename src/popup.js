@@ -325,6 +325,34 @@ document.addEventListener("DOMContentLoaded",
 
         if (data.trySystemNotificationPush != null) {
             trySystemNotificationPushCheckbox.checked = data.trySystemNotificationPush;
+            if ( data.trySystemNotificationPush === true ) {
+                const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+
+                if (!tab || !tab.id) {
+                    console.warn("未找到活动标签页");
+                    return;
+                }
+
+                browser.scripting.executeScript({
+                    target: { tabId: tab.id },
+                    func: () => {
+                        // 这是在页面里执行的函数
+                        console.log("在当前标签页执行的代码！");
+                        if ( document.visibilityState !== 'visible' ) {
+                            browser.runtime.sendMessage({
+                                action: 'start_message_fetch'
+                            });
+                        }
+                    }
+                });
+                
+            } else if ( data.trySystemNotificationPush === false ) {
+                browser.runtime.sendMessage({
+                    action: 'stop_message_fetch'
+                });
+            } else {
+                console.error(`trySystemNotificationPush value invalid: ${data.trySystemNotificationPush}`);
+            }
         }
 
         if (data.hideScrollbarTrack === true) {

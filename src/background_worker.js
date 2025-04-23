@@ -7,6 +7,7 @@ if (typeof browser === "undefined") {
 }
 
 
+var last_fetch_message_url = null;
 var staged_new_messages_cnt_to_notify = 0;
 var messageIds = new Set();
 var fetch_message_timer_handle;
@@ -136,7 +137,10 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                     if ( request.lastMsgID ) {
                         messageIds.add(request.lastMsgID);
                     }
-                    fetch_message(request.url); 
+                    fetch_message( request.url || last_fetch_message_url ); 
+                    if ( request.url ) {
+                        last_fetch_message_url = request.url;
+                    }
                     if ( flag_clear_messageIds ) {
                         messageIds.clear();
                     }
