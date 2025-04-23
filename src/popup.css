@@ -435,6 +435,7 @@ button.dark {
 #customAvatar-cleanButton,
 #customAvatar-saveButton,
 #pauseSystemNotificationPushButton,
+#resumeSystemNotificationPushButton,
 #opacityResetButton {
     /* padding: 0.5em; */
     padding: 0%;
@@ -456,6 +457,7 @@ button.dark {
 #customAvatar-cleanButton img,
 #customAvatar-saveButton img,
 #pauseSystemNotificationPushButton img,
+#resumeSystemNotificationPushButton img,
 #opacityResetButton img {
     width: auto;
     max-width: 70%;

@@ -21,7 +21,8 @@ copy ".\res\icons\blueray_disc_cd_dvd_icon_190780.svg" ".\build\BHBChatRoomBG\re
 copy ".\res\icons\dvdplayer_86273.svg" ".\build\BHBChatRoomBG\res\icons\dvdplayer_86273.svg"
 copy ".\res\icons\bin_delete_file_garbage_recycle_remove_trash_icon_123192.svg" ".\build\BHBChatRoomBG\res\icons\bin_delete_file_garbage_recycle_remove_trash_icon_123192.svg"
 copy ".\res\icons\3643774-disk-floppy-save-saveas-saved-saving_113433.svg" ".\build\BHBChatRoomBG\res\icons\3643774-disk-floppy-save-saveas-saved-saving_113433.svg"
-copy ".\res\icons\iconfinder-pause-stop-button-player-music-4593160_122283.svg" ".\build\BHBChatRoomBG\res\icons\iconfinder-pause-stop-button-player-music-4593160_122283.svg"
+copy ".\res\icons\multimedia_break_control_player_music_button_pause_icon_219319.svg" ".\build\BHBChatRoomBG\res\icons\multimedia_break_control_player_music_button_pause_icon_219319.svg"
+copy ".\res\icons\playwithcircularbuttonwithrightarrowofboldroundedfilledtriangle_80162.svg" ".\build\BHBChatRoomBG\res\icons\playwithcircularbuttonwithrightarrowofboldroundedfilledtriangle_80162.svg"
 
 ren ".\build\BHBChatRoomBG\manifest-firefox.json" "manifest.json"
 7z a -sse ".\build\BHBChatRoomBG.xpi" ".\build\BHBChatRoomBG\*" -x!".\build\BHBChatRoomBG\manifest-chrome.json"

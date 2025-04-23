@@ -140,7 +140,7 @@ function popupPageCollectInputs() {
     const themeToggle = document.getElementById("themeToggle");
     const displayModeSelect = document.getElementById("display-mode-select");
     const displayScopeSelect = document.getElementById("display-scope-select");
-    const trySystemNotificationPushCheckbox = document.getElementById("trySystemNotificationPush");
+    const trySystemNotificationPushCheckbox = document.getElementById("trySystemNotificationPushCheckbox");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const autoTextStrokeColorCheckbox = document.getElementById("autoTextStrokeColorCheckbox");
     const persistTimestampDisplayCheckbox = document.getElementById("persistTimestampDisplayCheckbox");

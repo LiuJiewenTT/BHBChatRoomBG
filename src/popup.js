@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded",
     const displayScopeSelect = document.getElementById("display-scope-select");
     const trySystemNotificationPushCheckbox = document.getElementById("trySystemNotificationPushCheckbox");
     const pauseSystemNotificationPushButton = document.getElementById("pauseSystemNotificationPushButton");
+    const resumeSystemNotificationPushButton = document.getElementById("resumeSystemNotificationPushButton");
     const horizontalDivider1 = document.getElementById("horizontalDivider1");
     const enableTextStrokeCheckbox = document.getElementById("enableTextStrokeCheckbox");
     const enableTextStrokeCheckbox_afterText = document.getElementById("enableTextStrokeCheckbox-afterText");
@@ -398,6 +399,7 @@ document.addEventListener("DOMContentLoaded",
         themeToggle.classList.add(currentTheme);
         trySystemNotificationPushCheckbox.classList.add(currentTheme);
         pauseSystemNotificationPushButton.classList.add(currentTheme);
+        resumeSystemNotificationPushButton.classList.add(currentTheme);
         persistTimestampDisplayCheckbox.classList.add(currentTheme);
         hideScrollbarTrackCheckbox.classList.add(currentTheme);
         horizontalDivider1.classList.add(currentTheme);
@@ -483,6 +485,8 @@ document.addEventListener("DOMContentLoaded",
         trySystemNotificationPushCheckbox.classList.add(newTheme);
         pauseSystemNotificationPushButton.classList.remove(currentTheme);
         pauseSystemNotificationPushButton.classList.add(newTheme);
+        resumeSystemNotificationPushButton.classList.remove(currentTheme);
+        resumeSystemNotificationPushButton.classList.add(newTheme);
         persistTimestampDisplayCheckbox.classList.remove(currentTheme);
         persistTimestampDisplayCheckbox.classList.add(newTheme);
         hideScrollbarTrackCheckbox.classList.remove(currentTheme);
@@ -633,6 +637,12 @@ document.addEventListener("DOMContentLoaded",
     pauseSystemNotificationPushButton.addEventListener("click", () => {
         browser.runtime.sendMessage({
             action: 'pause_message_fetch'
+        });
+    });
+
+    resumeSystemNotificationPushButton.addEventListener("click", () => {
+        browser.runtime.sendMessage({
+            action: 'resume_message_fetch'
         });
     });
 
