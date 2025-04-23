@@ -88,19 +88,27 @@ function wrap_get_msg() {
             if ( !new_normal_msg_cnt_stop_flag ) {
                 new_normal_msg_cnt = new_normal_msg_cnt + 1;
             }
-            // browser.runtime.sendMessage({
-            //     action: 'notify',
-            //     message: '新消息',
-            //     message_type: 'normal'
-            // });
-            // console.log('new message');
-            // new Notification("消息通知", { body: "新消息" });
 
             let img_item = li_item.querySelector("img");
             // console.log('img: ', img_item);  // 调试用
+
             if (img_item) {
+                // 处理外链头像
                 if (img_item.getAttribute('src').startsWith(".http://") || img_item.getAttribute('src').startsWith(".https://")) {
                     img_item.src = img_item.getAttribute('src').replace(/^\./, '');
+                }
+
+                // 处理时间显示
+                let element_message_time = li_item.querySelector('.message-time');
+                if ( element_message_time ) {
+                    let new_element_message_time = li_item.querySelector('.message-time-besides-name');
+                    if ( !new_element_message_time ) {
+                        new_element_message_time = document.createElement('small');
+                        new_element_message_time.classList.add('message-time-besides-name');
+                        new_element_message_time.textContent = ` ${element_message_time.textContent}`;
+                        let element_name = li_item.querySelector('small');
+                        element_name.appendChild(new_element_message_time);
+                    }
                 }
             } else {
                 // console.error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);

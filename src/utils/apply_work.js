@@ -225,7 +225,7 @@ function applyWork_core(storagedata_sync, storagedata_local) {
                 persistTimestampDisplayStyle = document.createElement('style');
                 persistTimestampDisplayStyle.id = persistTimestampDisplayStyleID;
                 persistTimestampDisplayStyle.textContent = `
-                .message-time {
+                .message-time-besides-name {
                     opacity: 1;
                 }`;
                 chatboxContainer.appendChild(persistTimestampDisplayStyle);
