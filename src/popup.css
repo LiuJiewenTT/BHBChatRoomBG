@@ -413,7 +413,7 @@ button.dark {
     /* padding: 0.5em; */
     padding: 0%;
     cursor: pointer;
-    display: block;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -440,7 +440,7 @@ button.dark {
     /* padding: 0.5em; */
     padding: 0%;
     position: relative;
-    display: block;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: auto;
@@ -462,6 +462,7 @@ button.dark {
     width: auto;
     max-width: 70%;
     max-height: 70%;
+    margin: 15%;
 }
 
 #avatarUrlUsedSpan {
