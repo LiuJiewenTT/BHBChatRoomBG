@@ -134,11 +134,26 @@ function wrap_get_msg() {
     }
 }
 
+function wrap_showMessageMenu() {
+    original_showMessageMenu = showMessageMenu;
+    return function (...args) {
+        let messageId = args[2];
+        let messageData = args[3];
+        let li_item = document.querySelector(`[data-index="${messageId}"]`);
+        let element_message_time = li_item.querySelector('.message-time');
+        messageData.name += element_message_time.textContent;
+        args[3] = messageData;
+        original_showMessageMenu(...args);
+    }
+}
+
 const wrapped_addmsg = wrap_addmsg();
 const wrapped_get_msg = wrap_get_msg();
+const wrapped_showMessageMenu = wrap_showMessageMenu();
 
 addmsg = wrapped_addmsg;
 get_msg = wrapped_get_msg;
+showMessageMenu = wrapped_showMessageMenu;
 
 if (typeof c !== 'undefined' && c) {
     console.log('c (old): ', c);  // 调试用
