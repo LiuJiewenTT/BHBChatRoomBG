@@ -103,13 +103,14 @@ function wrap_get_msg() {
                 if ( element_message_time ) {
                     let new_element_message_time = li_item.querySelector('.message-time-besides-name');
                     if ( !new_element_message_time ) {
-                        new_element_message_time = document.createElement('small');
+                        new_element_message_time = document.createElement('span');
                         new_element_message_time.classList.add('message-time-besides-name');
-                        new_element_message_time.textContent = ` ${element_message_time.textContent}`;
-                        let element_name_line_etc = document.createElement('small');
-                        element_name_line_etc.appendChild(new_element_message_time);
+                        new_element_message_time.textContent = `${element_message_time.textContent}`;
+                        let element_name_line_etc = document.createElement('span');
                         let element_name = li_item.querySelector('small');
-                        element_name.parentElement.insertAfter(element_name, element_name_line_etc);
+                        element_name.parentElement.classList.add('element_name_line');
+                        element_name_line_etc.appendChild(new_element_message_time);
+                        element_name.parentElement.appendChild(element_name_line_etc);
                     }
                 }
             } else {

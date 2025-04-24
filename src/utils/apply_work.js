@@ -231,8 +231,24 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             .message-time-besides-name:hover {
                 opacity: 1;
             }
+            span.message-time-besides-name {
+                font-size: 72.25%;
+            }
             `;
             document.head.appendChild(persistTimestampDisplay_newNonPersistDisplayStyle);
+        }
+
+        let messageNameLineDisplayStyleID = 'message-name-line-style';
+        let messageNameLineDisplayStyle = document.getElementById(messageNameLineDisplayStyleID);
+        if ( !messageNameLineDisplayStyle ) {
+            let messageNameLineDisplayStyle = document.createElement('style');
+            messageNameLineDisplayStyle.id = messageNameLineDisplayStyleID;
+            messageNameLineDisplayStyle.textContent = `
+            .element_name_line {
+                gap: 5px;
+            }
+            `;
+            document.head.appendChild(messageNameLineDisplayStyle);
         }
 
         // 处理时间常驻状态
