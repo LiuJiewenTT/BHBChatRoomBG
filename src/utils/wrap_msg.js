@@ -106,8 +106,10 @@ function wrap_get_msg() {
                         new_element_message_time = document.createElement('small');
                         new_element_message_time.classList.add('message-time-besides-name');
                         new_element_message_time.textContent = ` ${element_message_time.textContent}`;
+                        let element_name_line_etc = document.createElement('small');
+                        element_name_line_etc.appendChild(new_element_message_time);
                         let element_name = li_item.querySelector('small');
-                        element_name.appendChild(new_element_message_time);
+                        element_name.parentElement.insertAfter(element_name, element_name_line_etc);
                     }
                 }
             } else {
