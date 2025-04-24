@@ -141,7 +141,7 @@ function wrap_showMessageMenu() {
         let messageData = args[3];
         let li_item = document.querySelector(`[data-index="${messageId}"]`);
         let element_message_time = li_item.querySelector('.message-time');
-        messageData.name += element_message_time.textContent;
+        messageData.name += `\u3000${element_message_time.textContent}`;
         args[3] = messageData;
         original_showMessageMenu(...args);
     }
