@@ -14,6 +14,12 @@ if ( isChatRoomPage() ) {
     var staged_new_messages_cnt_to_notify = 0;
     var lastMsgID;
 
+    if (document.visibilityState === 'visible') {
+        browser.runtime.sendMessage({
+            action: 'stop_message_fetch'
+        });
+    }
+
     window.addEventListener('message', (event) => {
         if (event.source !== window) return;
         if (event.data.receiver_name !== 'addon_BHBChatRoomBG') return;
