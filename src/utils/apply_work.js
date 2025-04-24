@@ -218,6 +218,24 @@ function applyWork_core(storagedata_sync, storagedata_local) {
             }
         }
 
+        // 检查定制类默认时间样式
+        let persistTimestampDisplay_newNonPersistDisplayStyleID = 'persist-timestamp-non-persist-display-style';
+        let persistTimestampDisplay_newNonPersistDisplayStyle = document.getElementById(persistTimestampDisplay_newNonPersistDisplayStyleID);
+        if ( !persistTimestampDisplay_newNonPersistDisplayStyle ) {
+            let persistTimestampDisplay_newNonPersistDisplayStyle = document.createElement('style');
+            persistTimestampDisplay_newNonPersistDisplayStyle.id = persistTimestampDisplay_newNonPersistDisplayStyleID;
+            persistTimestampDisplay_newNonPersistDisplayStyle.textContent = `
+            .message-time-besides-name {
+                opacity: 0;
+            }
+            .message-time-besides-name:hover {
+                opacity: 1;
+            }
+            `;
+            document.head.appendChild(persistTimestampDisplay_newNonPersistDisplayStyle);
+        }
+
+        // 处理时间常驻状态
         let persistTimestampDisplayStyleID = "persist-timestamp-display-style";
         let persistTimestampDisplayStyle = document.getElementById(persistTimestampDisplayStyleID);
         if (data.persistTimestampDisplay === true) {
