@@ -27,7 +27,7 @@
 
 ### 稳定版
 
-#### Firefox
+#### Firefox/Waterfox
 
 **上架版**：
 
