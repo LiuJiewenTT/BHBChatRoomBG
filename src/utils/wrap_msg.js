@@ -113,6 +113,13 @@ function wrap_get_msg() {
                         element_name.parentElement.appendChild(element_name_line_etc);
                     }
                 }
+
+                // 删除文本上的右键选择监听器
+                let element_p = li_item.querySelector('.mb-0');
+                element_p.oncontextmenu = null;
+                element_p.addEventListener('contextmenu', e => {
+                    e.stopPropagation();
+                  }, true);
             } else {
                 // console.error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);
                 throw Error(`get_msg error: img null, i_start: ${i_start}, ul_len: ${ul_len}, new_msg_cnt: ${new_msg_cnt}, ul_len-1: ${ul_len-1}, i: ${i}, j: ${j}, li: `, li_item);
