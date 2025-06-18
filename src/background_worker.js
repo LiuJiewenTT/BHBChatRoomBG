@@ -70,7 +70,7 @@ function fetch_message(url) {
                         if ( !message_image_url.startsWith('http') ) {
                             message_image_url = site_base + '/' + message_image_url;
                         }
-                        console.log(`site_base: ${site_base}, message_image_url: ${message_image_url}`);
+                        // console.log(`site_base: ${site_base}, message_image_url: ${message_image_url}`);
                     } else {
                         message_image_url = null;
                     }
@@ -96,14 +96,10 @@ function fetch_message(url) {
                         message: prefix_string + message
                     };
                 
-                if ( browser_type_general === 'Chromium' ) {
-                    if ( has_image === true ) {
-                        notification_create_options.imageUrl = message_image_url;
-                    }
-                    chrome.notifications.create(notification_create_options);
-                } else {
-                    browser.notifications.create(notification_create_options);
+                if ( has_image === true ) {
+                    notification_create_options.imageUrl = message_image_url;
                 }
+                browser.notifications.create(notification_create_options);
             }
         });
 }
