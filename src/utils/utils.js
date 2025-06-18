@@ -306,7 +306,7 @@ function get_browser_type_general(type) {
 
 browser_type_general = get_browser_type_general(browser_type);
 
-function getMessageTypePrefixString(type) {
+function getMessageTypePrefixString(type, has_image = false) {
     let prefix_string = '❔';
     if ( type === 'log' || type === 'normal' || type === 'info' ) {
         prefix_string = '💬';
@@ -318,6 +318,9 @@ function getMessageTypePrefixString(type) {
         prefix_string = '✔';
     } else if ( type === 'warn' ) {
         prefix_string = '⚡❕';
+    }
+    if ( has_image === true ) {
+        prefix_string += '🖼️';
     }
     return prefix_string;
 }

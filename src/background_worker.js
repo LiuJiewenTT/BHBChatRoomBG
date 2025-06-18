@@ -52,17 +52,35 @@ function fetch_message(url) {
             staged_new_messages_cnt_to_notify += normal_msg_cnt;
             console.log(`staged_new_messages_cnt_to_notify: ${staged_new_messages_cnt_to_notify}`);
 
+            let has_image = false;
+
             if ( normal_msg_cnt > 0 ) {
                 let message;
                 let message_icon_url;
+                let message_image_url;
+
                 if ( normal_msg_cnt === 1 ) {
                     let msg = JSON.parse(messages[last_msg_index]);
                     message = `(${staged_new_messages_cnt_to_notify}条未读)\n来自【${msg.name}】的消息: ${msg.msg}`;
                     message_icon_url = site_base + '/' + msg.pic;
+                    if ( msg.msg.includes('[img]') && msg.msg.includes('[/img]') ) {
+                        has_image = true;
+                        // from [image] to [/image], and not includes tags
+                        message_image_url = msg.msg.slice(msg.msg.indexOf('[img]') + 5, msg.msg.indexOf('[/img]'));
+                        if ( !message_image_url.startsWith('http') ) {
+                            message_image_url = site_base + '/' + message_image_url;
+                        }
+                        console.log(`site_base: ${site_base}, message_image_url: ${message_image_url}`);
+                    } else {
+                        message_image_url = null;
+                    }
                 } else {
                     message = `(${staged_new_messages_cnt_to_notify}条未读)\n${normal_msg_cnt}条新消息`;
                     message_icon_url = null;
+                    message_image_url = null;
                 }
+
+
                 // 此处不可使用消息，chrome会找不到监听接收器。
                 // browser.runtime.sendMessage({
                 //     action: 'notify', 
@@ -70,13 +88,22 @@ function fetch_message(url) {
                 //     message_type: 'normal',
                 //     message_icon_url: message_icon_url
                 // }); 
-                let prefix_string = getMessageTypePrefixString('normal');
-                browser.notifications.create({
-                    type: "basic",
-                    iconUrl: message_icon_url || browser.runtime.getURL("res/icons/icon.png"),
-                    title: `BHB聊天室的消息`,
-                    message: prefix_string + message
-                });
+                let prefix_string = getMessageTypePrefixString('normal', has_image);
+                let notification_create_options = {
+                        type: has_image !== true ? "basic" : "image",
+                        iconUrl: message_icon_url || browser.runtime.getURL("res/icons/icon.png"),
+                        title: `BHB聊天室的消息`,
+                        message: prefix_string + message
+                    };
+                
+                if ( browser_type_general === 'Chromium' ) {
+                    if ( has_image === true ) {
+                        notification_create_options.imageUrl = message_image_url;
+                    }
+                    chrome.notifications.create(notification_create_options);
+                } else {
+                    browser.notifications.create(notification_create_options);
+                }
             }
         });
 }
@@ -107,13 +134,24 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             console.log('已保存头像到Cookie:', initialAvatarUrl);
         });
     } else if (request.action === "notify") {
-        let prefix_string = getMessageTypePrefixString(request?.message_type);
-        browser.notifications.create({
-            type: "basic",
+        let has_image = false;
+        if ( request?.imageUrl !== null ) {
+            has_image = true;
+        } else if ( request.message.includes('[img]') && request.message.includes('[/img]') ) {
+            has_image = true;
+            request.imageUrl = request.message.slice(request.message.indexOf('[img]') + 5, request.message.indexOf('[/img]'));
+        }
+        let prefix_string = getMessageTypePrefixString(request?.message_type, has_image);
+        let notification_create_options = {
+            type: has_image !== true ? "basic" : "image",
             iconUrl: request.message_icon_url || browser.runtime.getURL("res/icons/icon.png"),
             title: request.title || `BHB聊天室的消息`,
             message: prefix_string + request.message
-        });
+        };
+        if ( has_image === true ) {
+            notification_create_options.imageUrl = request.imageUrl;
+        }
+        browser.notifications.create(notification_create_options);
     } else if ( request.action === 'start_message_fetch' 
         || request.action === 'stop_message_fetch'
         || request.action === 'pause_message_fetch'
